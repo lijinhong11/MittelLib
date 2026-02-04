@@ -1,0 +1,7 @@
+name: MittelLib
+version: '1.0-SNAPSHOT'
+main: me.mmmjjkx.mittellib.MittelLib
+api-version: '1.20'
+load: STARTUP
+authors: [ mmmjjkx ]
+description: A library for mmmjjkx's plugins
