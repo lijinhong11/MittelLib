@@ -19,7 +19,7 @@ import java.util.Optional;
 public enum ContentProviders implements ContentProvider {
     NEXO {
         @Override
-        public ItemStack getItem(@NonNull String id) {
+        public @Nullable ItemStack getItem(@NonNull String id) {
             Optional<ItemBuilder> optional = NexoItems.optionalItemFromId(id);
             return optional.map(ItemBuilder::build).orElse(null);
         }
@@ -51,7 +51,7 @@ public enum ContentProviders implements ContentProvider {
     },
     ITEMSADDER {
         @Override
-        public ItemStack getItem(@NonNull String id) {
+        public @Nullable ItemStack getItem(@NonNull String id) {
             CustomStack stack = CustomStack.getInstance(id);
             if (stack == null) {
                 return null;

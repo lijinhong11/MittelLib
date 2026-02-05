@@ -5,11 +5,11 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import me.mmmjjkx.mittellib.MittelLib;
 import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
 import me.mmmjjkx.mittellib.utils.BukkitUtils;
 import me.mmmjjkx.mittellib.utils.EnumUtils;
-import me.mmmjjkx.mittellib.utils.Patterns;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -17,10 +17,11 @@ import org.bukkit.profile.PlayerTextures;
 
 import java.util.*;
 
-@NoArgsConstructor
+@SuppressWarnings("unchecked")
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class ProfileComponent extends ReadWriteItemComponent {
-    private UUID uuid;
+    private final UUID uuid;
     private String name;
     private Collection<ProfileProperty> properties;
     private ResolvableProfile.SkinPatch skinPatch;
@@ -52,22 +53,30 @@ public class ProfileComponent extends ReadWriteItemComponent {
         }
     }
 
-    @Override
-    public void read(ConfigurationSection cs) {
+    public static ProfileComponent readFromSection(ConfigurationSection cs) {
         String id = cs.getString("id", "null");
-        this.uuid = UUID.fromString(id);
+        UUID uuid = UUID.fromString(id);
+        String name = cs.getString("name");
 
-        this.name = cs.getString("name");
+        List<Map<?, ?>> propertiesMap = cs.getMapList("properties");
+        List<ProfileProperty> properties = new ArrayList<>();
+        if (!propertiesMap.isEmpty()) {
+            properties = propertiesMap.stream().map(m -> {
+                Map<String, String> map = (Map<String, String>) m;
+                return new ProfileProperty(map.get("name"), map.get("value"), map.get("signature"));
+            }).toList();
+        }
 
+        ResolvableProfile.SkinPatch skinPatch = ResolvableProfile.SkinPatch.empty();
         ConfigurationSection skin = cs.getConfigurationSection("skin");
         if (skin != null) {
-            ResolvableProfile.SkinPatchBuilder skinPatch = ResolvableProfile.SkinPatch.skinPatch();
+            ResolvableProfile.SkinPatchBuilder skinPatchBuilder = ResolvableProfile.SkinPatch.skinPatch();
 
             String bodyKey = skin.getString("body");
             if (bodyKey != null) {
                 NamespacedKey body = BukkitUtils.getNamespacedKey(bodyKey);
                 if (body != null) {
-                    skinPatch.body(body);
+                    skinPatchBuilder.body(body);
                 }
             }
 
@@ -75,7 +84,7 @@ public class ProfileComponent extends ReadWriteItemComponent {
             if (capeKey != null) {
                 NamespacedKey cape = BukkitUtils.getNamespacedKey(capeKey);
                 if (cape != null) {
-                    skinPatch.cape(cape);
+                    skinPatchBuilder.cape(cape);
                 }
             }
 
@@ -83,7 +92,7 @@ public class ProfileComponent extends ReadWriteItemComponent {
             if (elytraKey != null) {
                 NamespacedKey elytra = BukkitUtils.getNamespacedKey(elytraKey);
                 if (elytra != null) {
-                    skinPatch.elytra(elytra);
+                    skinPatchBuilder.elytra(elytra);
                 }
             }
 
@@ -91,10 +100,19 @@ public class ProfileComponent extends ReadWriteItemComponent {
             if (modelStr != null) {
                 PlayerTextures.SkinModel model = EnumUtils.readEnum(PlayerTextures.SkinModel.class, modelStr);
                 if (model == null) {
-
+                    MittelLib.getInstance()
+                            .getLogger()
+                            .severe("Cannot find a skin model with the name " + modelStr
+                            + "! Available options are SLIM and CLASSIC");
+                } else {
+                    skinPatchBuilder.model(model);
                 }
             }
+
+            skinPatch = skinPatchBuilder.build();
         }
+
+        return new ProfileComponent(uuid, name, properties, skinPatch);
     }
 
     @Override

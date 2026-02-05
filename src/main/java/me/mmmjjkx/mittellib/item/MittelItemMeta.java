@@ -12,13 +12,15 @@ public class MittelItemMeta extends ReadWriteObject {
     private @Nullable SkullDefinition skull;
     private @Nullable FireworkDefinition firework;
 
-    @Override
-    public void write(ConfigurationSection cs) {
+    public MittelItemMeta() {
 
     }
 
     @Override
-    public void read(ConfigurationSection cs) {
+    public void write(ConfigurationSection cs) {
+    }
 
+    @Override
+    public void read(ConfigurationSection cs) {
     }
 }
