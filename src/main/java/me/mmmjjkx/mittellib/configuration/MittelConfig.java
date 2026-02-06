@@ -12,6 +12,16 @@ public class MittelConfig extends YamlConfiguration {
         super();
     }
 
+    @NotNull
+    public ConfigurationSection getSectionOrCreate(@NotNull String path) {
+        ConfigurationSection section = getConfigurationSection(path);
+        if (section == null) {
+            return createSection(path);
+        }
+
+        return section;
+    }
+
     @Override
     public @Nullable ItemStack getItemStack(@NotNull String path) {
         return getItemStack(path, null);

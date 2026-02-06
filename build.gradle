@@ -23,17 +23,34 @@ repositories {
     maven {
         url = "https://repo.oraxen.com/releases"
     }
+    maven {
+        url = "https://mvn.lumine.io/repository/maven-public/"
+    }
+    maven {
+        url = "https://nexus.phoenixdevt.fr/repository/maven-public/"
+    }
+    maven {
+        url = "https://api.modrinth.com/maven/"
+    }
+    maven {
+        url = "https://repo.auxilor.io/repository/maven-public/"
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
 
+    //content provider
     compileOnly("dev.lone:api-itemsadder:4.0.10")
     compileOnly("com.nexomc:nexo:1.16.1")
     compileOnly("net.momirealms:craft-engine-core:0.0.67")
     compileOnly("net.momirealms:craft-engine-bukkit:0.0.67")
     compileOnly("io.th0rgal:oraxen:1.207.0")
+    compileOnly("net.Indyuce:MMOItems-API:6.10.1-SNAPSHOT")
+    compileOnly("maven.modrinth:SCore:5.25.7.19")
+    compileOnly("com.willfp:EcoItems:5.66.0")
 
+    //lombok
     compileOnly("org.projectlombok:lombok:1.18.42")
     annotationProcessor("org.projectlombok:lombok:1.18.42")
 }
