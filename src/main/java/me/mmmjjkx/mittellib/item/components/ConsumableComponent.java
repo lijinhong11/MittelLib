@@ -15,7 +15,6 @@ import me.mmmjjkx.mittellib.utils.BukkitUtils;
 import me.mmmjjkx.mittellib.utils.EnumUtils;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -23,7 +22,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @AllArgsConstructor

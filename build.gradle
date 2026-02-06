@@ -20,6 +20,9 @@ repositories {
     maven {
         url = "https://repo.momirealms.net/releases/"
     }
+    maven {
+        url = "https://repo.oraxen.com/releases"
+    }
 }
 
 dependencies {
@@ -29,6 +32,7 @@ dependencies {
     compileOnly("com.nexomc:nexo:1.16.1")
     compileOnly("net.momirealms:craft-engine-core:0.0.67")
     compileOnly("net.momirealms:craft-engine-bukkit:0.0.67")
+    compileOnly("io.th0rgal:oraxen:1.207.0")
 
     compileOnly("org.projectlombok:lombok:1.18.42")
     annotationProcessor("org.projectlombok:lombok:1.18.42")

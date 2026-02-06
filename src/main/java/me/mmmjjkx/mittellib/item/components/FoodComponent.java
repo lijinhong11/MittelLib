@@ -1,0 +1,84 @@
+package me.mmmjjkx.mittellib.item.components;
+
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.FoodProperties;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import me.mmmjjkx.mittellib.MittelLib;
+import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.jetbrains.annotations.Nullable;
+
+@AllArgsConstructor
+@NoArgsConstructor
+public class FoodComponent extends ReadWriteItemComponent {
+    private @NonNegative int nutrition = 0;
+
+    private float saturation = 0.0f;
+
+    private boolean canAlwaysEat = false;
+
+    public static FoodComponent fromMinecraftComponent(FoodProperties properties) {
+        return new FoodComponent(properties.nutrition(), properties.saturation(), properties.canAlwaysEat());
+    }
+
+    @Override
+    public void applyToItem(ItemStack item) {
+        FoodProperties properties = FoodProperties.food()
+                .nutrition(nutrition)
+                .saturation(saturation)
+                .canAlwaysEat(canAlwaysEat)
+                .build();
+
+        item.setData(DataComponentTypes.FOOD, properties);
+    }
+
+    @Override
+    public void write(ConfigurationSection cs) {
+        cs.set("nutrition", nutrition);
+        cs.set("saturation", saturation);
+        cs.set("canAlwaysEat", canAlwaysEat);
+    }
+
+    @Nullable
+    public static FoodComponent readFromSection(ConfigurationSection cs) {
+        if (!cs.contains("nutrition")) {
+            MittelLib.getInstance()
+                    .getLogger()
+                    .severe("Cannot define FOOD component: 'nutrition' is not set");
+            return null;
+        }
+
+        if (!cs.contains("saturation")) {
+            MittelLib.getInstance()
+                    .getLogger()
+                    .severe("Cannot define FOOD component: 'saturation' is not set");
+            return null;
+        }
+
+        int nutrition = cs.getInt("nutrition", -1);
+        if (nutrition < 0) {
+            MittelLib.getInstance()
+                    .getLogger()
+                    .severe("Cannot define FOOD component: 'nutrition' must be >= 0 (was " + nutrition + ")");
+            return null;
+        }
+
+        // Use double to avoid precision surprises in config, then cast to float.
+        double saturationDouble = cs.getDouble("saturation", -1.0d);
+        if (saturationDouble < 0.0d) {
+            MittelLib.getInstance()
+                    .getLogger()
+                    .severe("Cannot define FOOD component: 'saturation' must be >= 0 (was " + saturationDouble + ")");
+            return null;
+        }
+
+        float saturation = (float) saturationDouble;
+        boolean canAlwaysEat = cs.getBoolean("canAlwaysEat", false);
+
+        return new FoodComponent(nutrition, saturation, canAlwaysEat);
+    }
+}
+

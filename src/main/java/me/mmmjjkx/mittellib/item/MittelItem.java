@@ -26,6 +26,7 @@ import java.util.Objects;
 public class MittelItem extends ReadWriteObject {
     private @Nullable ContentProvider provider;
     private @NotNull Material material = Material.BARRIER;
+    private @NotNull MittelItemMeta meta = MittelItemMeta.empty();
     private int amount = 1;
 
     private final @NotNull List<ReadWriteItemComponent> components = new ArrayList<>();
