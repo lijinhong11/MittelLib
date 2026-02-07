@@ -36,7 +36,7 @@ public abstract class ReadWriteObject {
         return null;
     }
 
-    public ReadWriteObject() {
+    protected ReadWriteObject() {
     }
 
     public ReadWriteObject(ConfigurationSection cs) {

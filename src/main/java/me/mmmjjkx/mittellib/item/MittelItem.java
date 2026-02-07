@@ -11,7 +11,6 @@ import me.mmmjjkx.mittellib.utils.EnumUtils;
 import me.mmmjjkx.mittellib.utils.MCVersion;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -31,22 +30,28 @@ public class MittelItem extends ReadWriteObject {
 
     private final @NotNull List<ReadWriteItemComponent> components = new ArrayList<>();
 
-    public MittelItem() {
-        super(new MemoryConfiguration());
+    private MittelItem() {
     }
 
-    public MittelItem(ConfigurationSection cs) {
-        super(cs);
+    public MittelItem(ItemStack itemStack) {
+        applyFromItemStack(itemStack);
     }
 
-    public static MittelItem fromItemStack(ItemStack itemStack) {
-        return new MittelItem().applyFromItemStack(itemStack);
+    public static MittelItem readFromSection(ConfigurationSection cs) {
+        MittelItem item = new MittelItem();
+        item.read(cs);
+        return item;
     }
 
     @Contract(value = "_ -> this", mutates = "this")
     public MittelItem applyFromItemStack(ItemStack itemStack) {
+        if (!itemStack.hasItemMeta()) {
+            throw new RuntimeException(new IllegalArgumentException("Only allow items which have item meta"));
+        }
+
         this.material = itemStack.getType();
         this.amount = itemStack.getAmount();
+        this.meta = MittelItemMeta.fromItemStack(itemStack);
 
         return this;
     }

@@ -4,11 +4,8 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Consumable;
 import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
 import io.papermc.paper.datacomponent.item.consumable.ItemUseAnimation;
-import io.papermc.paper.registry.RegistryKey;
-import io.papermc.paper.registry.TypedKey;
-import io.papermc.paper.registry.set.RegistrySet;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import me.mmmjjkx.mittellib.MittelLib;
 import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
 import me.mmmjjkx.mittellib.utils.BukkitUtils;
@@ -17,16 +14,13 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 public class ConsumableComponent extends ReadWriteItemComponent {
     private @NonNegative float consumeSeconds = 1.6f;
@@ -107,53 +101,8 @@ public class ConsumableComponent extends ReadWriteItemComponent {
         Key sound = BukkitUtils.getNamespacedKey(cs.getString("sound", "minecraft:entity.generic.eat"));
         boolean hasConsumeParticles = cs.getBoolean("hasConsumeParticles", true);
 
-        ConfigurationSection effects = cs.getConfigurationSection("effects");
-        List<ConsumeEffect> effectList = new ArrayList<>();
-        if (effects != null) {
-            if (effects.contains("teleportRandom")) {
-                effectList.add(ConsumeEffect.teleportRandomlyEffect((float) effects.getDouble("teleportRandom")));
-            }
+        List<ConsumeEffect> effects = ItemComponentSerializer.readConsumeEffects(cs);
 
-            if (effects.contains("sound")) {
-                NamespacedKey key = BukkitUtils.getNamespacedKey(effects.getString("sound", "minecraft:entity.generic.eat"));
-                effectList.add(ConsumeEffect.playSoundConsumeEffect(key));
-            }
-
-            if (effects.getBoolean("clearAllEffects", true)) {
-                effectList.add(ConsumeEffect.clearAllStatusEffects());
-            }
-
-            List<TypedKey<PotionEffectType>> removeEffects = effects.getStringList("removeEffects").stream().map(e -> {
-                NamespacedKey key = BukkitUtils.getNamespacedKey(e);
-                if (key == null) {
-                    return null;
-                }
-
-                return TypedKey.create(RegistryKey.MOB_EFFECT, key);
-            }).filter(Objects::nonNull).toList();
-
-            effectList.add(ConsumeEffect.removeEffects(RegistrySet.keySet(RegistryKey.MOB_EFFECT, removeEffects)));
-
-            ConfigurationSection applyEffects = cs.getConfigurationSection("applyEffects");
-            if (applyEffects != null) {
-                float probability = (float) applyEffects.getDouble("probability");
-                ConfigurationSection potionEffects = applyEffects.getConfigurationSection("effects");
-                if (potionEffects != null) {
-                    List<PotionEffect> pe = potionEffects.getKeys(false).stream().map(s -> {
-                        ConfigurationSection effect = potionEffects.getConfigurationSection(s);
-                        if (effect == null) {
-                            return null;
-                        }
-
-                        return BukkitUtils.readPotionEffect(effect);
-                    }).filter(Objects::nonNull).toList();
-
-                    effectList.add(ConsumeEffect.applyStatusEffects(pe, probability));
-                }
-            }
-
-        }
-
-        return new ConsumableComponent(consumeSeconds, animation, sound, hasConsumeParticles, effectList);
+        return new ConsumableComponent(consumeSeconds, animation, sound, hasConsumeParticles, effects);
     }
 }

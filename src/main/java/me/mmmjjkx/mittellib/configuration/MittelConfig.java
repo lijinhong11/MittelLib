@@ -29,10 +29,12 @@ public class MittelConfig extends YamlConfiguration {
 
     @Override
     public @Nullable ItemStack getItemStack(@NotNull String path, @Nullable ItemStack def) {
-        MittelItem mittelItem = getRWObject(path, MittelItem.class);
-        if (mittelItem == null) {
-            return null;
+        ConfigurationSection cs = getConfigurationSection(path);
+        if (cs == null) {
+            return def;
         }
+
+        MittelItem mittelItem = MittelItem.readFromSection(cs);
 
         return mittelItem.get();
     }

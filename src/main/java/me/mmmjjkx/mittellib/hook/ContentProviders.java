@@ -185,7 +185,7 @@ public enum ContentProviders implements ContentProvider {
                 return null;
             }
 
-            String type = id.substring(0, id.indexOf('.'));
+            String type = id.substring(0, id.indexOf(':'));
             String itemId = id.substring(type.length());
 
             Type mmoType = Type.get(type);

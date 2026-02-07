@@ -9,13 +9,13 @@ import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
+@SuppressWarnings("unchecked")
 public class CustomModelDataComponent extends ReadWriteItemComponent {
     private List<Float> floats = new ArrayList<>();
     private List<Boolean> flags = new ArrayList<>();
@@ -43,11 +43,36 @@ public class CustomModelDataComponent extends ReadWriteItemComponent {
         cs.set("floats", floats);
         cs.set("flags", flags);
         cs.set("strings", strings);
+
+        if (this.colors != null) {
+            List<Map<String, Integer>> colors = this.colors.stream()
+                    .filter(Objects::nonNull)
+                    .map(c -> {
+                Map<String, Integer> color = new HashMap<>();
+                color.put("alpha", c.getAlpha());
+                color.put("red", c.getRed());
+                color.put("green", c.getGreen());
+                color.put("blue", c.getBlue());
+                return color;
+            }).toList();
+        }
     }
 
-    @Nullable
+    @NotNull
     public static CustomModelDataComponent readFromSection(ConfigurationSection cs) {
+        List<Float> floats = cs.getFloatList("floats");
+        List<Boolean> flags = cs.getBooleanList("flags");
+        List<String> strings = cs.getStringList("strings");
 
+        List<Color> colors = new ArrayList<>();
+        List<Map<?, ?>> colorMaps = cs.getMapList("colors");
+        for (Map<?, ?> color : colorMaps) {
+            Map<String, Integer> colorMap = (Map<String, Integer>) color;
+            Color bukkit = Color.fromARGB(colorMap.getOrDefault("alpha", 255), colorMap.get("red"), colorMap.get("green"), colorMap.get("blue"));
+            colors.add(bukkit);
+        }
+
+        return new CustomModelDataComponent(floats, flags, strings, colors);
     }
 
     public void applyToMeta(ItemMeta meta) {
@@ -56,5 +81,7 @@ public class CustomModelDataComponent extends ReadWriteItemComponent {
         cmd.setFlags(flags);
         cmd.setStrings(strings);
         cmd.setColors(colors);
+
+        meta.setCustomModelDataComponent(cmd);
     }
 }

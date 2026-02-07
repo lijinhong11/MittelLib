@@ -42,13 +42,21 @@ dependencies {
 
     //content provider
     compileOnly("dev.lone:api-itemsadder:4.0.10")
+
     compileOnly("com.nexomc:nexo:1.16.1")
+
     compileOnly("net.momirealms:craft-engine-core:0.0.67")
     compileOnly("net.momirealms:craft-engine-bukkit:0.0.67")
+
     compileOnly("io.th0rgal:oraxen:1.207.0")
+
     compileOnly("net.Indyuce:MMOItems-API:6.10.1-SNAPSHOT")
+    compileOnly("io.lumine:MythicLib-dist:1.7.1-SNAPSHOT")
+
     compileOnly("maven.modrinth:SCore:5.25.7.19")
+
     compileOnly("com.willfp:EcoItems:5.66.0")
+    compileOnly("com.willfp:libreforge:4.79.0")
 
     //lombok
     compileOnly("org.projectlombok:lombok:1.18.42")

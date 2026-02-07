@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
 public class NullUtils {
+    @SafeVarargs
     @Nullable
     public static <U extends T, T> T findAnyNonNull(U... objects) {
         for (U u : objects) {
