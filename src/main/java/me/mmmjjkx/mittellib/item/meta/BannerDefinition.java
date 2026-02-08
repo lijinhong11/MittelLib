@@ -75,7 +75,6 @@ public class BannerDefinition extends ReadWriteObject {
         if (stringPatterns.isEmpty()) {
             return;
         }
-
         bannerPatterns.clear();
         for (String s : stringPatterns) {
             String[] parts = s.split(";", 2);

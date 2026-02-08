@@ -15,7 +15,9 @@ import org.jetbrains.annotations.Nullable;
 @NoArgsConstructor
 public class FoodComponent extends ReadWriteItemComponent {
     private @NonNegative int nutrition = 0;
+
     private float saturation = 0.0f;
+
     private boolean canAlwaysEat = false;
 
     public static FoodComponent fromMinecraftComponent(FoodProperties properties) {

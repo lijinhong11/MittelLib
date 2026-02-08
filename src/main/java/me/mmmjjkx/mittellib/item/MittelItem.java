@@ -43,10 +43,9 @@ public class MittelItem extends ReadWriteObject {
 
         ItemStack get = provider.getItem(itemIdByProvider);
         if (get == null) {
-            throw new RuntimeException(new IllegalArgumentException(
-                    "Cannot find a item with id " + itemIdByProvider + " at " + provider.toString()));
+            throw new RuntimeException(new IllegalArgumentException("Cannot find a item with id " + itemIdByProvider + " at " + provider.toString()));
         }
-
+    
         applyFromItemStack(get);
     }
 
@@ -118,7 +117,7 @@ public class MittelItem extends ReadWriteObject {
                 MittelLib.getInstance()
                         .getLogger()
                         .severe("Cannot find a content provider called " + provider + " at "
-                                + cs.getCurrentPath());
+                        + cs.getCurrentPath());
             }
         } else {
             String mat = cs.getString("material", "null");
