@@ -3,6 +3,7 @@ package me.mmmjjkx.mittellib.utils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.checkerframework.checker.index.qual.NonNegative;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 public enum MCVersion {
@@ -31,6 +32,7 @@ public enum MCVersion {
     V26_1(0x40000126)
     ;
 
+    @NotNull
     public static MCVersion getCurrent() {
         int current = Bukkit.getUnsafe().getProtocolVersion();
 
@@ -40,7 +42,7 @@ public enum MCVersion {
             }
         }
 
-        return null;
+        throw new RuntimeException(new UnsupportedOperationException("This version of Minecraft is not supported"));
     }
 
     private final @NonNegative int protocolVersion;

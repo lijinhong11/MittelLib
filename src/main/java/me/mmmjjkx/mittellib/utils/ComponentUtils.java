@@ -1,9 +1,11 @@
 package me.mmmjjkx.mittellib.utils;
 
+import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
+@UtilityClass
 public class ComponentUtils {
     private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer
             .legacyAmpersand()
@@ -12,9 +14,6 @@ public class ComponentUtils {
             .build();
 
     private static final Component RESET = Component.empty().decoration(TextDecoration.ITALIC, false);
-
-    private ComponentUtils() {
-    }
 
     public static Component deserialize(String input) {
         if (input == null) {

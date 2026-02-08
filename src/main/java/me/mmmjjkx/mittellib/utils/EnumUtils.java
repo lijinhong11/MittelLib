@@ -1,10 +1,15 @@
 package me.mmmjjkx.mittellib.utils;
 
 import com.google.common.base.Preconditions;
+import net.kyori.adventure.util.TriState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EnumUtils {
+    public static @Nullable TriState readTriState(@NotNull String name) {
+        return readEnum(TriState.class, name, null);
+    }
+
     public static <T extends Enum<T>> T readEnum(@NotNull Class<T> clazz, @NotNull String name) {
         return readEnum(clazz, name, null);
     }

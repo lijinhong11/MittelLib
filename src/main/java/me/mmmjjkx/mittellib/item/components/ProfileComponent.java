@@ -54,7 +54,15 @@ public class ProfileComponent extends ReadWriteItemComponent {
 
     public static ProfileComponent readFromSection(ConfigurationSection cs) {
         String id = cs.getString("id", "null");
-        UUID uuid = UUID.fromString(id);
+        UUID uuid;
+        try {
+            uuid = UUID.fromString(id);
+        } catch (Exception e) {
+            MittelLib.getInstance()
+                    .getLogger()
+                    .severe("Cannot define profile component: " + id + " is not an UUID");
+            return null;
+        }
         String name = cs.getString("name");
 
         List<Map<?, ?>> propertiesMap = cs.getMapList("properties");

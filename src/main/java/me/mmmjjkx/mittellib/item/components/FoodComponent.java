@@ -15,9 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @NoArgsConstructor
 public class FoodComponent extends ReadWriteItemComponent {
     private @NonNegative int nutrition = 0;
-
     private float saturation = 0.0f;
-
     private boolean canAlwaysEat = false;
 
     public static FoodComponent fromMinecraftComponent(FoodProperties properties) {
@@ -47,14 +45,14 @@ public class FoodComponent extends ReadWriteItemComponent {
         if (!cs.contains("nutrition")) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot define FOOD component: 'nutrition' is not set");
+                    .severe("Cannot define food component: 'nutrition' is not set");
             return null;
         }
 
         if (!cs.contains("saturation")) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot define FOOD component: 'saturation' is not set");
+                    .severe("Cannot define food component: 'saturation' is not set");
             return null;
         }
 
@@ -62,7 +60,7 @@ public class FoodComponent extends ReadWriteItemComponent {
         if (nutrition < 0) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot define FOOD component: 'nutrition' must be >= 0 (was " + nutrition + ")");
+                    .severe("Cannot define food component: 'nutrition' must be >= 0 (was " + nutrition + ")");
             return null;
         }
 
@@ -71,7 +69,7 @@ public class FoodComponent extends ReadWriteItemComponent {
         if (saturationDouble < 0.0d) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot define FOOD component: 'saturation' must be >= 0 (was " + saturationDouble + ")");
+                    .severe("Cannot define food component: 'saturation' must be >= 0 (was " + saturationDouble + ")");
             return null;
         }
 

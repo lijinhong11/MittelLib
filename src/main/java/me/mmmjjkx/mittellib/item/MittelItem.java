@@ -7,10 +7,12 @@ import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
 import me.mmmjjkx.mittellib.configuration.ReadWriteObject;
 import me.mmmjjkx.mittellib.hook.ContentProvider;
 import me.mmmjjkx.mittellib.hook.ContentProviders;
+import me.mmmjjkx.mittellib.item.components.ItemComponentSerializer;
 import me.mmmjjkx.mittellib.utils.EnumUtils;
 import me.mmmjjkx.mittellib.utils.MCVersion;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -23,18 +25,37 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class MittelItem extends ReadWriteObject {
-    private @Nullable ContentProvider provider;
+    private @Nullable ContentProvider provider = null;
+    private @Nullable String itemIdByProvider = null;
     private @NotNull Material material = Material.BARRIER;
     private @NotNull MittelItemMeta meta = MittelItemMeta.empty();
     private int amount = 1;
 
-    private final @NotNull List<ReadWriteItemComponent> components = new ArrayList<>();
+    private @Nullable List<Enchantment> enchantments = new ArrayList<>();
+    private @Nullable List<ReadWriteItemComponent> components = new ArrayList<>();
 
     private MittelItem() {
     }
 
+    public MittelItem(ContentProvider provider, String itemIdByProvider) {
+        this.provider = provider;
+        this.itemIdByProvider = itemIdByProvider;
+
+        ItemStack get = provider.getItem(itemIdByProvider);
+        if (get == null) {
+            throw new RuntimeException(new IllegalArgumentException(
+                    "Cannot find a item with id " + itemIdByProvider + " at " + provider.toString()));
+        }
+
+        applyFromItemStack(get);
+    }
+
     public MittelItem(ItemStack itemStack) {
         applyFromItemStack(itemStack);
+    }
+
+    public MittelItem(Material material) {
+        this.material = material;
     }
 
     public static MittelItem readFromSection(ConfigurationSection cs) {
@@ -58,7 +79,20 @@ public class MittelItem extends ReadWriteObject {
 
     @Override
     public void write(ConfigurationSection cs) {
+        if (provider != null) {
+            cs.set("provider", provider.toString());
+            cs.set("material", itemIdByProvider);
+        } else {
+            cs.set("material", material.toString());
+        }
+        cs.set("amount", amount);
 
+        meta.write(cs.createSection("meta"));
+
+        if (components != null && !components.isEmpty() && MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5)) {
+            ConfigurationSection componentsSection = cs.createSection("components");
+            ItemComponentSerializer.writeComponentsToConfiguration(components, componentsSection);
+        }
     }
 
     @Override
@@ -84,7 +118,7 @@ public class MittelItem extends ReadWriteObject {
                 MittelLib.getInstance()
                         .getLogger()
                         .severe("Cannot find a content provider called " + provider + " at "
-                        + cs.getCurrentPath());
+                                + cs.getCurrentPath());
             }
         } else {
             String mat = cs.getString("material", "null");
@@ -107,6 +141,16 @@ public class MittelItem extends ReadWriteObject {
             amount = 1;
         }
 
+        ConfigurationSection components = cs.getConfigurationSection("components");
+        if (components != null && MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5)) {
+            this.components = ItemComponentSerializer.readComponentsFromSection(components);
+        }
+
+        ConfigurationSection metaSection = cs.getConfigurationSection("meta");
+        if (metaSection != null) {
+            meta.read(metaSection);
+        }
+
         this.material = material;
         this.amount = amount;
     }
@@ -117,6 +161,8 @@ public class MittelItem extends ReadWriteObject {
         }
 
         ItemStack newOne = new ItemStack(material, amount);
+
+        meta.applyToItemStack(newOne);
 
         if (Objects.requireNonNull(MCVersion.getCurrent()).isAtLeast(MCVersion.V1_20_5)) {
             for (ReadWriteItemComponent component : components) {

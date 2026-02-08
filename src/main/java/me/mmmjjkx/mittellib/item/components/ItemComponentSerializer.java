@@ -21,6 +21,15 @@ import java.util.Objects;
 public class ItemComponentSerializer {
     private static final String CONSUMABLE = "consumable";
     private static final String CUSTOM_MODEL = "custom_model";
+    private static final String FOOD = "food";
+    private static final String PROFILE = "profile";
+    private static final String USEREMAINDER = "use_remainder";
+    private static final String EQUIPPABLE = "equippable";
+    private static final String DAMAGERESISTANT = "damage_resistant";
+    private static final String INSTRUMENT = "instrument";
+    private static final String ENCHANTABLE = "enchantable";
+    private static final String DEATHPROTECTION = "death_protection";
+    private static final String TRIM = "trim";
 
     public static List<ReadWriteItemComponent> readComponentsFromSection(ConfigurationSection cs) {
         List<ReadWriteItemComponent> components = new ArrayList<>();
@@ -39,11 +48,75 @@ public class ItemComponentSerializer {
             components.add(cmd);
         }
 
+        ConfigurationSection food = cs.getConfigurationSection(FOOD);
+        if (food != null) {
+            FoodComponent foodComponent = FoodComponent.readFromSection(food);
+            if (foodComponent != null) {
+                components.add(foodComponent);
+            }
+        }
+
+        ConfigurationSection instrument = cs.getConfigurationSection(INSTRUMENT);
+        if (instrument != null) {
+            InstrumentComponent instrumentComponent = InstrumentComponent.readFromSection(instrument);
+            if (instrumentComponent != null) {
+                components.add(instrumentComponent);
+            }
+        }
+
+        ConfigurationSection profile = cs.getConfigurationSection(PROFILE);
+        if (profile != null) {
+            ProfileComponent profileComponent = ProfileComponent.readFromSection(profile);
+            if (profileComponent != null) {
+                components.add(profileComponent);
+            }
+        }
+
+        ConfigurationSection useRemainder = cs.getConfigurationSection(USEREMAINDER);
+        if (useRemainder != null) {
+            UseRemainderComponent useRemainderComponent = UseRemainderComponent.readFromSection(useRemainder);
+            if (useRemainderComponent != null) {
+                components.add(useRemainderComponent);
+            }
+        }
+
+        ConfigurationSection equippable = cs.getConfigurationSection(EQUIPPABLE);
+        if (equippable != null) {
+            EquippableComponent equippableComponent = EquippableComponent.readFromSection(equippable);
+            if (equippableComponent != null) {
+                components.add(equippableComponent);
+            }
+        }
+
         return components;
     }
 
     public static void writeComponentsToConfiguration(List<ReadWriteItemComponent> components, ConfigurationSection cs) {
+        for (ReadWriteItemComponent component : components) {
+            if (component instanceof ConsumableComponent consumable) {
+                consumable.write(cs.createSection(CONSUMABLE));
+            }
 
+            if (component instanceof CustomModelDataComponent cmd) {
+                cmd.write(cs.createSection(CUSTOM_MODEL));
+            }
+
+            if (component instanceof FoodComponent food) {
+                food.write(cs.createSection(FOOD));
+            }
+
+            if (component instanceof InstrumentComponent instrument) {
+                instrument.write(cs.createSection(INSTRUMENT));
+            }
+
+            if (component instanceof ProfileComponent profile) {
+                profile.write(cs.createSection(PROFILE));
+            }
+
+            if (component instanceof UseRemainderComponent useRemainder) {
+                useRemainder.write(cs.createSection(USEREMAINDER));
+            }
+        }
     }
 
     static List<ConsumeEffect> readConsumeEffects(ConfigurationSection cs) {
