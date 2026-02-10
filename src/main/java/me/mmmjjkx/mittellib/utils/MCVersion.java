@@ -29,7 +29,7 @@ public enum MCVersion {
     /**
     <b>NOTE: this is not a final version</b>
      */
-    V26_1(0x40000126)
+    V26_1(0x40000127)
     ;
 
     @NotNull

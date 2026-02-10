@@ -1,4 +1,4 @@
-package me.mmmjjkx.mittellib.item.components;
+package me.mmmjjkx.mittellib.item.components.impl;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -7,8 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import me.mmmjjkx.mittellib.MittelLib;
 import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
+import me.mmmjjkx.mittellib.item.components.internal.ItemComponentSpec;
 import me.mmmjjkx.mittellib.utils.BukkitUtils;
 import me.mmmjjkx.mittellib.utils.EnumUtils;
+import me.mmmjjkx.mittellib.utils.MCVersion;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +18,7 @@ import org.bukkit.profile.PlayerTextures;
 
 import java.util.*;
 
+@ItemComponentSpec(key = "profile", requiredVersion = MCVersion.V1_20_5)
 @SuppressWarnings("unchecked")
 @RequiredArgsConstructor
 @AllArgsConstructor

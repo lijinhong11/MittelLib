@@ -3,13 +3,14 @@ package me.mmmjjkx.mittellib.configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
+@SuppressWarnings("unused")
 public abstract class ReadWriteItemComponent extends ReadWriteObject {
     protected ReadWriteItemComponent() {
         super();
     }
 
     protected ReadWriteItemComponent(ConfigurationSection cs) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Please use #readFromSection method");
     }
 
     public abstract void applyToItem(ItemStack item);

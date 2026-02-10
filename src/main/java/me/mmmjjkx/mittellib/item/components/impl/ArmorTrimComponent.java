@@ -1,4 +1,4 @@
-package me.mmmjjkx.mittellib.item.components;
+package me.mmmjjkx.mittellib.item.components.impl;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemArmorTrim;
@@ -6,6 +6,8 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import lombok.AllArgsConstructor;
 import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
+import me.mmmjjkx.mittellib.item.components.internal.ItemComponentSpec;
+import me.mmmjjkx.mittellib.utils.MCVersion;
 import org.bukkit.Registry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -13,6 +15,7 @@ import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 
+@ItemComponentSpec(key = "trim", requiredVersion = MCVersion.V1_21_5)
 @AllArgsConstructor
 public class ArmorTrimComponent extends ReadWriteItemComponent {
     private static final Registry<TrimMaterial> TRIM_MATERIAL_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL);

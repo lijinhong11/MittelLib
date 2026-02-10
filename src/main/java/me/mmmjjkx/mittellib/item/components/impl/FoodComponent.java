@@ -1,4 +1,4 @@
-package me.mmmjjkx.mittellib.item.components;
+package me.mmmjjkx.mittellib.item.components.impl;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.FoodProperties;
@@ -6,11 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import me.mmmjjkx.mittellib.MittelLib;
 import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
+import me.mmmjjkx.mittellib.item.components.internal.ItemComponentSpec;
+import me.mmmjjkx.mittellib.utils.MCVersion;
+import me.mmmjjkx.mittellib.utils.NumberUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Nullable;
 
+@ItemComponentSpec(key = "food", requiredVersion = MCVersion.V1_20_5)
 @AllArgsConstructor
 @NoArgsConstructor
 public class FoodComponent extends ReadWriteItemComponent {
@@ -58,15 +62,8 @@ public class FoodComponent extends ReadWriteItemComponent {
             return null;
         }
 
-        int nutrition = cs.getInt("nutrition", -1);
-        if (nutrition < 0) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Cannot define food component: 'nutrition' must be >= 0 (was " + nutrition + ")");
-            return null;
-        }
+        int nutrition = NumberUtils.asUnsigned(cs.getInt("nutrition", -1));
 
-        // Use double to avoid precision surprises in config, then cast to float.
         double saturationDouble = cs.getDouble("saturation", -1.0d);
         if (saturationDouble < 0.0d) {
             MittelLib.getInstance()

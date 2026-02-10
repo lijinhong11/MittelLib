@@ -11,6 +11,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @UtilityClass
@@ -32,11 +34,23 @@ public class BukkitUtils {
 
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("The namespaced key doesn't match NamespacedKey's format: " + namespacedKey);
+                    .severe("The string doesn't match NamespacedKey's format: " + namespacedKey);
             return null;
         }
 
         return NamespacedKey.fromString(namespacedKey);
+    }
+
+    public static @NotNull List<NamespacedKey> getNamespacedKeys(@NotNull Iterable<String> namespacedKeys) {
+        List<NamespacedKey> keys = new ArrayList<>();
+        for (String s : namespacedKeys) {
+            NamespacedKey key = getNamespacedKey(s);
+            if (key != null) {
+                keys.add(key);
+            }
+        }
+
+        return keys;
     }
 
     public static @Nullable PotionEffect readPotionEffect(@NotNull ConfigurationSection cs) {

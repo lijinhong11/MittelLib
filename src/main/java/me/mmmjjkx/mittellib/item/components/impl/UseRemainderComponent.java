@@ -1,14 +1,17 @@
-package me.mmmjjkx.mittellib.item.components;
+package me.mmmjjkx.mittellib.item.components.impl;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.UseRemainder;
 import lombok.AllArgsConstructor;
 import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
 import me.mmmjjkx.mittellib.item.MittelItem;
+import me.mmmjjkx.mittellib.item.components.internal.ItemComponentSpec;
+import me.mmmjjkx.mittellib.utils.MCVersion;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+@ItemComponentSpec(key = "useRemainder", requiredVersion = MCVersion.V1_21_2)
 @AllArgsConstructor
 public class UseRemainderComponent extends ReadWriteItemComponent {
     private final @NotNull ItemStack transfromInto;

@@ -1,4 +1,4 @@
-package me.mmmjjkx.mittellib.item.components;
+package me.mmmjjkx.mittellib.item.components.impl;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Equippable;
@@ -10,8 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import me.mmmjjkx.mittellib.MittelLib;
 import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
+import me.mmmjjkx.mittellib.item.components.internal.ItemComponentSpec;
 import me.mmmjjkx.mittellib.utils.BukkitUtils;
 import me.mmmjjkx.mittellib.utils.EnumUtils;
+import me.mmmjjkx.mittellib.utils.MCVersion;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@ItemComponentSpec(key = "equippable", requiredVersion = MCVersion.V1_21_2)
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class EquippableComponent extends ReadWriteItemComponent {
@@ -131,10 +134,10 @@ public class EquippableComponent extends ReadWriteItemComponent {
         }
 
         RegistryKeySet<EntityType> allowedEntities = null;
-        var entities = cs.getStringList("allowedEntities");
+        List<String> entities = cs.getStringList("allowedEntities");
         if (!entities.isEmpty()) {
-            List<TypedKey<EntityType>> keys = entities.stream().map(BukkitUtils::getNamespacedKey)
-                    .filter(java.util.Objects::nonNull)
+            List<TypedKey<EntityType>> keys = BukkitUtils.getNamespacedKeys(entities)
+                    .stream()
                     .map(RegistryKey.ENTITY_TYPE::typedKey)
                     .toList();
 
