@@ -11,7 +11,7 @@ import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
 import me.mmmjjkx.mittellib.item.components.internal.ItemComponentSpec;
 import me.mmmjjkx.mittellib.utils.BukkitUtils;
 import me.mmmjjkx.mittellib.utils.EnumUtils;
-import me.mmmjjkx.mittellib.utils.MCVersion;
+import me.mmmjjkx.mittellib.utils.enums.MCVersion;
 import me.mmmjjkx.mittellib.utils.NumberUtils;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;

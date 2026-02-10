@@ -1,4 +1,4 @@
-package me.mmmjjkx.mittellib.utils;
+package me.mmmjjkx.mittellib.utils.enums;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;

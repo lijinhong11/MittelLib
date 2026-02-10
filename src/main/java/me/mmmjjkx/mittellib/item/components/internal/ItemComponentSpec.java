@@ -1,6 +1,6 @@
 package me.mmmjjkx.mittellib.item.components.internal;
 
-import me.mmmjjkx.mittellib.utils.MCVersion;
+import me.mmmjjkx.mittellib.utils.enums.MCVersion;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.annotation.ElementType;

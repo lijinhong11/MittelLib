@@ -9,7 +9,7 @@ import me.mmmjjkx.mittellib.hook.ContentProvider;
 import me.mmmjjkx.mittellib.hook.ContentProviders;
 import me.mmmjjkx.mittellib.item.components.internal.ItemComponentSerializer;
 import me.mmmjjkx.mittellib.utils.EnumUtils;
-import me.mmmjjkx.mittellib.utils.MCVersion;
+import me.mmmjjkx.mittellib.utils.enums.MCVersion;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
