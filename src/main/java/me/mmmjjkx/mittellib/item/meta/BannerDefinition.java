@@ -75,21 +75,25 @@ public class BannerDefinition extends ReadWriteObject {
         if (stringPatterns.isEmpty()) {
             return;
         }
+
         bannerPatterns.clear();
         for (String s : stringPatterns) {
             String[] parts = s.split(";", 2);
             if (parts.length != 2) {
                 continue;
             }
+
             DyeColor color = EnumUtils.readEnum(DyeColor.class, parts[0].trim());
             NamespacedKey key = BukkitUtils.getNamespacedKey(parts[1].trim());
             if (color == null || key == null) {
                 continue;
             }
+
             PatternType type = REGISTRY.get(key);
             if (type == null) {
                 continue;
             }
+
             bannerPatterns.add(new Pattern(color, type));
         }
     }

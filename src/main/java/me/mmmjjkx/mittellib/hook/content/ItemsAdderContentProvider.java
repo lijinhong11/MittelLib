@@ -2,8 +2,8 @@ package me.mmmjjkx.mittellib.hook.content;
 
 import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.CustomStack;
-import me.mmmjjkx.mittellib.hook.ContentProvider;
-import me.mmmjjkx.mittellib.item.block.PackedBlock;
+import me.mmmjjkx.mittellib.iface.ContentProvider;
+import me.mmmjjkx.mittellib.iface.block.PackedBlock;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

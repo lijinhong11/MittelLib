@@ -1,4 +1,4 @@
-package me.mmmjjkx.mittellib.actions;
+package me.mmmjjkx.mittellib.iface.actions;
 
 import org.bukkit.entity.Player;
 

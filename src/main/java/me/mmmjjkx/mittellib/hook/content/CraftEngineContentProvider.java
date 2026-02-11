@@ -1,7 +1,7 @@
 package me.mmmjjkx.mittellib.hook.content;
 
-import me.mmmjjkx.mittellib.hook.ContentProvider;
-import me.mmmjjkx.mittellib.item.block.PackedBlock;
+import me.mmmjjkx.mittellib.iface.ContentProvider;
+import me.mmmjjkx.mittellib.iface.block.PackedBlock;
 import me.mmmjjkx.mittellib.utils.BukkitUtils;
 import net.momirealms.craftengine.bukkit.api.CraftEngineBlocks;
 import net.momirealms.craftengine.bukkit.api.CraftEngineItems;

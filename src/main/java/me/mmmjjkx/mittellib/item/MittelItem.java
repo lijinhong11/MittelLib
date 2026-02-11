@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import me.mmmjjkx.mittellib.MittelLib;
 import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
 import me.mmmjjkx.mittellib.configuration.ReadWriteObject;
-import me.mmmjjkx.mittellib.hook.ContentProvider;
+import me.mmmjjkx.mittellib.iface.ContentProvider;
 import me.mmmjjkx.mittellib.hook.ContentProviders;
 import me.mmmjjkx.mittellib.item.components.internal.ItemComponentSerializer;
 import me.mmmjjkx.mittellib.utils.EnumUtils;

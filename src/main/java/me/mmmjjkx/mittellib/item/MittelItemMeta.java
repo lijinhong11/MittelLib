@@ -48,20 +48,21 @@ public class MittelItemMeta extends ReadWriteObject {
         if (meta instanceof BannerMeta bannerMeta) {
             newOne.banner = BannerDefinition.fromBannerMeta(bannerMeta);
         }
+
         if (meta instanceof FireworkMeta fireworkMeta) {
             newOne.firework = FireworkDefinition.fromFireworkMeta(fireworkMeta);
         }
+
         if (meta instanceof MapMeta mapMeta) {
             newOne.map = MapDefinition.fromMapMeta(mapMeta);
         }
+
         if (meta instanceof SkullMeta skullMeta) {
             newOne.skull = SkullDefinition.fromSkullMeta(skullMeta);
         }
+
         if (meta instanceof LeatherArmorMeta leatherArmorMeta) {
-            Color color = leatherArmorMeta.getColor();
-            if (color != null) {
-                newOne.leatherArmorColor = color;
-            }
+            newOne.leatherArmorColor = leatherArmorMeta.getColor();
         }
 
         return newOne;
@@ -80,9 +81,15 @@ public class MittelItemMeta extends ReadWriteObject {
             meta.removeItemFlags(ItemFlag.values());
             meta.addItemFlags(itemFlags.toArray(new ItemFlag[0]));
         }
+
         if (meta instanceof BannerMeta bm && banner != null) {
             banner.applyTo(bm);
         }
+
+        if (meta instanceof FireworkMeta fm && firework != null) {
+            firework.applyTo(fm);
+        }
+
         if (meta instanceof LeatherArmorMeta lam && leatherArmorColor != null) {
             lam.setColor(leatherArmorColor);
         }
@@ -100,18 +107,22 @@ public class MittelItemMeta extends ReadWriteObject {
             ConfigurationSection bannerSection = cs.createSection("banner");
             banner.write(bannerSection);
         }
+
         if (skull != null) {
             ConfigurationSection skullSection = cs.createSection("skull");
             skull.write(skullSection);
         }
+
         if (firework != null) {
             ConfigurationSection fireworkSection = cs.createSection("firework");
             firework.write(fireworkSection);
         }
+
         if (map != null) {
             ConfigurationSection mapSection = cs.createSection("map");
             map.write(mapSection);
         }
+
         if (leatherArmorColor != null) {
             ConfigurationSection colorSection = cs.createSection("leatherArmorColor");
             colorSection.set("alpha", leatherArmorColor.getAlpha());
@@ -158,11 +169,12 @@ public class MittelItemMeta extends ReadWriteObject {
         }
 
         ConfigurationSection colorSection = cs.getConfigurationSection("leatherArmorColor");
-        if (colorSection != null && colorSection.contains("red")) {
+        if (colorSection != null) {
+            int alpha = colorSection.getInt("alpha", 255);
             int red = colorSection.getInt("red", 0);
             int green = colorSection.getInt("green", 0);
             int blue = colorSection.getInt("blue", 0);
-            leatherArmorColor = Color.fromRGB(red, green, blue);
+            leatherArmorColor = Color.fromARGB(alpha, red, green, blue);
         }
     }
 }

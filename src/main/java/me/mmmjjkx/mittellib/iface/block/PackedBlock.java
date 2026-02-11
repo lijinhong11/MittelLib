@@ -1,4 +1,4 @@
-package me.mmmjjkx.mittellib.item.block;
+package me.mmmjjkx.mittellib.iface.block;
 
 import org.bukkit.Location;
 

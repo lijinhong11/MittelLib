@@ -2,6 +2,7 @@ package me.mmmjjkx.mittellib.utils;
 
 import lombok.experimental.UtilityClass;
 import me.mmmjjkx.mittellib.MittelLib;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -11,9 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @UtilityClass
 public class BukkitUtils {
@@ -97,5 +96,29 @@ public class BukkitUtils {
         boolean icon = (boolean) map.getOrDefault("icon", true);
 
         return new PotionEffect(pet, duration, amplifier, ambient, particle, icon);
+    }
+
+    public static @NotNull List<Color> toColors(List<Map<?, ?>> colorMaps) {
+        List<Color> colors = new ArrayList<>();
+        for (Map<?, ?> color : colorMaps) {
+            Map<String, Integer> colorMap = (Map<String, Integer>) color;
+            Color bukkit = Color.fromARGB(colorMap.getOrDefault("alpha", 255), colorMap.get("red"), colorMap.get("green"), colorMap.get("blue"));
+            colors.add(bukkit);
+        }
+
+        return colors;
+    }
+
+    public static List<Map<String, Integer>> writeColor(List<Color> colors) {
+        return colors.stream()
+                .filter(Objects::nonNull)
+                .map(c -> {
+                    Map<String, Integer> color = new HashMap<>();
+                    color.put("alpha", c.getAlpha());
+                    color.put("red", c.getRed());
+                    color.put("green", c.getGreen());
+                    color.put("blue", c.getBlue());
+                    return color;
+                }).toList();
     }
 }

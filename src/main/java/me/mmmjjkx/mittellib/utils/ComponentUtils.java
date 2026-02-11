@@ -1,9 +1,13 @@
 package me.mmmjjkx.mittellib.utils;
 
+import io.github.miniplaceholders.api.MiniPlaceholders;
 import lombok.experimental.UtilityClass;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
 
 @UtilityClass
 public class ComponentUtils {
@@ -20,16 +24,16 @@ public class ComponentUtils {
             return Component.empty();
         }
 
-        //if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-        //    input = PlaceholderAPI.setPlaceholders(null, input);
-        //}
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            input = PlaceholderAPI.setPlaceholders(null, input);
+        }
 
         Component result = LEGACY.deserialize(input);
 
-        //if (Bukkit.getPluginManager().isPluginEnabled("MiniPlaceholders")) {
-        //    String mini = MiniMessage.miniMessage().serialize(result);
-        //    return MiniMessage.miniMessage().deserialize(mini, MiniPlaceholders.getGlobalPlaceholders());
-        //}
+        if (Bukkit.getPluginManager().isPluginEnabled("MiniPlaceholders")) {
+            String mini = MiniMessage.miniMessage().serialize(result);
+            return MiniMessage.miniMessage().deserialize(mini, MiniPlaceholders.globalPlaceholders());
+        }
 
         return result;
     }

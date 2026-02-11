@@ -1,13 +1,13 @@
-package me.mmmjjkx.mittellib.actions.tool;
+package me.mmmjjkx.mittellib.actions.item;
 
 import lombok.AllArgsConstructor;
-import me.mmmjjkx.mittellib.actions.ToolAction;
+import me.mmmjjkx.mittellib.iface.actions.ItemAction;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 @AllArgsConstructor
-class DropMultiple implements ToolAction {
+class DropMultiple implements ItemAction {
     private final int multi;
 
     @Override

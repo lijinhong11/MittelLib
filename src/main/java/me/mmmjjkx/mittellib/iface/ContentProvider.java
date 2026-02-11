@@ -1,6 +1,6 @@
-package me.mmmjjkx.mittellib.hook;
+package me.mmmjjkx.mittellib.iface;
 
-import me.mmmjjkx.mittellib.item.block.PackedBlock;
+import me.mmmjjkx.mittellib.iface.block.PackedBlock;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

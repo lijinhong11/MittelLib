@@ -1,7 +1,7 @@
 package me.mmmjjkx.mittellib.actions.player;
 
 import lombok.AllArgsConstructor;
-import me.mmmjjkx.mittellib.actions.PlayerAction;
+import me.mmmjjkx.mittellib.iface.actions.PlayerAction;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 

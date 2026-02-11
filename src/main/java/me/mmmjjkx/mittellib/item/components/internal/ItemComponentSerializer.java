@@ -80,11 +80,38 @@ public class ItemComponentSerializer {
         }
 
         if (current.isAtLeast(MCVersion.V1_21_2)) {
+            READERS.put("glider", new ReadMethod(cs ->
+                    SimpleItemComponent.readFromSection("glider", cs, Boolean.class, (i, e) -> {
+                        e = e == null || e;
+                        if (e) {
+                            i.setData(DataComponentTypes.GLIDER);
+                        }
+                    })
+            ));
             READERS.put("item_model", new ReadMethod(cs ->
                     SimpleItemComponent.readFromSection("item_model", cs, String.class, (i, e) -> {
                         NamespacedKey key = BukkitUtils.getNamespacedKey(e);
                         if (key != null) {
                             i.setData(DataComponentTypes.ITEM_MODEL, key);
+                        }
+                    })
+            ));
+            READERS.put("tooltip_style", new ReadMethod(cs ->
+                    SimpleItemComponent.readFromSection("tooltip_style", cs, String.class, (i, e) -> {
+                        NamespacedKey key = BukkitUtils.getNamespacedKey(e);
+                        if (key != null) {
+                            i.setData(DataComponentTypes.TOOLTIP_STYLE, key);
+                        }
+                    })
+            ));
+        }
+
+        if (current.isAtLeast(MCVersion.V1_21_11)) {
+            READERS.put("intangible_projectile", new ReadMethod(cs ->
+                    SimpleItemComponent.readFromSection("intangible_projectile", cs, Boolean.class, (i, e) -> {
+                        e = e == null || e;
+                        if (e) {
+                            i.setData(DataComponentTypes.INTANGIBLE_PROJECTILE);
                         }
                     })
             ));

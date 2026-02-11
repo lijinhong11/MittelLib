@@ -1,7 +1,7 @@
 package me.mmmjjkx.mittellib.actions.player;
 
 import lombok.AllArgsConstructor;
-import me.mmmjjkx.mittellib.actions.PlayerAction;
+import me.mmmjjkx.mittellib.iface.actions.PlayerAction;
 import me.mmmjjkx.mittellib.utils.enums.PlayerAttributeType;
 import org.bukkit.entity.Player;
 

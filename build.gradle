@@ -35,6 +35,9 @@ repositories {
     maven {
         url = "https://repo.auxilor.io/repository/maven-public/"
     }
+    maven {
+        url = 'https://repo.extendedclip.com/releases/'
+    }
 }
 
 dependencies {
@@ -42,6 +45,10 @@ dependencies {
 
     //libraries
     implementation("org.reflections:reflections:0.10.2")
+
+    //placeholders
+    compileOnly("me.clip:placeholderapi:2.12.2")
+    compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.1.0")
 
     //content provider
     compileOnly("dev.lone:api-itemsadder:4.0.10")

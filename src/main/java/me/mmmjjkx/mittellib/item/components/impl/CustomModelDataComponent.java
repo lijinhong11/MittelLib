@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import me.mmmjjkx.mittellib.configuration.ReadWriteItemComponent;
 import me.mmmjjkx.mittellib.item.components.internal.ItemComponentSpec;
+import me.mmmjjkx.mittellib.utils.BukkitUtils;
 import me.mmmjjkx.mittellib.utils.enums.MCVersion;
 import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
@@ -34,14 +35,7 @@ public class CustomModelDataComponent extends ReadWriteItemComponent {
         List<Float> floats = cs.getFloatList("floats");
         List<Boolean> flags = cs.getBooleanList("flags");
         List<String> strings = cs.getStringList("strings");
-
-        List<Color> colors = new ArrayList<>();
-        List<Map<?, ?>> colorMaps = cs.getMapList("colors");
-        for (Map<?, ?> color : colorMaps) {
-            Map<String, Integer> colorMap = (Map<String, Integer>) color;
-            Color bukkit = Color.fromARGB(colorMap.getOrDefault("alpha", 255), colorMap.get("red"), colorMap.get("green"), colorMap.get("blue"));
-            colors.add(bukkit);
-        }
+        List<Color> colors = BukkitUtils.toColors(cs.getMapList("colors"));
 
         return new CustomModelDataComponent(floats, flags, strings, colors);
     }

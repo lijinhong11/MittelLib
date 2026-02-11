@@ -2,8 +2,8 @@ package me.mmmjjkx.mittellib.hook.content;
 
 import com.willfp.ecoitems.items.EcoItem;
 import com.willfp.ecoitems.items.EcoItems;
-import me.mmmjjkx.mittellib.hook.ContentProvider;
-import me.mmmjjkx.mittellib.item.block.PackedBlock;
+import me.mmmjjkx.mittellib.iface.ContentProvider;
+import me.mmmjjkx.mittellib.iface.block.PackedBlock;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

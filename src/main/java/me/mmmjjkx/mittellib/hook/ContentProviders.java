@@ -1,6 +1,7 @@
 package me.mmmjjkx.mittellib.hook;
 
 import lombok.experimental.UtilityClass;
+import me.mmmjjkx.mittellib.iface.ContentProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
