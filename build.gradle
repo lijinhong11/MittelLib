@@ -1,10 +1,14 @@
+import java.nio.file.Files
+
 plugins {
-    id 'java'
+    id "java"
+    id "maven-publish"
+    id "org.jreleaser" version "1.22.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
-group = 'me.mmmjjkx'
-version = '1.0-SNAPSHOT'
+group = "io.github.lijinhong11"
+version = properties["version"]
 
 repositories {
     mavenCentral()
@@ -36,12 +40,12 @@ repositories {
         url = "https://repo.auxilor.io/repository/maven-public/"
     }
     maven {
-        url = 'https://repo.extendedclip.com/releases/'
+        url = "https://repo.extendedclip.com/releases/"
     }
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
     //libraries
     implementation("org.reflections:reflections:0.10.2")
@@ -65,8 +69,9 @@ dependencies {
 
     compileOnly("maven.modrinth:SCore:5.25.7.19")
 
+    compileOnly("com.willfp:eco:6.77.3")
     compileOnly("com.willfp:EcoItems:5.66.0")
-    compileOnly("com.willfp:libreforge:4.79.0")
+    compileOnly("com.willfp:libreforge:4.79.0:all")
 
     //lombok
     compileOnly("org.projectlombok:lombok:1.18.42")
@@ -90,10 +95,13 @@ java {
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
+
+    withSourcesJar()
+    withJavadocJar()
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+    options.encoding = "UTF-8"
 
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
@@ -101,10 +109,84 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 processResources {
-    def props = [version: version]
-    inputs.properties props
-    filteringCharset 'UTF-8'
-    filesMatching('plugin.yml') {
-        expand props
+    filteringCharset "UTF-8"
+    filesMatching("plugin.yml") {
+        expand project.properties
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            pom {
+                groupId = "io.github.lijinhong11"
+                artifactId = "MittelLib"
+                version = this.version
+                description = "A library for Mittel series"
+                name = "MittelLib"
+                url = "https://github.com/lijinhong11/MittelLib"
+
+                licenses {
+                    license {
+                        name = "The GNU General Public License, Version 3.0"
+                        url = "https://www.gnu.org/licenses/gpl-3.0.md"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "lijinhong11"
+                        name = "Jinhong Li"
+                        email = "tygfhk@outlook.com"
+                    }
+                }
+
+                scm {
+                    connection = "scm:git:git://github.com/lijinhong11/MittelLib.git"
+                    developerConnection = "scm:git:ssh://github.com/lijinhong11/MittelLib.git"
+                    url = "https://github.com/lijinhong11/MittelLib"
+                }
+            }
+
+            from(components.java)
+        }
+    }
+
+    repositories {
+        maven {
+            url = uri(layout.projectDirectory.dir("repo"))
+        }
+    }
+}
+
+
+jreleaser {
+    signing {
+        pgp {
+            active = 'ALWAYS'
+            armored = true
+
+            mode = "COMMAND"
+
+            command {
+                executable = "gpg"
+            }
+        }
+    }
+
+    deploy {
+        maven {
+            mavenCentral {
+                sonatype {
+                    applyMavenCentralRules = true
+
+                    username = System.getenv("SONATYPE_USERNAME")
+                    password = System.getenv("SONATYPE_PASSWORD")
+
+                    active = 'RELEASE'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('repo')
+                }
+            }
+        }
     }
 }

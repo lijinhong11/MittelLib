@@ -1,7 +1,20 @@
 name: MittelLib
-version: '1.0-SNAPSHOT'
-main: me.mmmjjkx.mittellib.MittelLib
+version: '${version}'
+main: io.github.lijinhong11.mittellib.MittelLib
 api-version: '1.20'
 load: STARTUP
 authors: [ mmmjjkx ]
 description: A library for mmmjjkx's plugins
+libraries:
+  - "org.reflections:reflections:0.10.2"
+softdepend:
+  - CraftEngine
+  - EcoItems
+  - ExecutableItems
+  - ItemsAdder
+  - MMOItems
+  - Nexo
+  - Oraxen
+
+  - PlaceholderAPI
+  - MiniPlaceholders
