@@ -96,7 +96,7 @@ public class ItemComponentSerializer {
             BiConsumer<ItemStack, T> applier
     ) {
         READERS.put(key, new ReadMethod(cs ->
-                SimpleItemComponent.readFromSection(key, cs, type, applier)
+                SimpleItemComponent.readFromSection(key, cs, type, applier), true
         ));
 
         TYPE_KEYS.put(dataType, key);
@@ -172,6 +172,27 @@ public class ItemComponentSerializer {
         List<ReadWriteItemComponent> list = new ArrayList<>();
 
         for (DataComponentType type : item.getDataTypes()) {
+            if (TYPE_KEYS.get(type) == null) {
+                continue;
+            } else {
+                String key = TYPE_KEYS.get(type);
+                ReadMethod rm = READERS.get(key);
+                if (rm.simple) {
+                    if (type instanceof DataComponentType.NonValued v) {
+                        list.add(new SimpleItemComponent<>(key, true, (i, b) -> i.setData(v)));
+                    }
+
+                    if (type instanceof DataComponentType.Valued<?> va) {
+                        SimpleItemComponent<?> sic = getSimpleValuedComponent(key, va, item);
+                        if (sic != null) {
+                            list.add(sic);
+                        }
+                    }
+
+                    continue;
+                }
+            }
+
             Method fromMethod = FROM_METHODS.get(type);
             if (fromMethod == null) continue;
 
@@ -198,6 +219,23 @@ public class ItemComponentSerializer {
         return list;
     }
 
+    private static <T> SimpleItemComponent<T> getSimpleValuedComponent(
+            String key,
+            DataComponentType.Valued<T> va,
+            ItemStack item
+    ) {
+        T value = item.getData(va);
+        if (value != null) {
+            return new SimpleItemComponent<>(
+                    key,
+                    value,
+                    (i, b) -> i.setData(va, b)
+            );
+        }
+
+        return null;
+    }
+
     public static void writeComponentsToConfiguration(
             List<ReadWriteItemComponent> components,
             ConfigurationSection cs
@@ -219,7 +257,8 @@ public class ItemComponentSerializer {
 
     @ApiStatus.Internal
     private record ReadMethod(
-            Function<ConfigurationSection, ReadWriteItemComponent> reader
+            Function<ConfigurationSection, ReadWriteItemComponent> reader,
+            boolean simple
     ) {
         ReadMethod(Method method) {
             this(cs -> {
@@ -228,7 +267,7 @@ public class ItemComponentSerializer {
                 } catch (Exception e) {
                     return null;
                 }
-            });
+            }, false);
         }
 
         ReadWriteItemComponent invoke(ConfigurationSection cs) {
