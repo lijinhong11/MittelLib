@@ -151,7 +151,8 @@ publishing {
 
     repositories {
         maven {
-            url = uri(layout.projectDirectory.dir("repo"))
+            var dir = layout.projectDirectory.dir("repo");
+            url = uri(dir)
         }
     }
 }
@@ -175,13 +176,28 @@ jreleaser {
         maven {
             mavenCentral {
                 sonatype {
+                    active = 'RELEASE'
+
                     applyMavenCentralRules = true
 
                     username = System.getenv("SONATYPE_USERNAME")
                     password = System.getenv("SONATYPE_PASSWORD")
 
-                    active = 'RELEASE'
                     url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('repo')
+                }
+            }
+            nexus2 {
+                'snapshot-deploy' {
+                    username = System.getenv("SONATYPE_USERNAME")
+                    password = System.getenv("SONATYPE_PASSWORD")
+
+                    active = 'SNAPSHOT'
+                    snapshotUrl = 'https://central.sonatype.com/repository/maven-snapshots/'
+                    applyMavenCentralRules = true
+                    snapshotSupported = true
+                    closeRepository = true
+                    releaseRepository = true
                     stagingRepository('repo')
                 }
             }

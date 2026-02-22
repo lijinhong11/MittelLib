@@ -26,6 +26,30 @@ public class BlockPos extends ReadWriteObject implements Comparable<BlockPos> {
     }
 
     /**
+     * Get x coordinate
+     * @return the x coordinate
+     */
+    public int x() {
+        return x;
+    }
+
+    /**
+     * Get y coordinate
+     * @return the y coordinate
+     */
+    public int y() {
+        return y;
+    }
+
+    /**
+     * Get z coordinate
+     * @return the z coordinate
+     */
+    public int z() {
+        return z;
+    }
+
+    /**
      * Creates a BlockPos from a Bukkit Location.
      *
      * @param location the location to convert

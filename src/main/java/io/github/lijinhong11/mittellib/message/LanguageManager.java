@@ -25,7 +25,7 @@ import java.util.jar.JarFile;
  * A class to manage language files and messages.
  * You can create a new instance of this class by passing a reference to your plugin.
  */
-public final class LanguageManager {
+public class LanguageManager {
     private final Plugin plugin;
     private final String defaultLanguage;
 
@@ -206,6 +206,10 @@ public final class LanguageManager {
 
     public void reload() {
         loadLanguages();
+    }
+
+    public Set<String> getTranslationKeys() {
+        return defaultConfiguration.getKeys(true);
     }
 
     private Configuration getConfiguration(CommandSender p) {
