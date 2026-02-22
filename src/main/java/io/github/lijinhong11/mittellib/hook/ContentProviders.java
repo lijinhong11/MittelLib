@@ -23,7 +23,7 @@ public class ContentProviders {
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             String name = plugin.getName() + "ContentProvider";
             try {
-                Class<?> theClass = Class.forName("me.mmmjjkx.mittellib.hook." + name);
+                Class<?> theClass = Class.forName("io.github.lijinhong11.mittellib.hook." + name);
                 Constructor<? extends ContentProvider> constructor = ((Class<? extends ContentProvider>) theClass).getConstructor();
                 contentProviders.put(name.toLowerCase(), constructor.newInstance());
             } catch (Exception ignore) {

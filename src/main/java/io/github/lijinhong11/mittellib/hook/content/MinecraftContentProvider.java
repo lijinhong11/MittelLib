@@ -57,7 +57,7 @@ public class MinecraftContentProvider implements ContentProvider {
         return Arrays.stream(Material.values()).filter(m -> !m.isAir() && m.isBlock()).map(m -> "minecraft:" + m.toString().toLowerCase()).toList();
     }
 
-    private record PackedMinecraftBlock(Material material) implements PackedBlock {
+    public record PackedMinecraftBlock(Material material) implements PackedBlock {
         @Override
         public void place(Location location) {
             location.getBlock().setType(material);
