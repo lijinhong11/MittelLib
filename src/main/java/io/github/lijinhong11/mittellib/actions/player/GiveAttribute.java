@@ -1,8 +1,8 @@
 package io.github.lijinhong11.mittellib.actions.player;
 
-import lombok.AllArgsConstructor;
 import io.github.lijinhong11.mittellib.iface.actions.PlayerAction;
 import io.github.lijinhong11.mittellib.utils.enums.PlayerAttributeType;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 @AllArgsConstructor

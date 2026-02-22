@@ -1,9 +1,12 @@
 package io.github.lijinhong11.mittellib.configuration;
 
+import io.github.lijinhong11.mittellib.item.MittelItem;
+import io.github.lijinhong11.mittellib.utils.ComponentUtils;
+import io.github.lijinhong11.mittellib.utils.EnumUtils;
+import io.github.lijinhong11.mittellib.utils.NumberUtils;
 import lombok.Getter;
 import lombok.Setter;
-import io.github.lijinhong11.mittellib.item.MittelItem;
-import io.github.lijinhong11.mittellib.utils.NumberUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,96 +17,107 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MittelConfig {
-    private final YamlConfiguration backend;
+    private YamlConfiguration backend;
 
-    @Getter
     @Setter
+    @Getter
     private File file;
 
     public MittelConfig() {
-        this(new YamlConfiguration());
+        this.backend = new YamlConfiguration();
     }
 
-    public MittelConfig(@NotNull YamlConfiguration configuration) {
+    public MittelConfig(YamlConfiguration configuration) {
         this.backend = configuration;
     }
 
-    public MittelConfig(@NotNull YamlConfiguration configuration, @Nullable File file) {
-        this.backend = configuration;
+    private MittelConfig(@NotNull File file, @NotNull YamlConfiguration configuration) {
         this.file = file;
+        this.backend = configuration;
     }
 
-    public int getUnsignedInt(@NotNull String path) {
-        int i = getInt(path);
-        return NumberUtils.asUnsigned(i);
+    public static @NotNull MittelConfig load(@NotNull File file, boolean createIfMissing) {
+        if (!file.exists()) {
+            if (!createIfMissing) {
+                throw new IllegalStateException("Config file does not exist: " + file.getPath());
+            }
+
+            try {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create config file", e);
+            }
+        }
+
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+        return new MittelConfig(file, config);
     }
 
-    public int getUnsignedInt(@NotNull String path, int def) {
-        int i = getInt(path, def);
-        return NumberUtils.asUnsigned(i);
+    public void reload() {
+        ensureFile();
+        this.backend = YamlConfiguration.loadConfiguration(file);
     }
 
-    public long getUnsignedLong(@NotNull String path) {
-        long l = getLong(path);
-        return NumberUtils.asUnsigned(l);
+    public void save() {
+        ensureFile();
+        try {
+            backend.save(file);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save config", e);
+        }
     }
 
-    public long getUnsignedLong(@NotNull String path, long def) {
-        long l = getLong(path, def);
-        return NumberUtils.asUnsigned(l);
+    private void ensureFile() {
+        if (file == null) {
+            throw new IllegalStateException("Config file is not set");
+        }
     }
 
-    public double getUnsignedDouble(@NotNull String path) {
-        double d = getDouble(path);
-        return NumberUtils.asUnsigned(d);
+    public boolean contains(@NotNull String path) {
+        return backend.contains(path);
     }
 
-    public double getUnsignedDouble(@NotNull String path, double def) {
-        double d = getDouble(path, def);
-        return NumberUtils.asUnsigned(d);
+    public void remove(@NotNull String path) {
+        backend.set(path, null);
     }
 
-    public float getUnsignedFloat(@NotNull String path) {
-        float f = getFloat(path);
-        return NumberUtils.asUnsigned(f);
+    public void clear() {
+        for (String key : backend.getKeys(false)) {
+            backend.set(key, null);
+        }
     }
 
-    public float getUnsignedFloat(@NotNull String path, float def) {
-        float f = getFloat(path, def);
-        return NumberUtils.asUnsigned(f);
+    public @Nullable String getString(@NotNull String path) {
+        return backend.getString(path);
     }
 
-    public @Nullable ItemStack getItemStack(@NotNull String path) {
-        return getItemStack(path, null);
+    public @Nullable String getString(@NotNull String path, @Nullable String def) {
+        return backend.getString(path, def);
     }
 
-    public @Nullable ItemStack getItemStack(@NotNull String path, @Nullable ItemStack def) {
-        ConfigurationSection cs = getConfigurationSection(path);
-        if (cs == null) {
+    public @Nullable Component getComponent(@NotNull String path) {
+        return getComponent(path, null);
+    }
+
+    public @Nullable Component getComponent(@NotNull String path, @Nullable Component def) {
+        String s = getString(path);
+        if (s == null) {
             return def;
         }
 
-        MittelItem mittelItem = MittelItem.readFromSection(cs);
-
-        return mittelItem.get();
+        return ComponentUtils.deserialize(s);
     }
 
-    public <T extends ReadWriteObject> T getRWObject(@NotNull String path, @NotNull Class<T> clazz) {
-        return getRWObject(path, clazz, null);
-    }
-
-    public <T extends ReadWriteObject> T getRWObject(@NotNull String path, @NotNull Class<T> clazz, @Nullable T def) {
-        ConfigurationSection cs = getConfigurationSection(path);
-        if (cs == null) {
-            return def;
+    public @NotNull String requireString(@NotNull String path) {
+        String value = getString(path);
+        if (value == null) {
+            throw new IllegalStateException("Missing required config path: " + path);
         }
-
-        return ReadWriteObject.read(clazz, cs);
+        return value;
     }
 
     public int getInt(@NotNull String path) {
@@ -138,77 +152,95 @@ public class MittelConfig {
         return (float) getDouble(path, def);
     }
 
-    public boolean isInt(@NotNull String path) {
-        return backend.isInt(path);
+    public boolean getBoolean(@NotNull String path) {
+        return backend.getBoolean(path);
     }
 
-    public boolean isLong(@NotNull String path) {
-        return backend.isLong(path);
+    public boolean getBoolean(@NotNull String path, boolean def) {
+        return backend.getBoolean(path, def);
     }
 
-    public boolean isDouble(@NotNull String path) {
-        return backend.isDouble(path);
+    public @NotNull List<String> getStringList(@NotNull String path) {
+        return backend.getStringList(path);
     }
 
-    public boolean isFloat(@NotNull String path) {
-        return isDouble(path);
+    public int getUnsignedInt(String path) {
+        return NumberUtils.asUnsigned(getInt(path));
+    }
+
+    public long getUnsignedLong(String path) {
+        return NumberUtils.asUnsigned(getLong(path));
+    }
+
+    public double getUnsignedDouble(String path) {
+        return NumberUtils.asUnsigned(getDouble(path));
+    }
+
+    public float getUnsignedFloat(String path) {
+        return NumberUtils.asUnsigned(getFloat(path));
     }
 
     public boolean isSection(@NotNull String path) {
         return backend.isConfigurationSection(path);
     }
 
-    public @Nullable ConfigurationSection getConfigurationSection(@NotNull String path) {
+    public @Nullable ConfigurationSection getSection(@NotNull String path) {
         return backend.getConfigurationSection(path);
     }
 
-    public @NotNull ConfigurationSection createSection(@NotNull String path) {
-        return backend.createSection(path);
-    }
-
     public @NotNull ConfigurationSection getSectionOrCreate(@NotNull String path) {
-        ConfigurationSection cs = backend.getConfigurationSection(path);
-        return cs == null ? createSection(path) : cs;
-    }
-
-    public boolean contains(@NotNull String path) {
-        return backend.contains(path);
+        ConfigurationSection cs = getSection(path);
+        return cs == null ? backend.createSection(path) : cs;
     }
 
     public Set<String> getKeys(boolean deep) {
         return backend.getKeys(deep);
     }
 
-    public Set<String> getKeys(@NotNull String sectionPath, boolean deep) {
-        ConfigurationSection cs = getConfigurationSection(sectionPath);
-        return cs == null ? new HashSet<>() : cs.getKeys(deep);
+    public Set<String> getKeys(@NotNull String path, boolean deep) {
+        ConfigurationSection cs = getSection(path);
+        return cs == null ? Collections.emptySet() : cs.getKeys(deep);
     }
 
-    public void setComments(@NotNull String path, @NotNull List<String> comments) {
-        backend.setComments(path, comments);
+    public <E extends Enum<E>> @Nullable E getEnum(@NotNull String path, @NotNull Class<E> clazz) {
+        String value = getString(path);
+        if (value == null) return null;
+
+        return EnumUtils.readEnum(clazz, value);
+    }
+
+    public <E extends Enum<E>> @NotNull E getEnum(@NotNull String path, @NotNull Class<E> clazz, @NotNull E def) {
+        E e = getEnum(path, clazz);
+        return e == null ? def : e;
+    }
+
+    public @Nullable ItemStack getItemStack(@NotNull String path) {
+        ConfigurationSection cs = getSection(path);
+        if (cs == null) return null;
+
+        try {
+            MittelItem item = MittelItem.readFromSection(cs);
+            return item.get();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public <T extends ReadWriteObject> @Nullable T getRWObject(
+            @NotNull String path,
+            @NotNull Class<T> clazz
+    ) {
+        ConfigurationSection cs = getSection(path);
+        if (cs == null) return null;
+
+        return ReadWriteObject.read(clazz, cs);
     }
 
     public void setDefaults(@NotNull Configuration defaults) {
         backend.setDefaults(defaults);
     }
 
-    public @NotNull YamlConfigurationOptions options() {
+    public YamlConfigurationOptions options() {
         return backend.options();
-    }
-
-    public void save() {
-        save(file);
-    }
-
-    public void save(File file) {
-        if (file == null) {
-            throw new IllegalArgumentException("file is not set");
-        }
-
-        try {
-            backend.save(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

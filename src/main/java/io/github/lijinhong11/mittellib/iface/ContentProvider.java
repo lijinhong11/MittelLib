@@ -58,4 +58,13 @@ public interface ContentProvider {
      * @return a list of block suggestion
      */
     List<String> getBlockSuggestions();
+
+    /**
+     * Get all blocks
+     *
+     * @return all blocks in this content provider
+     */
+    default List<PackedBlock> getAllBlocks() {
+        return getBlockSuggestions().stream().map(this::getBlock).toList();
+    }
 }

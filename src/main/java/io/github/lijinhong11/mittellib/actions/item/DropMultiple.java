@@ -1,7 +1,7 @@
 package io.github.lijinhong11.mittellib.actions.item;
 
-import lombok.AllArgsConstructor;
 import io.github.lijinhong11.mittellib.iface.actions.ItemAction;
+import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;

@@ -1,12 +1,12 @@
 package io.github.lijinhong11.mittellib.hook.content;
 
+import io.github.lijinhong11.mittellib.iface.ContentProvider;
+import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
+import io.github.lijinhong11.mittellib.utils.NullUtils;
 import io.th0rgal.oraxen.api.OraxenBlocks;
 import io.th0rgal.oraxen.api.OraxenItems;
 import io.th0rgal.oraxen.items.ItemBuilder;
 import io.th0rgal.oraxen.mechanics.Mechanic;
-import io.github.lijinhong11.mittellib.iface.ContentProvider;
-import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
-import io.github.lijinhong11.mittellib.utils.NullUtils;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -66,13 +66,19 @@ public class OraxenContentProvider implements ContentProvider {
 
     private record PackedOraxenBlock(Mechanic mechanic) implements PackedBlock {
         @Override
-        public void place(Location location) {
+        public void place(@NotNull Location location) {
             OraxenBlocks.place(mechanic.getItemID(), location);
         }
 
         @Override
         public String getId() {
             return mechanic.getItemID();
+        }
+
+        @Override
+        public @Nullable ItemStack toItem() {
+            ItemBuilder item = OraxenItems.getItemById(mechanic.getItemID());
+            return item == null ? null : item.build();
         }
     }
 }

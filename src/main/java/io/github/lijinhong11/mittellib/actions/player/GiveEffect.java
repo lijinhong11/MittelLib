@@ -1,7 +1,7 @@
 package io.github.lijinhong11.mittellib.actions.player;
 
-import lombok.AllArgsConstructor;
 import io.github.lijinhong11.mittellib.iface.actions.PlayerAction;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 

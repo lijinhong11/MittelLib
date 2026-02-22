@@ -1,15 +1,15 @@
 package io.github.lijinhong11.mittellib.item;
 
-import io.github.lijinhong11.mittellib.item.components.impl.CustomModelDataComponent;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
+import io.github.lijinhong11.mittellib.item.components.impl.CustomModelDataComponent;
 import io.github.lijinhong11.mittellib.item.meta.BannerDefinition;
 import io.github.lijinhong11.mittellib.item.meta.FireworkDefinition;
 import io.github.lijinhong11.mittellib.item.meta.MapDefinition;
 import io.github.lijinhong11.mittellib.item.meta.SkullDefinition;
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;

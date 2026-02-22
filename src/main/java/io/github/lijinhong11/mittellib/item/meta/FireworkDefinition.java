@@ -1,11 +1,13 @@
 package io.github.lijinhong11.mittellib.item.meta;
 
-import lombok.AllArgsConstructor;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -17,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 @AllArgsConstructor
 public class FireworkDefinition extends ReadWriteObject {
     private @NotNull List<FireworkEffect> fireworkEffects = new ArrayList<>();

@@ -1,7 +1,7 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
-import lombok.Getter;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
+import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 

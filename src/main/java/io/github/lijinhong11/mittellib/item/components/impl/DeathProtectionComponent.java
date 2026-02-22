@@ -1,13 +1,13 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
+import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
+import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
+import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DeathProtection;
 import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
 import lombok.AllArgsConstructor;
-import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
-import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 

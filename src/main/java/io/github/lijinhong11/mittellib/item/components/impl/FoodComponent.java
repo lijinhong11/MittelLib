@@ -1,15 +1,15 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
-import io.papermc.paper.datacomponent.DataComponentType;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.FoodProperties;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
+import io.papermc.paper.datacomponent.DataComponentType;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.FoodProperties;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.index.qual.NonNegative;

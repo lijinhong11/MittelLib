@@ -2,8 +2,6 @@ package io.github.lijinhong11.mittellib.item;
 
 import com.google.common.base.Preconditions;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
@@ -12,6 +10,8 @@ import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSerializer;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -68,6 +68,12 @@ public class MittelItem extends ReadWriteObject {
         this.amount = amount;
     }
 
+    /**
+     * Read the item and apply it from the configuration section
+     * @param cs the configuration section
+     * @return a mittel item
+     * @throws IllegalArgumentException if the material doesn't support item metas
+     */
     public static MittelItem readFromSection(ConfigurationSection cs) {
         MittelItem item = new MittelItem();
         item.read(cs);
@@ -78,7 +84,7 @@ public class MittelItem extends ReadWriteObject {
     @CanIgnoreReturnValue
     public MittelItem applyFromItemStack(ItemStack itemStack) {
         if (!itemStack.hasItemMeta()) {
-            throw new RuntimeException(new IllegalArgumentException("Only allow items which have item meta"));
+            throw new IllegalArgumentException("Only allow items which have item meta");
         }
 
         this.material = itemStack.getType();

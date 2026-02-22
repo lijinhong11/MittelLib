@@ -1,9 +1,8 @@
 package io.github.lijinhong11.mittellib.utils;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
-import lombok.experimental.UtilityClass;
 import io.github.lijinhong11.mittellib.MittelLib;
-import io.github.lijinhong11.mittellib.utils.constant.Patterns;
+import lombok.experimental.UtilityClass;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -24,8 +23,17 @@ public class BukkitUtils {
         return getMaterial(name, Material.BARRIER);
     }
 
-    public static @Nullable Material getMaterial(@NotNull String name, @Nullable Material def) {
-        return EnumUtils.readEnum(Material.class, name, def);
+    public static @NotNull Material getMaterial(@NotNull String name, @Nullable Material def) {
+        if (name.isBlank()) {
+            return def == null ? Material.BARRIER : def;
+        }
+
+        try {
+            Material material = Material.matchMaterial(name);
+            return material == null ? (def == null ? Material.BARRIER : def) : material;
+        } catch (Exception ignored) {
+            return def == null ? Material.BARRIER : def;
+        }
     }
 
     public static @Nullable String getProfileSkinURL(@NotNull ItemStack itemStack) {
@@ -39,11 +47,7 @@ public class BukkitUtils {
         }
 
         PlayerTextures textures = profile.getTextures();
-        if (textures.getSkin() == null) {
-            return null;
-        }
-
-        return textures.getSkin().toString();
+        return textures.getSkin() == null ? null : textures.getSkin().toString();
     }
 
     public static void setProfileBySkinURL(@NotNull ItemStack itemStack, @NotNull String url) {
@@ -51,127 +55,149 @@ public class BukkitUtils {
             return;
         }
 
-        PlayerProfile profile = Bukkit.createProfile("MITTEL_LIB_LOL");
-
-        PlayerTextures textures = profile.getTextures();
         try {
+            PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+            PlayerTextures textures = profile.getTextures();
             textures.setSkin(URI.create(url).toURL());
             profile.setTextures(textures);
+
+            skullMeta.setPlayerProfile(profile);
+            itemStack.setItemMeta(skullMeta);
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            MittelLib.getInstance().getLogger().severe("Invalid skin URL: " + url);
         }
-
-        skullMeta.setPlayerProfile(profile);
     }
 
-    public static @Nullable NamespacedKey getNamespacedKey(@Nullable String namespacedKey) {
-        if (namespacedKey == null) {
+    public static @Nullable NamespacedKey getNamespacedKey(@Nullable String input) {
+        if (input == null || input.isBlank() || input.equalsIgnoreCase("null")) {
             return null;
         }
 
-        if (namespacedKey.equals("null")) {
-            return null;
+        NamespacedKey key = NamespacedKey.fromString(input);
+        if (key != null) {
+            return key;
         }
 
-        if (!namespacedKey.matches(Patterns.NAMESPACED_KEY)) {
-            String minecraft = "minecraft:" + namespacedKey;
-            if (minecraft.matches(Patterns.NAMESPACED_KEY)) {
-                return NamespacedKey.minecraft(namespacedKey);
-            }
-
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("The string doesn't match NamespacedKey's format: " + namespacedKey);
-            return null;
-        }
-
-        return NamespacedKey.fromString(namespacedKey);
+        return NamespacedKey.minecraft(input);
     }
 
-    public static @NotNull List<NamespacedKey> getNamespacedKeys(@NotNull Iterable<String> namespacedKeys) {
-        List<NamespacedKey> keys = new ArrayList<>();
-        for (String s : namespacedKeys) {
+    public static @NotNull List<NamespacedKey> getNamespacedKeys(@NotNull Iterable<String> keys) {
+        List<NamespacedKey> list = new ArrayList<>();
+        for (String s : keys) {
             NamespacedKey key = getNamespacedKey(s);
             if (key != null) {
-                keys.add(key);
+                list.add(key);
             }
         }
-
-        return keys;
+        return list;
     }
 
     public static @Nullable PotionEffect readPotionEffect(@NotNull ConfigurationSection cs) {
-        NamespacedKey potionEffectTypeKey = getNamespacedKey(cs.getString("type", "null"));
-        if (potionEffectTypeKey == null) {
-            return null;
-        }
+        NamespacedKey key = getNamespacedKey(cs.getString("type"));
+        if (key == null) return null;
 
-        PotionEffectType pet = Registry.EFFECT.get(potionEffectTypeKey);
-        if (pet == null) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Cannot find a potion effect type with key " + potionEffectTypeKey.asString());
+        PotionEffectType type = Registry.EFFECT.get(key);
+        if (type == null) {
+            MittelLib.getInstance().getLogger()
+                    .severe("Unknown potion effect type: " + key.asString());
             return null;
         }
 
         int duration = cs.getInt("duration");
-        int amplifier = cs.getInt("amplifier");
+        if (duration <= 0) return null;
+
+        int amplifier = cs.getInt("amplifier", 0);
         boolean ambient = cs.getBoolean("ambient", true);
         boolean particle = cs.getBoolean("particle", true);
         boolean icon = cs.getBoolean("icon", true);
 
-        return new PotionEffect(pet, duration, amplifier, ambient, particle, icon);
+        return new PotionEffect(type, duration, amplifier, ambient, particle, icon);
     }
 
-    @SuppressWarnings("unused")
     public static @Nullable PotionEffect readPotionEffect(@NotNull Map<String, Object> map) {
-        NamespacedKey potionEffectTypeKey = getNamespacedKey((String) map.getOrDefault("type", "null"));
-        if (potionEffectTypeKey == null) {
-            return null;
-        }
+        Object typeObj = map.get("type");
+        if (!(typeObj instanceof String typeStr)) return null;
 
-        PotionEffectType pet = Registry.EFFECT.get(potionEffectTypeKey);
-        if (pet == null) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Cannot find a potion effect type with key " + potionEffectTypeKey.asString());
-            return null;
-        }
+        NamespacedKey key = getNamespacedKey(typeStr);
+        if (key == null) return null;
 
-        int duration = (int) map.get("duration");
-        int amplifier = (int) map.get("amplifier");
-        boolean ambient = (boolean) map.getOrDefault("ambient", true);
-        boolean particle = (boolean) map.getOrDefault("particle", true);
-        boolean icon = (boolean) map.getOrDefault("icon", true);
+        PotionEffectType type = Registry.EFFECT.get(key);
+        if (type == null) return null;
 
-        return new PotionEffect(pet, duration, amplifier, ambient, particle, icon);
+        Number durationNum = asNumber(map.get("duration"));
+        if (durationNum == null || durationNum.intValue() <= 0) return null;
+
+        Number amplifierNum = asNumber(map.getOrDefault("amplifier", 0));
+
+        boolean ambient = asBoolean(map.getOrDefault("ambient", true));
+        boolean particle = asBoolean(map.getOrDefault("particle", true));
+        boolean icon = asBoolean(map.getOrDefault("icon", true));
+
+        return new PotionEffect(
+                type,
+                durationNum.intValue(),
+                amplifierNum == null ? 0 : amplifierNum.intValue(),
+                ambient,
+                particle,
+                icon
+        );
     }
 
-    public static @NotNull List<Color> toColors(@NotNull List<Map<?, ?>> colorMaps) {
-        List<Color> colors = new ArrayList<>();
-        for (Map<?, ?> color : colorMaps) {
-            Map<String, Integer> colorMap = (Map<String, Integer>) color;
-            Color bukkit = Color.fromARGB(colorMap.getOrDefault("alpha", 255), colorMap.get("red"), colorMap.get("green"), colorMap.get("blue"));
-            colors.add(bukkit);
+    public static @NotNull Map<String, Object> writePotionEffect(@NotNull PotionEffect effect) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", effect.getType().key().asString());
+        map.put("duration", effect.getDuration());
+        map.put("amplifier", effect.getAmplifier());
+        map.put("ambient", effect.isAmbient());
+        map.put("particle", effect.hasParticles());
+        map.put("icon", effect.hasIcon());
+        return map;
+    }
+
+
+    public static @NotNull List<Color> toColors(@NotNull List<Map<?, ?>> maps) {
+        List<Color> list = new ArrayList<>();
+
+        for (Map<?, ?> raw : maps) {
+            Number r = asNumber(raw.get("red"));
+            Number g = asNumber(raw.get("green"));
+            Number b = asNumber(raw.get("blue"));
+            Number a = asNumber(raw.get("alpha"));
+
+            if (r == null || g == null || b == null) continue;
+
+            list.add(Color.fromARGB(
+                    a == null ? 255 : a.intValue(),
+                    r.intValue(),
+                    g.intValue(),
+                    b.intValue()
+            ));
         }
 
-        return colors;
+        return list;
     }
 
-    public static List<Map<String, Integer>> writeColors(@NotNull List<Color> colors) {
-        return colors.stream()
-                .filter(Objects::nonNull)
-                .map(c -> {
-                    Map<String, Integer> color = new HashMap<>();
-                    color.put("alpha", c.getAlpha());
-                    color.put("red", c.getRed());
-                    color.put("green", c.getGreen());
-                    color.put("blue", c.getBlue());
-                    return color;
-                }).toList();
+    public static @NotNull List<Map<String, Integer>> writeColors(@NotNull List<Color> colors) {
+        List<Map<String, Integer>> list = new ArrayList<>();
+
+        for (Color c : colors) {
+            if (c == null) continue;
+
+            Map<String, Integer> map = new HashMap<>();
+            map.put("alpha", c.getAlpha());
+            map.put("red", c.getRed());
+            map.put("green", c.getGreen());
+            map.put("blue", c.getBlue());
+
+            list.add(map);
+        }
+
+        return list;
     }
 
-    public static void writeLocationSection(@NotNull ConfigurationSection cs, Location loc) {
+    public static void writeLocationSection(@NotNull ConfigurationSection cs, @Nullable Location loc) {
+        if (loc == null || loc.getWorld() == null) return;
+
         cs.set("world", loc.getWorld().getName());
         cs.set("x", loc.getX());
         cs.set("y", loc.getY());
@@ -180,30 +206,35 @@ public class BukkitUtils {
         cs.set("pitch", loc.getPitch());
     }
 
-    @Nullable
-    public static Location readLocation(@NotNull ConfigurationSection cs) {
-        String w = cs.getString("world");
-        if (w == null || w.isBlank()) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Cannot define a location: world is empty");
+    public static @Nullable Location readLocation(@NotNull ConfigurationSection cs) {
+        String worldName = cs.getString("world");
+        if (worldName == null || worldName.isBlank()) {
+            MittelLib.getInstance().getLogger()
+                    .severe("Cannot read location: world is missing");
             return null;
         }
 
-        World world = Bukkit.getWorld(w);
+        World world = Bukkit.getWorld(worldName);
         if (world == null) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Cannot define a location: world " + w + "does not exist");
+            MittelLib.getInstance().getLogger()
+                    .severe("Cannot read location: world " + worldName + " does not exist");
             return null;
         }
 
-        int x = cs.getInt("x");
-        int y = cs.getInt("y");
-        int z = cs.getInt("z");
-        float yaw = cs.getInt("yaw", 0);
-        float pitch = cs.getInt("pitch", 0);
+        double x = cs.getDouble("x");
+        double y = cs.getDouble("y");
+        double z = cs.getDouble("z");
+        float yaw = (float) cs.getDouble("yaw", 0);
+        float pitch = (float) cs.getDouble("pitch", 0);
 
         return new Location(world, x, y, z, yaw, pitch);
+    }
+
+    private static @Nullable Number asNumber(Object obj) {
+        return obj instanceof Number n ? n : null;
+    }
+
+    private static boolean asBoolean(Object obj) {
+        return obj instanceof Boolean b && b;
     }
 }

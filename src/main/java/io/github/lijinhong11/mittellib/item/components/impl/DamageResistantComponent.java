@@ -1,15 +1,15 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
+import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
+import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
+import io.github.lijinhong11.mittellib.utils.BukkitUtils;
+import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DamageResistant;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.tag.TagKey;
 import lombok.AllArgsConstructor;
-import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
-import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
-import io.github.lijinhong11.mittellib.utils.BukkitUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.damage.DamageType;

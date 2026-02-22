@@ -60,13 +60,19 @@ public class NexoContentProvider implements ContentProvider {
 
     private record PackedNexoBlock(CustomBlockMechanic mechanic) implements PackedBlock {
         @Override
-        public void place(Location location) {
+        public void place(@NotNull Location location) {
             NexoBlocks.place(mechanic.getItemID(), location);
         }
 
         @Override
         public String getId() {
             return mechanic.getItemID();
+        }
+
+        @Override
+        public @Nullable ItemStack toItem() {
+            ItemBuilder item = NexoItems.itemFromId(mechanic.getItemID());
+            return item == null ? null : item.build();
         }
     }
 }

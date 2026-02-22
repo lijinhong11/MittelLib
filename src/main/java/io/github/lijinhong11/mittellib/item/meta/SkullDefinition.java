@@ -1,10 +1,12 @@
 package io.github.lijinhong11.mittellib.item.meta;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
-import lombok.AllArgsConstructor;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -14,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 @AllArgsConstructor
 public class SkullDefinition extends ReadWriteObject {
     private @Nullable PlayerProfile profile;

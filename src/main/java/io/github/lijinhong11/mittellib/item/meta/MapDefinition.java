@@ -1,12 +1,12 @@
 package io.github.lijinhong11.mittellib.item.meta;
 
+import io.github.lijinhong11.mittellib.MittelLib;
+import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
+import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import io.github.lijinhong11.mittellib.MittelLib;
-import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
-import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.World;
@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class MapDefinition extends ReadWriteObject {
     private @Nullable MapViewDefinition mapView;

@@ -81,13 +81,23 @@ public class CraftEngineContentProvider implements ContentProvider {
 
     private record PackedCraftEngineBlock(CustomBlock block) implements PackedBlock {
         @Override
-        public void place(Location location) {
+        public void place(@NotNull Location location) {
             CraftEngineBlocks.place(location, block.id(), true);
         }
 
         @Override
         public String getId() {
             return block.id().asString();
+        }
+
+        @Override
+        public ItemStack toItem() {
+            CustomItem<ItemStack> bind = CraftEngineItems.byId(block.id());
+            if (bind == null) {
+                return null;
+            }
+
+            return bind.buildItemStack();
         }
     }
 }

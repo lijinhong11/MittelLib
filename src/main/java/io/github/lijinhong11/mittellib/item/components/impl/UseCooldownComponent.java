@@ -1,16 +1,16 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
-import io.papermc.paper.datacomponent.DataComponentType;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.UseCooldown;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
+import io.papermc.paper.datacomponent.DataComponentType;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.UseCooldown;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;

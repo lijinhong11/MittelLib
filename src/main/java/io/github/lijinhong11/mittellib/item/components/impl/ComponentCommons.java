@@ -1,10 +1,10 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
+import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.set.RegistrySet;
-import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.potion.PotionEffect;

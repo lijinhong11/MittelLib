@@ -1,7 +1,7 @@
 package io.github.lijinhong11.mittellib.actions.item;
 
-import lombok.experimental.UtilityClass;
 import io.github.lijinhong11.mittellib.iface.actions.ItemAction;
+import lombok.experimental.UtilityClass;
 import org.checkerframework.checker.index.qual.NonNegative;
 
 @UtilityClass

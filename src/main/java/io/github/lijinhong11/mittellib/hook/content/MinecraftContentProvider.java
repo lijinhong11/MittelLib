@@ -58,14 +58,25 @@ public class MinecraftContentProvider implements ContentProvider {
     }
 
     public record PackedMinecraftBlock(Material material) implements PackedBlock {
+        public PackedMinecraftBlock {
+            if (!material.isBlock()) {
+                throw new IllegalArgumentException("Material which isn't a block is not allowed");
+            }
+        }
+
         @Override
-        public void place(Location location) {
+        public void place(@NotNull Location location) {
             location.getBlock().setType(material);
         }
 
         @Override
         public String getId() {
             return "minecraft:" + material.toString().toLowerCase();
+        }
+
+        @Override
+        public @Nullable ItemStack toItem() {
+            return new ItemStack(material);
         }
     }
 }

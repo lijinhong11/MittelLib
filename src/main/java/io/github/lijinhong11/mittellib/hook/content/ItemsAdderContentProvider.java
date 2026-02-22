@@ -65,13 +65,18 @@ public class ItemsAdderContentProvider implements ContentProvider {
 
     private record PackedItemsAdderBlock(CustomBlock block) implements PackedBlock {
         @Override
-        public void place(Location location) {
+        public void place(@NotNull Location location) {
             block.place(location);
         }
 
         @Override
         public String getId() {
             return block.getId();
+        }
+
+        @Override
+        public @Nullable ItemStack toItem() {
+            return block.getItemStack();
         }
     }
 }

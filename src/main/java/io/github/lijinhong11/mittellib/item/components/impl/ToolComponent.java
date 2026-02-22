@@ -1,5 +1,10 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
+import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
+import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
+import io.github.lijinhong11.mittellib.utils.BukkitUtils;
+import io.github.lijinhong11.mittellib.utils.EnumUtils;
+import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Tool;
@@ -9,11 +14,6 @@ import io.papermc.paper.registry.set.RegistryKeySet;
 import io.papermc.paper.registry.set.RegistrySet;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
-import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
-import io.github.lijinhong11.mittellib.utils.BukkitUtils;
-import io.github.lijinhong11.mittellib.utils.EnumUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.block.BlockType;

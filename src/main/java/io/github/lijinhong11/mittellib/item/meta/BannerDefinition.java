@@ -1,13 +1,13 @@
 package io.github.lijinhong11.mittellib.item.meta;
 
+import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
+import io.github.lijinhong11.mittellib.utils.BukkitUtils;
+import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
-import io.github.lijinhong11.mittellib.utils.BukkitUtils;
-import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import org.bukkit.DyeColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;

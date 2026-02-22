@@ -1,8 +1,8 @@
 package io.github.lijinhong11.mittellib;
 
-import lombok.Getter;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
+import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MittelLib extends JavaPlugin {

@@ -1,21 +1,22 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
+import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
+import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
+import io.github.lijinhong11.mittellib.utils.BukkitUtils;
+import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.CustomModelData;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
-import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
-import io.github.lijinhong11.mittellib.utils.BukkitUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @ItemComponentSpec(key = "modelData", requiredVersion = MCVersion.V1_21_4)
 @RequiredArgsConstructor
