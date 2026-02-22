@@ -27,6 +27,10 @@ public class SkullDefinition extends ReadWriteObject {
         return new SkullDefinition(meta.getPlayerProfile(), meta.getNoteBlockSound());
     }
 
+    public SkullDefinition(ConfigurationSection cs) {
+        super(cs);
+    }
+
     @Override
     public void write(ConfigurationSection cs) {
         if (profile != null) {

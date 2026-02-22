@@ -1,5 +1,8 @@
 package io.github.lijinhong11.mittellib.utils.random;
 
+/**
+ * A fast random number generator based on SplitMix64
+ */
 @SuppressWarnings("deprecation")
 public final class FastRandom {
     private static final ThreadLocal<SplitMix64> LOCAL =

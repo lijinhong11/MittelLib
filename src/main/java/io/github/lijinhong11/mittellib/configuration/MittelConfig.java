@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -179,7 +180,8 @@ public class MittelConfig {
     }
 
     public Set<String> getKeys(@NotNull String sectionPath, boolean deep) {
-        return getSectionOrCreate(sectionPath).getKeys(deep);
+        ConfigurationSection cs = getConfigurationSection(sectionPath);
+        return cs == null ? new HashSet<>() : cs.getKeys(deep);
     }
 
     public void setComments(@NotNull String path, @NotNull List<String> comments) {

@@ -32,6 +32,10 @@ public class MapDefinition extends ReadWriteObject {
         return new MapDefinition(MapViewDefinition.fromMapView(meta.getMapView()), meta.isScaling(), meta.getColor());
     }
 
+    public MapDefinition(ConfigurationSection cs) {
+        super(cs);
+    }
+
     @Override
     public void write(ConfigurationSection cs) {
         if (mapView != null) {

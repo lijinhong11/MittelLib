@@ -2,6 +2,7 @@ package io.github.lijinhong11.mittellib.message;
 
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.ConfigFileUtil;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.command.CommandSender;
@@ -30,7 +31,11 @@ public final class LanguageManager {
 
     private final Map<String, YamlConfiguration> configurations = new HashMap<>();
 
-    private boolean detectPlayerLocale;
+    @Setter
+    private boolean detectPlayerLocale = true;
+    @Setter
+    private boolean autoComplete;
+
     private YamlConfiguration defaultConfiguration;
 
     public LanguageManager(Plugin plugin) {
@@ -38,8 +43,13 @@ public final class LanguageManager {
     }
 
     public LanguageManager(Plugin plugin, String defaultLanguage) {
+        this(plugin, defaultLanguage, true);
+    }
+
+    public LanguageManager(Plugin plugin, String defaultLanguage, boolean autoComplete) {
         this.plugin = plugin;
         this.defaultLanguage = defaultLanguage;
+        this.autoComplete = autoComplete;
 
         loadLanguages();
     }
@@ -81,7 +91,11 @@ public final class LanguageManager {
                     if (!path.toFile().exists()) {
                         plugin.saveResource("language/" + realName, false);
                     } else {
-                        ConfigFileUtil.completeLangFile(plugin, "language/" + realName);
+                        if (autoComplete) {
+                            ConfigFileUtil.completeLangFile(plugin, "language/" + realName);
+                        } else {
+                            path.toFile().createNewFile();
+                        }
                     }
                 }
             }
@@ -95,7 +109,9 @@ public final class LanguageManager {
         if (languageFiles != null) {
             for (File languageFile : languageFiles) {
                 String language = convertToRightLangCode(languageFile.getName().replaceAll(".yml", ""));
-                ConfigFileUtil.completeLangFile(plugin, "language/" + languageFile.getName());
+                if (autoComplete) {
+                    ConfigFileUtil.completeLangFile(plugin, "language/" + languageFile.getName());
+                }
                 configurations.put(language, YamlConfiguration.loadConfiguration(languageFile));
             }
         }

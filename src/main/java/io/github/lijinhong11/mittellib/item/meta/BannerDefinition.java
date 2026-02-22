@@ -37,6 +37,10 @@ public class BannerDefinition extends ReadWriteObject {
         return new BannerDefinition(bannerMeta.getPatterns());
     }
 
+    public BannerDefinition(ConfigurationSection cs) {
+        super(cs);
+    }
+
     @NotNull
     public Pattern getPattern(int index) {
         return bannerPatterns.get(index);

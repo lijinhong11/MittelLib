@@ -1,7 +1,11 @@
 package io.github.lijinhong11.mittellib.math;
 
+import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -9,12 +13,17 @@ import java.util.Map;
 
 /**
  * Represents a block position in 3D space with integer coordinates.
- *
- * @param x the block x
- * @param y the block y
- * @param z the block z
  */
-public record BlockPos(int x, int y, int z) implements Comparable<BlockPos> {
+@NoArgsConstructor
+@AllArgsConstructor
+public class BlockPos extends ReadWriteObject implements Comparable<BlockPos> {
+    private int x = 0;
+    private int y = 0;
+    private int z = 0;
+
+    public BlockPos(ConfigurationSection cs) {
+        super(cs);
+    }
 
     /**
      * Creates a BlockPos from a Bukkit Location.
@@ -133,6 +142,15 @@ public record BlockPos(int x, int y, int z) implements Comparable<BlockPos> {
         return Map.of("x", x, "y", y, "z", z);
     }
 
+    /**
+     * Converts this BlockPos to a long number which represents this BlockPos
+     *
+     * @return a long number which represents this BlockPos
+     */
+    public long getBlockKey() {
+        return (long)x & 134217727L | ((long)z & 134217727L) << 27 | (long)y << 54;
+    }
+
     @Override
     public int compareTo(BlockPos other) {
         int cmpX = Integer.compare(this.x, other.x);
@@ -149,5 +167,19 @@ public record BlockPos(int x, int y, int z) implements Comparable<BlockPos> {
     @Override
     public @NotNull String toString() {
         return x + ", " + y + ", " + z;
+    }
+
+    @Override
+    public void write(ConfigurationSection cs) {
+        cs.set("x", x);
+        cs.set("y", y);
+        cs.set("z", z);
+    }
+
+    @Override
+    public void read(ConfigurationSection cs) {
+        x = cs.getInt("x");
+        y = cs.getInt("y");
+        z = cs.getInt("z");
     }
 }

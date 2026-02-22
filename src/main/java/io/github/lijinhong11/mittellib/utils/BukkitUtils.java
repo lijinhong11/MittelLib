@@ -20,8 +20,8 @@ import java.util.*;
 
 @UtilityClass
 public class BukkitUtils {
-    public static @Nullable Material getMaterial(@NotNull String name) {
-        return getMaterial(name, null);
+    public static @NotNull Material getMaterial(@NotNull String name) {
+        return getMaterial(name, Material.BARRIER);
     }
 
     public static @Nullable Material getMaterial(@NotNull String name, @Nullable Material def) {
@@ -64,7 +64,11 @@ public class BukkitUtils {
         skullMeta.setPlayerProfile(profile);
     }
 
-    public static @Nullable NamespacedKey getNamespacedKey(@NotNull String namespacedKey) {
+    public static @Nullable NamespacedKey getNamespacedKey(@Nullable String namespacedKey) {
+        if (namespacedKey == null) {
+            return null;
+        }
+
         if (namespacedKey.equals("null")) {
             return null;
         }
@@ -119,6 +123,7 @@ public class BukkitUtils {
         return new PotionEffect(pet, duration, amplifier, ambient, particle, icon);
     }
 
+    @SuppressWarnings("unused")
     public static @Nullable PotionEffect readPotionEffect(@NotNull Map<String, Object> map) {
         NamespacedKey potionEffectTypeKey = getNamespacedKey((String) map.getOrDefault("type", "null"));
         if (potionEffectTypeKey == null) {
@@ -142,7 +147,7 @@ public class BukkitUtils {
         return new PotionEffect(pet, duration, amplifier, ambient, particle, icon);
     }
 
-    public static @NotNull List<Color> toColors(List<Map<?, ?>> colorMaps) {
+    public static @NotNull List<Color> toColors(@NotNull List<Map<?, ?>> colorMaps) {
         List<Color> colors = new ArrayList<>();
         for (Map<?, ?> color : colorMaps) {
             Map<String, Integer> colorMap = (Map<String, Integer>) color;
@@ -153,7 +158,7 @@ public class BukkitUtils {
         return colors;
     }
 
-    public static List<Map<String, Integer>> writeColor(List<Color> colors) {
+    public static List<Map<String, Integer>> writeColors(@NotNull List<Color> colors) {
         return colors.stream()
                 .filter(Objects::nonNull)
                 .map(c -> {
@@ -164,5 +169,41 @@ public class BukkitUtils {
                     color.put("blue", c.getBlue());
                     return color;
                 }).toList();
+    }
+
+    public static void writeLocationSection(@NotNull ConfigurationSection cs, Location loc) {
+        cs.set("world", loc.getWorld().getName());
+        cs.set("x", loc.getX());
+        cs.set("y", loc.getY());
+        cs.set("z", loc.getZ());
+        cs.set("yaw", loc.getYaw());
+        cs.set("pitch", loc.getPitch());
+    }
+
+    @Nullable
+    public static Location readLocation(@NotNull ConfigurationSection cs) {
+        String w = cs.getString("world");
+        if (w == null || w.isBlank()) {
+            MittelLib.getInstance()
+                    .getLogger()
+                    .severe("Cannot define a location: world is empty");
+            return null;
+        }
+
+        World world = Bukkit.getWorld(w);
+        if (world == null) {
+            MittelLib.getInstance()
+                    .getLogger()
+                    .severe("Cannot define a location: world " + w + "does not exist");
+            return null;
+        }
+
+        int x = cs.getInt("x");
+        int y = cs.getInt("y");
+        int z = cs.getInt("z");
+        float yaw = cs.getInt("yaw", 0);
+        float pitch = cs.getInt("pitch", 0);
+
+        return new Location(world, x, y, z, yaw, pitch);
     }
 }

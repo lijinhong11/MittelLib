@@ -1,5 +1,6 @@
 package io.github.lijinhong11.mittellib.hook;
 
+import io.github.lijinhong11.mittellib.hook.content.MinecraftContentProvider;
 import lombok.experimental.UtilityClass;
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
@@ -11,15 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 @UtilityClass
 public class ContentProviders {
-    private static final Map<String, ContentProvider> contentProviders = new HashMap<>();
+    private static final Map<String, ContentProvider> contentProviders = new LinkedHashMap<>();
 
     public static void init() {
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
@@ -31,6 +29,8 @@ public class ContentProviders {
             } catch (Exception ignore) {
             }
         }
+
+        contentProviders.put("minecraft", new MinecraftContentProvider());
     }
 
     /**

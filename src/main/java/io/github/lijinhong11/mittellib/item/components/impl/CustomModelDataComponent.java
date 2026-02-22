@@ -63,18 +63,7 @@ public class CustomModelDataComponent extends ReadWriteItemComponent {
         cs.set("strings", strings);
 
         if (this.colors != null) {
-            List<Map<String, Integer>> colors = this.colors.stream()
-                    .filter(Objects::nonNull)
-                    .map(c -> {
-                        Map<String, Integer> color = new HashMap<>();
-                        color.put("alpha", c.getAlpha());
-                        color.put("red", c.getRed());
-                        color.put("green", c.getGreen());
-                        color.put("blue", c.getBlue());
-                        return color;
-                    }).toList();
-
-            cs.set("colors", colors);
+            cs.set("colors", BukkitUtils.writeColors(colors));
         }
     }
 
