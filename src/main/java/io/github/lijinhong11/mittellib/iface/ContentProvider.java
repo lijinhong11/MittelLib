@@ -60,6 +60,13 @@ public interface ContentProvider {
     List<String> getBlockSuggestions();
 
     /**
+     * Get the packed block by its location
+     *
+     * @return a packed block
+     */
+    @Nullable PackedBlock getBlockByLocation(Location loc);
+
+    /**
      * Get all blocks
      *
      * @return all blocks in this content provider

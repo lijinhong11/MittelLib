@@ -230,8 +230,16 @@ public class MittelConfig {
             @NotNull String path,
             @NotNull Class<T> clazz
     ) {
+        return getRWObject(path, clazz, null);
+    }
+
+    public <T extends ReadWriteObject> @Nullable T getRWObject(
+            @NotNull String path,
+            @NotNull Class<T> clazz,
+            @Nullable T def
+    ) {
         ConfigurationSection cs = getSection(path);
-        if (cs == null) return null;
+        if (cs == null) return def;
 
         return ReadWriteObject.read(clazz, cs);
     }

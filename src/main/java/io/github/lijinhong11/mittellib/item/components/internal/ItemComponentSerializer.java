@@ -7,7 +7,11 @@ import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Enchantable;
+import io.papermc.paper.datacomponent.item.JukeboxPlayable;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import lombok.experimental.UtilityClass;
+import org.bukkit.JukeboxSong;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -109,6 +113,16 @@ public class ItemComponentSerializer {
             registerSimple("max_damage", Integer.class, DataComponentTypes.MAX_DAMAGE, (i, e) -> i.setData(DataComponentTypes.MAX_DAMAGE, e));
             registerSimple("max_stack_size", Integer.class, DataComponentTypes.MAX_STACK_SIZE, (i, e) -> i.setData(DataComponentTypes.MAX_STACK_SIZE, e));
             registerSimple("enchantable", Integer.class, DataComponentTypes.ENCHANTABLE, (i, e) -> i.setData(DataComponentTypes.ENCHANTABLE, Enchantable.enchantable(e)));
+        }
+
+        if (current.isAtLeast(MCVersion.V1_21)) {
+            registerSimple("jukebox_playable", String.class, DataComponentTypes.JUKEBOX_PLAYABLE, (i, e) -> {
+                NamespacedKey key = BukkitUtils.getNamespacedKey(e);
+                if (key != null) {
+                    JukeboxSong song = RegistryAccess.registryAccess().getRegistry(RegistryKey.JUKEBOX_SONG).get(key);
+                    i.setData(DataComponentTypes.JUKEBOX_PLAYABLE, JukeboxPlayable.jukeboxPlayable(song).build());
+                }
+            });
         }
 
         if (current.isAtLeast(MCVersion.V1_21_2)) {

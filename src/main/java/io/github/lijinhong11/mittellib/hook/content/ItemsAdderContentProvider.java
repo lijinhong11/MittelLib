@@ -63,6 +63,16 @@ public class ItemsAdderContentProvider implements ContentProvider {
         return CustomBlock.getNamespacedIdsInRegistry().stream().map(s -> "itemsadder:" + s).toList();
     }
 
+    @Override
+    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+        CustomBlock block = CustomBlock.byAlreadyPlaced(loc.getBlock());
+        if (block == null) {
+            return null;
+        }
+
+        return new PackedItemsAdderBlock(block);
+    }
+
     private record PackedItemsAdderBlock(CustomBlock block) implements PackedBlock {
         @Override
         public void place(@NotNull Location location) {

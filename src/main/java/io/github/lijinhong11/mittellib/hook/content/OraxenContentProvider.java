@@ -64,6 +64,16 @@ public class OraxenContentProvider implements ContentProvider {
         return OraxenBlocks.getBlockIDs().stream().map(b -> "oraxen:" + b).toList();
     }
 
+    @Override
+    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+        Mechanic mechanic = OraxenBlocks.getOraxenBlock(loc);
+        if (mechanic == null) {
+            return null;
+        }
+
+        return new PackedOraxenBlock(mechanic);
+    }
+
     private record PackedOraxenBlock(Mechanic mechanic) implements PackedBlock {
         @Override
         public void place(@NotNull Location location) {

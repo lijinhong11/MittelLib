@@ -51,4 +51,9 @@ public class EcoItemsContentProvider implements ContentProvider {
     public List<String> getBlockSuggestions() {
         return List.of();
     }
+
+    @Override
+    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+        return null;
+    }
 }

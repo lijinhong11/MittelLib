@@ -6,10 +6,12 @@ import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import net.momirealms.craftengine.bukkit.api.CraftEngineBlocks;
 import net.momirealms.craftengine.bukkit.api.CraftEngineItems;
 import net.momirealms.craftengine.core.block.CustomBlock;
+import net.momirealms.craftengine.core.block.ImmutableBlockState;
 import net.momirealms.craftengine.core.item.CustomItem;
 import net.momirealms.craftengine.core.util.Key;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,7 +78,22 @@ public class CraftEngineContentProvider implements ContentProvider {
 
     @Override
     public List<String> getBlockSuggestions() {
-        return CraftEngineBlocks.loadedBlocks().keySet().stream().map(k -> "craftengine:" + k.asString()).toList();
+        return CraftEngineBlocks.loadedBlocks().entrySet().stream().filter(b -> new PackedCraftEngineBlock(b.getValue()).toItem() != null).map(k -> "craftengine:" + k.getKey().asString()).toList();
+    }
+
+    @Override
+    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+        Block block = loc.getBlock();
+        if (!CraftEngineBlocks.isCustomBlock(block)) {
+            return null;
+        }
+
+        ImmutableBlockState ibs = CraftEngineBlocks.getCustomBlockState(block);
+        if (ibs == null) {
+            return null;
+        }
+
+        return new PackedCraftEngineBlock(ibs.behavior().block());
     }
 
     private record PackedCraftEngineBlock(CustomBlock block) implements PackedBlock {

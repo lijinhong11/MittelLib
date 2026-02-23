@@ -75,4 +75,9 @@ public class MMOItemsContentProvider implements ContentProvider {
     public List<String> getBlockSuggestions() {
         return List.of(); //its custom blocks are very limited
     }
+
+    @Override
+    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+        return null; //its custom blocks are very limited
+    }
 }

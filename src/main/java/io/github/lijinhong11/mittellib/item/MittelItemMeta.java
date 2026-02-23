@@ -2,10 +2,7 @@ package io.github.lijinhong11.mittellib.item;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
 import io.github.lijinhong11.mittellib.item.components.impl.CustomModelDataComponent;
-import io.github.lijinhong11.mittellib.item.meta.BannerDefinition;
-import io.github.lijinhong11.mittellib.item.meta.FireworkDefinition;
-import io.github.lijinhong11.mittellib.item.meta.MapDefinition;
-import io.github.lijinhong11.mittellib.item.meta.SkullDefinition;
+import io.github.lijinhong11.mittellib.item.meta.*;
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import lombok.Data;
@@ -38,6 +35,7 @@ public class MittelItemMeta extends ReadWriteObject {
     private @Nullable SkullDefinition skull;
     private @Nullable FireworkDefinition firework;
     private @Nullable MapDefinition map;
+    private @Nullable PotionDefinition potion;
     private @Nullable Color leatherArmorColor;
 
     private MittelItemMeta() {
@@ -75,6 +73,10 @@ public class MittelItemMeta extends ReadWriteObject {
 
         if (meta instanceof SkullMeta skullMeta) {
             newOne.skull = SkullDefinition.fromSkullMeta(skullMeta);
+        }
+
+        if (meta instanceof PotionMeta potionMeta) {
+            newOne.potion = PotionDefinition.fromPotionMeta(potionMeta);
         }
 
         if (meta instanceof LeatherArmorMeta leatherArmorMeta) {
@@ -115,6 +117,10 @@ public class MittelItemMeta extends ReadWriteObject {
             firework.applyTo(fm);
         }
 
+        if (meta instanceof PotionMeta pm && potion != null) {
+            potion.applyTo(pm);
+        }
+
         if (meta instanceof LeatherArmorMeta lam && leatherArmorColor != null) {
             lam.setColor(leatherArmorColor);
         }
@@ -146,6 +152,11 @@ public class MittelItemMeta extends ReadWriteObject {
         if (map != null) {
             ConfigurationSection mapSection = cs.createSection("map");
             map.write(mapSection);
+        }
+
+        if (potion != null) {
+            ConfigurationSection potionSection = cs.createSection("potion");
+            potion.write(potionSection);
         }
 
         if (leatherArmorColor != null) {

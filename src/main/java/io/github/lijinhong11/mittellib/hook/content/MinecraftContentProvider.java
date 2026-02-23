@@ -57,6 +57,11 @@ public class MinecraftContentProvider implements ContentProvider {
         return Arrays.stream(Material.values()).filter(m -> !m.isAir() && m.isBlock()).map(m -> "minecraft:" + m.toString().toLowerCase()).toList();
     }
 
+    @Override
+    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+        return new PackedMinecraftBlock(loc.getBlock().getType());
+    }
+
     public record PackedMinecraftBlock(Material material) implements PackedBlock {
         public PackedMinecraftBlock {
             if (!material.isBlock()) {

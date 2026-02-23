@@ -142,4 +142,18 @@ public class ContentProviders {
 
         return suggest;
     }
+
+    /**
+     * Get all usable blocks (which bind an item)
+     *
+     * @return a list of all usable blocks
+     */
+    public static @NotNull List<PackedBlock> getAllUsableBlocks() {
+        List<PackedBlock> blocks = new ArrayList<>();
+        for (ContentProvider cp : contentProviders.values()) {
+            blocks.addAll(cp.getAllBlocks().stream().filter(b -> b.toItem() != null).toList());
+        }
+
+        return blocks;
+    }
 }

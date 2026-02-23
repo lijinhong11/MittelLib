@@ -58,6 +58,16 @@ public class NexoContentProvider implements ContentProvider {
         return Arrays.stream(NexoBlocks.blockIDs()).map(b -> "nexo:" + b).toList();
     }
 
+    @Override
+    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+        CustomBlockMechanic mechanic = NexoBlocks.customBlockMechanic(loc);
+        if (mechanic == null) {
+            return null;
+        }
+
+        return new PackedNexoBlock(mechanic);
+    }
+
     private record PackedNexoBlock(CustomBlockMechanic mechanic) implements PackedBlock {
         @Override
         public void place(@NotNull Location location) {
