@@ -26,7 +26,7 @@ public class MinecraftContentProvider implements ContentProvider {
     }
 
     @Override
-    public @Nullable String getIdFromItem(@NotNull ItemStack item) {
+    public @NotNull String getIdFromItem(@NotNull ItemStack item) {
         return "minecraft:" + item.getType().toString().toLowerCase();
     }
 
@@ -58,7 +58,7 @@ public class MinecraftContentProvider implements ContentProvider {
     }
 
     @Override
-    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+    public @NotNull PackedBlock getBlockByLocation(Location loc) {
         return new PackedMinecraftBlock(loc.getBlock().getType());
     }
 

@@ -156,4 +156,20 @@ public class ContentProviders {
 
         return blocks;
     }
+
+    /**
+     * Get the block by its location
+     *
+     * @return the block
+     */
+    public static @Nullable PackedBlock getBlockByLocation(Location loc) {
+        for (ContentProvider cp : contentProviders.values()) {
+            PackedBlock block = cp.getBlockByLocation(loc);
+            if (block != null) {
+                return block;
+            }
+        }
+
+        return null;
+    }
 }
