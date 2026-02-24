@@ -5,11 +5,15 @@ import io.github.lijinhong11.mittellib.utils.ConfigFileUtil;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -204,11 +208,20 @@ public class LanguageManager {
         return msgList;
     }
 
+    public @NotNull ItemStack getMessagedItem(@NotNull Material material, @NotNull String sectionKey, @Nullable Player player, MessageReplacement... args) {
+        ItemStack is = new ItemStack(material);
+        ItemMeta meta = is.getItemMeta();
+        meta.displayName(getMsgComponent(player, sectionKey + ".name", args));
+        meta.lore(getMsgComponentList(player, sectionKey + ".lore", args));
+        is.setItemMeta(meta);
+        return is;
+    }
+
     public void reload() {
         loadLanguages();
     }
 
-    public Set<String> getTranslationKeys() {
+    public @NotNull Set<String> getTranslationKeys() {
         return defaultConfiguration.getKeys(true);
     }
 
