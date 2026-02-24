@@ -1,10 +1,14 @@
 package io.github.lijinhong11.mittellib.message;
 
+import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.ConfigFileUtils;
+import io.github.lijinhong11.mittellib.utils.StringUtils;
+import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
@@ -41,6 +45,10 @@ public class LanguageManager {
     private boolean autoComplete;
 
     private YamlConfiguration defaultConfiguration;
+
+    @Getter
+    @Setter
+    private LanguageManager fallback;
 
     public LanguageManager(Plugin plugin) {
         this(plugin, "en-US");
@@ -164,15 +172,24 @@ public class LanguageManager {
         return parseToComponentList(getMsgListByLanguage(lang, key, args));
     }
 
-    public String getMsg(@Nullable CommandSender commandSender, String key, MessageReplacement... args) {
-        String msg = getConfiguration(commandSender).getString(key);
+    public String getMsg(@Nullable CommandSender sender,
+                         String key,
+                         MessageReplacement... args) {
+        String msg = getConfiguration(sender).getString(key);
+
         if (msg == null) {
+            if (fallback != null) {
+                return fallback.getMsg(sender, key, args);
+            }
+
             return key;
         }
 
         for (MessageReplacement arg : args) {
             msg = arg.parse(msg);
         }
+
+        msg = StringUtils.parsePlaceholders(sender, msg);
 
         return msg;
     }
@@ -215,6 +232,22 @@ public class LanguageManager {
         meta.lore(getMsgComponentList(player, sectionKey + ".lore", args));
         is.setItemMeta(meta);
         return is;
+    }
+
+    public String getParsedLocation(@Nullable CommandSender cs, @NotNull Location loc) {
+        return getParsedLocation(cs, loc.getX(), loc.getY(), loc.getZ());
+    }
+
+    public String getParsedBlockLocation(@Nullable CommandSender cs, @NotNull Location loc) {
+        return getParsedLocation(cs, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    }
+
+    public String getParsedLocation(@Nullable CommandSender cs, double x, double y, double z) {
+        MessageReplacement xm = MessageReplacement.replace("%x%", String.valueOf(x));
+        MessageReplacement ym = MessageReplacement.replace("%y%", String.valueOf(y));
+        MessageReplacement zm = MessageReplacement.replace("%z%", String.valueOf(z));
+
+        return MittelLib.getInstance().getLanguageManager().getMsg(cs, "common.location-format", xm, ym, zm);
     }
 
     public void reload() {
