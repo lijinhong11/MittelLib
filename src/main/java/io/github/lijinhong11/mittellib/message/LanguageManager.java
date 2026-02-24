@@ -1,7 +1,7 @@
 package io.github.lijinhong11.mittellib.message;
 
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
-import io.github.lijinhong11.mittellib.utils.ConfigFileUtil;
+import io.github.lijinhong11.mittellib.utils.ConfigFileUtils;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -96,7 +96,7 @@ public class LanguageManager {
                         plugin.saveResource("language/" + realName, false);
                     } else {
                         if (autoComplete) {
-                            ConfigFileUtil.completeLangFile(plugin, "language/" + realName);
+                            ConfigFileUtils.completeLangFile(plugin, "language/" + realName);
                         } else {
                             path.toFile().createNewFile();
                         }
@@ -114,7 +114,7 @@ public class LanguageManager {
             for (File languageFile : languageFiles) {
                 String language = convertToRightLangCode(languageFile.getName().replaceAll(".yml", ""));
                 if (autoComplete) {
-                    ConfigFileUtil.completeLangFile(plugin, "language/" + languageFile.getName());
+                    ConfigFileUtils.completeLangFile(plugin, "language/" + languageFile.getName());
                 }
                 configurations.put(language, YamlConfiguration.loadConfiguration(languageFile));
             }

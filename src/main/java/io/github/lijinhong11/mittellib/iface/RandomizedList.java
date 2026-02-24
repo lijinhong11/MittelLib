@@ -1,11 +1,9 @@
-package io.github.lijinhong11.mittellib.objects;
+package io.github.lijinhong11.mittellib.iface;
 
 import io.github.lijinhong11.mittellib.utils.random.FastRandom;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,26 +11,9 @@ import java.util.List;
  *
  * @param <T> the type
  */
-public class RandomizedList<T> extends ArrayList<T> {
-    public RandomizedList() {
-        super();
-    }
-
-    public RandomizedList(int initialCapacity) {
-        super(initialCapacity);
-    }
-
-    public RandomizedList(Collection<T> collection) {
-        super(collection);
-    }
-
-    @SafeVarargs
-    public RandomizedList(T... arr) {
-        super(Arrays.asList(arr));
-    }
-
+public interface RandomizedList<T> extends List<T> {
     @Nullable
-    public T randomOne() {
+    default T randomOne() {
         if (isEmpty()) {
             return null;
         }
@@ -43,12 +24,12 @@ public class RandomizedList<T> extends ArrayList<T> {
     }
 
     @Nullable
-    public List<T> randomMulti(int size) {
+    default List<T> randomMulti(int size) {
         return randomMulti(size, false);
     }
 
     @Nullable
-    public List<T> randomMulti(int size, boolean distinct) {
+    default List<T> randomMulti(int size, boolean distinct) {
         if (size > size()) {
             throw new IllegalArgumentException("size is bigger than the list's size");
         }

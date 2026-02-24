@@ -1,6 +1,6 @@
 package io.github.lijinhong11.mittellib.actions.player;
 
-import io.github.lijinhong11.mittellib.iface.actions.PlayerAction;
+import io.github.lijinhong11.mittellib.actions.PlayerAction;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;

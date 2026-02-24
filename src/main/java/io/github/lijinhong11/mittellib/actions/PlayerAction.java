@@ -1,4 +1,4 @@
-package io.github.lijinhong11.mittellib.iface.actions;
+package io.github.lijinhong11.mittellib.actions;
 
 import org.bukkit.entity.Player;
 

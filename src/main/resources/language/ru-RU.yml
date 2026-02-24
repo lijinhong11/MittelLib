@@ -1,0 +1,12 @@
+time:
+  second: "секунда"
+  seconds: "секунд"
+  minute: "минута"
+  minutes: "минут"
+  hour: "час"
+  hours: "часов"
+common:
+  location-format: "&fX: &b%x%, &fY: &b%y%, &fZ: &b%z%"
+  no-permission: "&cУ вас нет прав для этого!"
+  enabled: "&aВключено"
+  disabled: "&cВыключено"

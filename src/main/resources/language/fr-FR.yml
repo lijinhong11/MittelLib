@@ -1,0 +1,12 @@
+time:
+  second: "seconde"
+  seconds: "secondes"
+  minute: "minute"
+  minutes: "minutes"
+  hour: "heure"
+  hours: "heures"
+common:
+  location-format: "&fX: &b%x%, &fY: &b%y%, &fZ: &b%z%"
+  no-permission: "&cVous n'avez pas la permission de faire cela !"
+  enabled: "&aActivé"
+  disabled: "&cDésactivé"

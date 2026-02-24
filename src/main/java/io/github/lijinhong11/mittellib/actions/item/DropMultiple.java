@@ -1,6 +1,6 @@
 package io.github.lijinhong11.mittellib.actions.item;
 
-import io.github.lijinhong11.mittellib.iface.actions.ItemAction;
+import io.github.lijinhong11.mittellib.actions.ItemAction;
 import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
 

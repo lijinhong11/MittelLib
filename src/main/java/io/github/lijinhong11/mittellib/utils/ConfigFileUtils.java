@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.logging.Level;
 
 @UtilityClass
-public class ConfigFileUtil {
+public class ConfigFileUtils {
     /**
      * Complete configuration(key and value, comments, etc)
      *
