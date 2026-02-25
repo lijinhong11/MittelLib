@@ -60,6 +60,10 @@ public class ContentProviders {
      */
     public static @Nullable ItemStack getItemStack(@NotNull String fullNamespaceKey) {
         String[] split = fullNamespaceKey.split(":", 2);
+        if (split.length < 2) {
+            return getItemStack("minecraft:" + fullNamespaceKey);
+        }
+
         String id = split[0];
         String item = split[1];
 
@@ -95,6 +99,10 @@ public class ContentProviders {
      */
     public static @Nullable PackedBlock getBlock(@NotNull String fullNamespaceKey) {
         String[] split = fullNamespaceKey.split(":", 2);
+        if (split.length < 2) {
+            return getBlock("minecraft:" + fullNamespaceKey);
+        }
+
         String id = split[0];
         String block = split[1];
 

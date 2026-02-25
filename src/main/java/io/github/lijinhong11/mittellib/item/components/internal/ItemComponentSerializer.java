@@ -110,13 +110,13 @@ public class ItemComponentSerializer {
         MCVersion current = MCVersion.getCurrent();
         if (current.isAtLeast(MCVersion.V1_20_5)) {
             registerSimple("damage", Integer.class, DataComponentTypes.DAMAGE, (i, e) -> i.setData(DataComponentTypes.DAMAGE, e));
-            registerSimple("max_damage", Integer.class, DataComponentTypes.MAX_DAMAGE, (i, e) -> i.setData(DataComponentTypes.MAX_DAMAGE, e));
-            registerSimple("max_stack_size", Integer.class, DataComponentTypes.MAX_STACK_SIZE, (i, e) -> i.setData(DataComponentTypes.MAX_STACK_SIZE, e));
+            registerSimple("maxDamage", Integer.class, DataComponentTypes.MAX_DAMAGE, (i, e) -> i.setData(DataComponentTypes.MAX_DAMAGE, e));
+            registerSimple("maxStackSize", Integer.class, DataComponentTypes.MAX_STACK_SIZE, (i, e) -> i.setData(DataComponentTypes.MAX_STACK_SIZE, e));
             registerSimple("enchantable", Integer.class, DataComponentTypes.ENCHANTABLE, (i, e) -> i.setData(DataComponentTypes.ENCHANTABLE, Enchantable.enchantable(e)));
         }
 
         if (current.isAtLeast(MCVersion.V1_21)) {
-            registerSimple("jukebox_playable", String.class, DataComponentTypes.JUKEBOX_PLAYABLE, (i, e) -> {
+            registerSimple("jukeboxPlayable", String.class, DataComponentTypes.JUKEBOX_PLAYABLE, (i, e) -> {
                 NamespacedKey key = BukkitUtils.getNamespacedKey(e);
                 if (key != null) {
                     JukeboxSong song = RegistryAccess.registryAccess().getRegistry(RegistryKey.JUKEBOX_SONG).get(key);
@@ -133,14 +133,14 @@ public class ItemComponentSerializer {
                 }
             });
 
-            registerSimple("item_model", String.class, DataComponentTypes.ITEM_MODEL, (i, e) -> {
+            registerSimple("itemModel", String.class, DataComponentTypes.ITEM_MODEL, (i, e) -> {
                 NamespacedKey key = BukkitUtils.getNamespacedKey(e);
                 if (key != null) {
                     i.setData(DataComponentTypes.ITEM_MODEL, key);
                 }
             });
 
-            registerSimple("tooltip_style", String.class, DataComponentTypes.TOOLTIP_STYLE, (i, e) -> {
+            registerSimple("tooltipStyle", String.class, DataComponentTypes.TOOLTIP_STYLE, (i, e) -> {
                 NamespacedKey key = BukkitUtils.getNamespacedKey(e);
                 if (key != null) {
                     i.setData(DataComponentTypes.TOOLTIP_STYLE, key);
@@ -149,12 +149,16 @@ public class ItemComponentSerializer {
         }
 
         if (current.isAtLeast(MCVersion.V1_21_11)) {
-            registerSimple("intangible_projectile", Boolean.class, DataComponentTypes.INTANGIBLE_PROJECTILE, (i, e) -> {
+            registerSimple("intangibleProjectile", Boolean.class, DataComponentTypes.INTANGIBLE_PROJECTILE, (i, e) -> {
                 e = e == null || e;
                 if (e) {
                     i.setData(DataComponentTypes.INTANGIBLE_PROJECTILE);
                 }
             });
+
+            registerSimple("minimumAttackCharge", float.class, DataComponentTypes.INTANGIBLE_PROJECTILE, (i, e) ->
+                i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e)
+            );
         }
     }
 

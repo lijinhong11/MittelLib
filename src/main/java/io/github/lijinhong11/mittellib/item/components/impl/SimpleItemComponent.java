@@ -2,6 +2,7 @@ package io.github.lijinhong11.mittellib.item.components.impl;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import lombok.Getter;
+import net.kyori.adventure.key.Key;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
@@ -43,7 +44,11 @@ public final class SimpleItemComponent<T> extends ReadWriteItemComponent {
 
     @Override
     public void write(ConfigurationSection cs) {
-        cs.set(key, value);
+        if (value instanceof Key k) {
+            cs.set(key, k.asString());
+        } else {
+            cs.set(key, value);
+        }
     }
 
     @Override

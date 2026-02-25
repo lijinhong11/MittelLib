@@ -8,11 +8,14 @@ import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSerializer;
-import io.github.lijinhong11.mittellib.utils.EnumUtils;
+import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +31,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class MittelItem extends ReadWriteObject {
-    private @Nullable ContentProvider provider = null;
+    private @Nullable ContentProvider itemProvider = null;
     private @Nullable String itemIdByProvider = null;
     private @NotNull Material material = Material.BARRIER;
     private @NotNull MittelItemMeta meta = MittelItemMeta.empty();
@@ -40,16 +43,16 @@ public class MittelItem extends ReadWriteObject {
     private MittelItem() {
     }
 
-    public MittelItem(@NotNull ContentProvider provider, @NotNull String itemIdByProvider) {
-        Preconditions.checkNotNull(provider);
+    public MittelItem(@NotNull ContentProvider itemProvider, @NotNull String itemIdByProvider) {
+        Preconditions.checkNotNull(itemProvider);
         Preconditions.checkNotNull(itemIdByProvider);
 
-        ItemStack get = provider.getItem(itemIdByProvider);
+        ItemStack get = itemProvider.getItem(itemIdByProvider);
         if (get == null) {
-            throw new RuntimeException(new IllegalArgumentException("Cannot find a item with id " + itemIdByProvider + " at " + provider));
+            throw new RuntimeException(new IllegalArgumentException("Cannot find a item with id " + itemIdByProvider + " at " + itemProvider));
         }
 
-        this.provider = provider;
+        this.itemProvider = itemProvider;
         this.itemIdByProvider = itemIdByProvider;
 
         applyFromItemStack(get);
@@ -101,8 +104,8 @@ public class MittelItem extends ReadWriteObject {
 
     @Override
     public void write(ConfigurationSection cs) {
-        if (provider != null) {
-            cs.set("provider", provider.toString());
+        if (itemProvider != null) {
+            cs.set("provider", itemProvider.getId().toLowerCase());
             cs.set("material", itemIdByProvider);
         } else {
             cs.set("material", material.toString());
@@ -141,7 +144,7 @@ public class MittelItem extends ReadWriteObject {
                             .severe("Cannot find a item with id " + id + " at "
                                     + cs.getCurrentPath());
                 } else {
-                    this.provider = contentProvider;
+                    this.itemProvider = contentProvider;
                     applyFromItemStack(item);
                 }
             } else {
@@ -152,7 +155,7 @@ public class MittelItem extends ReadWriteObject {
             }
         } else {
             String mat = cs.getString("material", "null");
-            material = EnumUtils.readEnum(Material.class, mat);
+            material = BukkitUtils.getMaterial(mat);
             if (material == null) {
                 MittelLib.getInstance()
                         .getLogger()
@@ -178,7 +181,33 @@ public class MittelItem extends ReadWriteObject {
 
         ConfigurationSection metaSection = cs.getConfigurationSection("meta");
         if (metaSection != null) {
-            meta.read(metaSection);
+            this.meta.read(metaSection);
+        }
+
+        ConfigurationSection enchantmentSection = cs.getConfigurationSection("enchantments");
+        if (enchantmentSection != null) {
+            if (this.enchantments == null) {
+                this.enchantments = new HashMap<>();
+            }
+
+            for (String k : enchantmentSection.getKeys(false)) {
+                NamespacedKey key = BukkitUtils.getNamespacedKey(k);
+                if (key == null) {
+                    continue;
+                }
+
+                Enchantment ench = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
+                if (ench == null) {
+                    MittelLib.getInstance()
+                            .getLogger()
+                            .severe("Failed to find a enchantment with key " + key.asString());
+                    continue;
+                }
+
+                int lvl = enchantmentSection.getInt(k);
+
+                this.enchantments.put(ench, lvl);
+            }
         }
 
         this.material = material;

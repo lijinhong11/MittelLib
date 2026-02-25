@@ -10,9 +10,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @ApiStatus.Internal
@@ -50,19 +52,17 @@ class ComponentCommons {
             ConfigurationSection applyEffects = cs.getConfigurationSection("applyEffects");
             if (applyEffects != null) {
                 float probability = (float) applyEffects.getDouble("probability");
-                ConfigurationSection potionEffects = applyEffects.getConfigurationSection("effects");
-                if (potionEffects != null) {
-                    List<PotionEffect> pe = potionEffects.getKeys(false).stream().map(s -> {
-                        ConfigurationSection effect = potionEffects.getConfigurationSection(s);
-                        if (effect == null) {
-                            return null;
-                        }
+                List<Map<?, ?>> potionEffects = applyEffects.getMapList("effects");
+                List<PotionEffect> pe = potionEffects.stream().map(s -> {
+                    Map<String, Object> effect = (Map<String, Object>) s;
+                    if (effect == null) {
+                        return null;
+                    }
 
-                        return BukkitUtils.readPotionEffect(effect);
-                    }).filter(Objects::nonNull).toList();
+                    return BukkitUtils.readPotionEffect(effect);
+                }).filter(Objects::nonNull).toList();
 
-                    effectList.add(ConsumeEffect.applyStatusEffects(pe, probability));
-                }
+                effectList.add(ConsumeEffect.applyStatusEffects(pe, probability));
             }
         }
 

@@ -57,7 +57,10 @@ public class MittelItemMeta extends ReadWriteObject {
         newOne.lore = meta.hasLore() ? meta.lore() : null;
         newOne.itemFlags = meta.getItemFlags().isEmpty() ? null : new HashSet<>(meta.getItemFlags());
         newOne.unbreakable = meta.isUnbreakable();
-        newOne.customModelData = meta.getCustomModelData();
+
+        if (meta.hasCustomModelData()) {
+            newOne.customModelData = meta.getCustomModelData();
+        }
 
         if (meta instanceof BannerMeta bannerMeta) {
             newOne.banner = BannerDefinition.fromBannerMeta(bannerMeta);
@@ -131,7 +134,7 @@ public class MittelItemMeta extends ReadWriteObject {
     @Override
     public void write(ConfigurationSection cs) {
         if (itemFlags != null && !itemFlags.isEmpty()) {
-            cs.set("itemFlags", itemFlags.stream().map(Enum::name).toList());
+            cs.set("itemFlags", itemFlags.stream().map(Enum::toString).toList());
         }
 
         if (banner != null) {

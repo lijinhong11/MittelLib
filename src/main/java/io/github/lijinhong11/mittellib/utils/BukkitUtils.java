@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.profile.PlayerTextures;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,20 +20,25 @@ import java.util.*;
 
 @UtilityClass
 public class BukkitUtils {
-    public static @NotNull Material getMaterial(@NotNull String name) {
+    public static @Nullable Material getMaterial(@NotNull String name) {
+        return getMaterial(name, null);
+    }
+
+    public static @NotNull Material getMaterialDef(@NotNull String name) {
         return getMaterial(name, Material.BARRIER);
     }
 
-    public static @NotNull Material getMaterial(@NotNull String name, @Nullable Material def) {
+    @Contract("_, !null -> !null")
+    public static @Nullable Material getMaterial(@NotNull String name, @Nullable Material def) {
         if (name.isBlank()) {
-            return def == null ? Material.BARRIER : def;
+            return def;
         }
 
         try {
             Material material = Material.matchMaterial(name);
-            return material == null ? (def == null ? Material.BARRIER : def) : material;
+            return material == null ? def : material;
         } catch (Exception ignored) {
-            return def == null ? Material.BARRIER : def;
+            return def;
         }
     }
 
@@ -78,7 +84,10 @@ public class BukkitUtils {
             return key;
         }
 
-        return NamespacedKey.minecraft(input);
+        MittelLib.getInstance()
+                .getLogger()
+                .severe("Failed to define a namespaced key: " + input + " does not match format or invalid character detected");
+        return null;
     }
 
     public static @NotNull List<NamespacedKey> getNamespacedKeys(@NotNull Iterable<String> keys) {
