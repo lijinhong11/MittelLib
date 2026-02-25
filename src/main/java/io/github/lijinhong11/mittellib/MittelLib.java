@@ -16,6 +16,10 @@ public final class MittelLib extends JavaPlugin {
     @Getter
     private static MittelLib instance;
 
+    /**
+     * Get MittelLib's language manager <br>
+     * For other plugin, use {@link #getLanguageManager(Plugin)}
+     */
     @Getter
     private LanguageManager languageManager;
 
@@ -39,6 +43,11 @@ public final class MittelLib extends JavaPlugin {
         getLogger().info("MittelLib is disabled!");
     }
 
+    /**
+     * Get the language manager for the plugin
+     * @param plugin the plugin
+     * @return the language manager for the plugin
+     */
     public LanguageManager getLanguageManager(Plugin plugin) {
         if (plugin == this) {
             return languageManager;

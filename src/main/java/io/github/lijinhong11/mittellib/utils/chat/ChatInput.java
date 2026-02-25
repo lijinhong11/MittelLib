@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -49,6 +50,7 @@ public final class ChatInput {
             }
 
             @Override
+            @ParametersAreNonnullByDefault
             public void onChat(Player p, String msg) {
                 handler.accept(msg);
             }
@@ -92,6 +94,7 @@ public final class ChatInput {
             }
 
             @Override
+            @ParametersAreNonnullByDefault
             public void onChat(Player p, String msg) {
                 handler.accept(p, msg);
             }

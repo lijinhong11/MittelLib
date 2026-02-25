@@ -31,9 +31,10 @@ import java.util.jar.JarFile;
 
 /**
  * A class to manage language files and messages.
- * You can create a new instance of this class by passing a reference to your plugin.
+ * <br>
+ * Please use {@link MittelLib#getLanguageManager(Plugin)} to get language manager!
  */
-public class LanguageManager {
+public final class LanguageManager {
     private final Plugin plugin;
     private final String defaultLanguage;
 
