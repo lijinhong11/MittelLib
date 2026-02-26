@@ -50,7 +50,7 @@ public class ConsumableComponent extends ReadWriteItemComponent {
         if (animation == null) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot find a item use animation with the name " + animationStr + "! Fallback to EAT");
+                    .severe("Failed to find a item use animation with the name " + animationStr + "! Fallback to EAT");
             animation = ItemUseAnimation.EAT;
         }
 

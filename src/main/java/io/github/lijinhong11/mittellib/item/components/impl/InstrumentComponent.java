@@ -42,7 +42,7 @@ public class InstrumentComponent extends ReadWriteItemComponent {
         if (instrument == null) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot find a MusicInstrument with key " + key.asString());
+                    .severe("Failed to find a MusicInstrument with key " + key.asString());
             return null;
         }
 

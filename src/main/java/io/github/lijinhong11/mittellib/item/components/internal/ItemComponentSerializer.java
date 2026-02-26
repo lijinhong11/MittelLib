@@ -19,6 +19,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.damage.DamageType;
+import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.reflections.Reflections;
@@ -32,7 +33,6 @@ import java.util.function.Function;
 @ApiStatus.Internal
 @SuppressWarnings("UnstableApiUsage")
 public class ItemComponentSerializer {
-
     private static final Map<String, ReadMethod> READERS = new HashMap<>();
     private static final Map<Class<?>, String> KEYS = new HashMap<>();
     private static final Map<DataComponentType, String> TYPE_KEYS = new HashMap<>();
@@ -124,11 +124,23 @@ public class ItemComponentSerializer {
                 if (dyeColor == null) {
                     MittelLib.getInstance()
                             .getLogger()
-                            .severe("Cannot find a dye color with name " + e);
+                            .severe("Failed to find a dye color with name " + e);
                     return;
                 }
 
                 i.setData(DataComponentTypes.BASE_COLOR, dyeColor);
+            });
+
+            registerSimple("rarity", String.class, DataComponentTypes.RARITY, (i, e) -> {
+                ItemRarity rarity = EnumUtils.readEnum(ItemRarity.class, e);
+                if (rarity == null) {
+                    MittelLib.getInstance()
+                            .getLogger()
+                            .severe("Failed to find a item rarity with name " + e);
+                    return;
+                }
+
+                i.setData(DataComponentTypes.RARITY, rarity);
             });
         }
 
@@ -140,7 +152,7 @@ public class ItemComponentSerializer {
                     if (song == null) {
                         MittelLib.getInstance()
                                 .getLogger()
-                                .severe("Cannot find a jukebox song with key " + key.asString());
+                                .severe("Failed to find a jukebox song with key " + key.asString());
                         return;
                     }
 
@@ -184,7 +196,7 @@ public class ItemComponentSerializer {
                 if (dt == null) {
                     MittelLib.getInstance()
                             .getLogger()
-                            .severe("Cannot find a damage type with key " + key.asString());
+                            .severe("Failed to find a damage type with key " + key.asString());
                     return;
                 }
 

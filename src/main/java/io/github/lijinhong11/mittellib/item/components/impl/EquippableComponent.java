@@ -116,7 +116,7 @@ public class EquippableComponent extends ReadWriteItemComponent {
         if (slot == null) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot find a equipment slot with name " + slotStr);
+                    .severe("Failed to find a equipment slot with name " + slotStr);
             return null;
         }
 

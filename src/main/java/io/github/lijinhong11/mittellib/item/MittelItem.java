@@ -54,7 +54,7 @@ public class MittelItem extends ReadWriteObject {
 
         ItemStack get = itemProvider.getItem(itemIdByProvider);
         if (get == null) {
-            throw new RuntimeException(new IllegalArgumentException("Cannot find a item with id " + itemIdByProvider + " at " + itemProvider.getId()));
+            throw new RuntimeException(new IllegalArgumentException("Failed to find a item with id " + itemIdByProvider + " at " + itemProvider.getId()));
         }
 
         this.itemProvider = itemProvider;
@@ -150,7 +150,7 @@ public class MittelItem extends ReadWriteObject {
                 if (item == null) {
                     MittelLib.getInstance()
                             .getLogger()
-                            .severe("Cannot find a item with id " + id + " at "
+                            .severe("Failed to find a item with id " + id + " at "
                                     + cs.getCurrentPath());
                 } else {
                     this.itemProvider = contentProvider;
@@ -159,7 +159,7 @@ public class MittelItem extends ReadWriteObject {
             } else {
                 MittelLib.getInstance()
                         .getLogger()
-                        .severe("Cannot find a content provider called " + provider + " at "
+                        .severe("Failed to find a content provider called " + provider + " at "
                                 + cs.getCurrentPath());
             }
         } else {
@@ -168,7 +168,7 @@ public class MittelItem extends ReadWriteObject {
             if (material == null) {
                 MittelLib.getInstance()
                         .getLogger()
-                        .severe("Cannot find a material called " + mat + " at "
+                        .severe("Failed to find a material called " + mat + " at "
                                 + cs.getCurrentPath());
                 material = Material.BARRIER;
             }

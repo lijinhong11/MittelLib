@@ -149,7 +149,7 @@ public class MapDefinition extends ReadWriteObject {
             if (scale == null) {
                 MittelLib.getInstance()
                         .getLogger()
-                        .severe("Cannot find a map view scale with name " + scaleStr + " ! Fallback to NORMAL.");
+                        .severe("Failed to find a map view scale with name " + scaleStr + " ! Fallback to NORMAL.");
                 scale = MapView.Scale.NORMAL;
             }
 

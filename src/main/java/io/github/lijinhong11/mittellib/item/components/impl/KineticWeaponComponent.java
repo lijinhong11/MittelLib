@@ -93,7 +93,7 @@ public class KineticWeaponComponent extends ReadWriteItemComponent {
         if (dismount == null || knockback == null || damage == null) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot define a kinetic weapon component: dismount condition & knockback condition & damage condition are required, one of them is missing");
+                    .severe("Failed to define a kinetic weapon component: dismount condition & knockback condition & damage condition are required, one of them is missing");
             return null;
         }
 
@@ -101,7 +101,7 @@ public class KineticWeaponComponent extends ReadWriteItemComponent {
         if (contactCooldownTicks < 1) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot define a kinetic weapon component: contactCooldownTicks must be positive");
+                    .severe("Failed to define a kinetic weapon component: contactCooldownTicks must be positive");
             return null;
         }
 

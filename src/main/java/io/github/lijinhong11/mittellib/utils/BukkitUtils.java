@@ -219,14 +219,14 @@ public class BukkitUtils {
         String worldName = cs.getString("world");
         if (worldName == null || worldName.isBlank()) {
             MittelLib.getInstance().getLogger()
-                    .severe("Cannot read location: world is missing");
+                    .severe("Failed to read location: world is missing");
             return null;
         }
 
         World world = Bukkit.getWorld(worldName);
         if (world == null) {
             MittelLib.getInstance().getLogger()
-                    .severe("Cannot read location: world " + worldName + " does not exist");
+                    .severe("Failed to read location: world " + worldName + " does not exist");
             return null;
         }
 

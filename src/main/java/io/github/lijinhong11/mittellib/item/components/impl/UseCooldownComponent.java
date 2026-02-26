@@ -41,7 +41,7 @@ public class UseCooldownComponent extends ReadWriteItemComponent {
         if (sec <= 0) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot define a use cooldown component: seconds is lower than or equals to 0");
+                    .severe("Failed to define a use cooldown component: seconds is lower than or equals to 0");
             return null;
         }
 

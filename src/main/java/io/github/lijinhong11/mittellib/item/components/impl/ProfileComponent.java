@@ -45,7 +45,7 @@ public class ProfileComponent extends ReadWriteItemComponent {
         } catch (Exception e) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot define profile component: " + id + " is not an UUID");
+                    .severe("Failed to define profile component: " + id + " is not an UUID");
             return null;
         }
         String name = cs.getString("name");
@@ -94,7 +94,7 @@ public class ProfileComponent extends ReadWriteItemComponent {
                 if (model == null) {
                     MittelLib.getInstance()
                             .getLogger()
-                            .severe("Cannot find a skin model with the name " + modelStr
+                            .severe("Failed to find a skin model with the name " + modelStr
                                     + "! Available options are SLIM and CLASSIC");
                 } else {
                     skinPatchBuilder.model(model);
@@ -135,7 +135,7 @@ public class ProfileComponent extends ReadWriteItemComponent {
         if (uuid == null) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot define a profile without an UUID");
+                    .severe("Failed to define a profile without an UUID");
             return;
         }
 

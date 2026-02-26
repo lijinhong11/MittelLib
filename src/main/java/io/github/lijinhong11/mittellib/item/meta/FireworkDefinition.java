@@ -73,7 +73,7 @@ public class FireworkDefinition extends ReadWriteObject {
             if (type == null) {
                 MittelLib.getInstance()
                         .getLogger()
-                        .severe("Cannot define a firework effect: type with name " + typeStr + " does not exist");
+                        .severe("Failed to define a firework effect: type with name " + typeStr + " does not exist");
                 continue;
             }
 

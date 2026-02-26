@@ -71,7 +71,7 @@ public class SkullDefinition extends ReadWriteObject {
         } catch (Exception e) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Cannot set a skull's skin: url " + url + " is not a valid url");
+                    .severe("Failed to set a skull's skin: url " + url + " is not a valid url");
         }
     }
 }

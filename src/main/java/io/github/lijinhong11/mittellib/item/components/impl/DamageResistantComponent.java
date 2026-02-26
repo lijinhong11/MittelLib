@@ -31,7 +31,7 @@ public class DamageResistantComponent extends ReadWriteItemComponent {
 
     @Nullable
     public static DamageResistantComponent readFromSection(ConfigurationSection cs) {
-        NamespacedKey key = BukkitUtils.getNamespacedKey(cs.getString("damageResistant", "null"));
+        NamespacedKey key = BukkitUtils.getNamespacedKey(cs.getString("damageResistant"));
         if (key == null) {
             return null;
         }
