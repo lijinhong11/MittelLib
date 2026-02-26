@@ -1,8 +1,10 @@
 package io.github.lijinhong11.mittellib.item.components.internal;
 
+import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.impl.SimpleItemComponent;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
+import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -11,9 +13,12 @@ import io.papermc.paper.datacomponent.item.JukeboxPlayable;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import lombok.experimental.UtilityClass;
+import org.bukkit.DyeColor;
 import org.bukkit.JukeboxSong;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.damage.DamageType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.reflections.Reflections;
@@ -113,6 +118,18 @@ public class ItemComponentSerializer {
             registerSimple("maxDamage", Integer.class, DataComponentTypes.MAX_DAMAGE, (i, e) -> i.setData(DataComponentTypes.MAX_DAMAGE, e));
             registerSimple("maxStackSize", Integer.class, DataComponentTypes.MAX_STACK_SIZE, (i, e) -> i.setData(DataComponentTypes.MAX_STACK_SIZE, e));
             registerSimple("enchantable", Integer.class, DataComponentTypes.ENCHANTABLE, (i, e) -> i.setData(DataComponentTypes.ENCHANTABLE, Enchantable.enchantable(e)));
+
+            registerSimple("baseColor", String.class, DataComponentTypes.BASE_COLOR, (i, e) -> {
+                DyeColor dyeColor = EnumUtils.readEnum(DyeColor.class, e);
+                if (dyeColor == null) {
+                    MittelLib.getInstance()
+                            .getLogger()
+                            .severe("Cannot find a dye color with name " + e);
+                    return;
+                }
+
+                i.setData(DataComponentTypes.BASE_COLOR, dyeColor);
+            });
         }
 
         if (current.isAtLeast(MCVersion.V1_21)) {
@@ -120,6 +137,13 @@ public class ItemComponentSerializer {
                 NamespacedKey key = BukkitUtils.getNamespacedKey(e);
                 if (key != null) {
                     JukeboxSong song = RegistryAccess.registryAccess().getRegistry(RegistryKey.JUKEBOX_SONG).get(key);
+                    if (song == null) {
+                        MittelLib.getInstance()
+                                .getLogger()
+                                .severe("Cannot find a jukebox song with key " + key.asString());
+                        return;
+                    }
+
                     i.setData(DataComponentTypes.JUKEBOX_PLAYABLE, JukeboxPlayable.jukeboxPlayable(song).build());
                 }
             });
@@ -149,6 +173,24 @@ public class ItemComponentSerializer {
         }
 
         if (current.isAtLeast(MCVersion.V1_21_11)) {
+            registerSimple("damageType", String.class, DataComponentTypes.DAMAGE_TYPE, (i, e) -> {
+                Registry<DamageType> reg = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE);
+                NamespacedKey key = BukkitUtils.getNamespacedKey(e);
+                if (key == null) {
+                    return;
+                }
+
+                DamageType dt = reg.get(key);
+                if (dt == null) {
+                    MittelLib.getInstance()
+                            .getLogger()
+                            .severe("Cannot find a damage type with key " + key.asString());
+                    return;
+                }
+
+                i.setData(DataComponentTypes.DAMAGE_TYPE, dt);
+            });
+
             registerSimple("intangibleProjectile", Boolean.class, DataComponentTypes.INTANGIBLE_PROJECTILE, (i, e) -> {
                 e = e == null || e;
                 if (e) {

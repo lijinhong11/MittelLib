@@ -43,13 +43,18 @@ public class MittelItem extends ReadWriteObject {
     private MittelItem() {
     }
 
+    /**
+     * Create a mittel item using item provider and item id
+     * @param itemProvider the item provider
+     * @param itemIdByProvider the item id to get item in the item provider
+     */
     public MittelItem(@NotNull ContentProvider itemProvider, @NotNull String itemIdByProvider) {
         Preconditions.checkNotNull(itemProvider);
         Preconditions.checkNotNull(itemIdByProvider);
 
         ItemStack get = itemProvider.getItem(itemIdByProvider);
         if (get == null) {
-            throw new RuntimeException(new IllegalArgumentException("Cannot find a item with id " + itemIdByProvider + " at " + itemProvider));
+            throw new RuntimeException(new IllegalArgumentException("Cannot find a item with id " + itemIdByProvider + " at " + itemProvider.getId()));
         }
 
         this.itemProvider = itemProvider;
@@ -58,6 +63,10 @@ public class MittelItem extends ReadWriteObject {
         applyFromItemStack(get);
     }
 
+    /**
+     * Create a mittel item using {@link ItemStack}
+     * @param itemStack the item stack
+     */
     public MittelItem(@NotNull ItemStack itemStack) {
         applyFromItemStack(itemStack);
     }
@@ -104,7 +113,7 @@ public class MittelItem extends ReadWriteObject {
 
     @Override
     public void write(ConfigurationSection cs) {
-        if (itemProvider != null) {
+        if (itemProvider != null && itemIdByProvider != null) {
             cs.set("provider", itemProvider.getId().toLowerCase());
             cs.set("material", itemIdByProvider);
         } else {
@@ -219,7 +228,14 @@ public class MittelItem extends ReadWriteObject {
             throw new RuntimeException(new IllegalArgumentException("amount must greater than 0"));
         }
 
-        ItemStack newOne = new ItemStack(material, amount);
+        ItemStack newOne = null;
+        if (itemProvider != null && itemIdByProvider != null) {
+            newOne = itemProvider.getItem(itemIdByProvider);
+        }
+
+        if (newOne == null) {
+            newOne = new ItemStack(material, amount);
+        }
 
         meta.applyToItemStack(newOne);
 

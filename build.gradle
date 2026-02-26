@@ -1,7 +1,7 @@
 plugins {
-    id "java"
-    id "maven-publish"
-    id "org.jreleaser" version "1.22.0"
+    id("java")
+    id("maven-publish")
+    id("org.jreleaser") version "1.22.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
@@ -44,6 +44,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    implementation("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT:javadoc")
 
     //libraries
     implementation("org.reflections:reflections:0.10.2")
@@ -104,6 +105,12 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
+}
+
+tasks.withType(Javadoc).configureEach {
+    options.links(
+            "https://hub.spigotmc.org/javadocs/spigot/"
+    )
 }
 
 processResources {

@@ -133,10 +133,10 @@ public class BukkitUtils {
         PotionEffectType type = Registry.EFFECT.get(key);
         if (type == null) return null;
 
-        Number durationNum = asNumber(map.get("duration"));
+        Number durationNum = NumberUtils.asNumber(map.get("duration"));
         if (durationNum == null || durationNum.intValue() <= 0) return null;
 
-        Number amplifierNum = asNumber(map.getOrDefault("amplifier", 0));
+        Number amplifierNum = NumberUtils.asNumber(map.getOrDefault("amplifier", 0));
 
         boolean ambient = asBoolean(map.getOrDefault("ambient", true));
         boolean particle = asBoolean(map.getOrDefault("particle", true));
@@ -168,10 +168,10 @@ public class BukkitUtils {
         List<Color> list = new ArrayList<>();
 
         for (Map<?, ?> raw : maps) {
-            Number r = asNumber(raw.get("red"));
-            Number g = asNumber(raw.get("green"));
-            Number b = asNumber(raw.get("blue"));
-            Number a = asNumber(raw.get("alpha"));
+            Number r = NumberUtils.asNumber(raw.get("red"));
+            Number g = NumberUtils.asNumber(raw.get("green"));
+            Number b = NumberUtils.asNumber(raw.get("blue"));
+            Number a = NumberUtils.asNumber(raw.get("alpha"));
 
             if (r == null || g == null || b == null) continue;
 
@@ -237,10 +237,6 @@ public class BukkitUtils {
         float pitch = (float) cs.getDouble("pitch", 0);
 
         return new Location(world, x, y, z, yaw, pitch);
-    }
-
-    private static @Nullable Number asNumber(Object obj) {
-        return obj instanceof Number n ? n : null;
     }
 
     private static boolean asBoolean(Object obj) {

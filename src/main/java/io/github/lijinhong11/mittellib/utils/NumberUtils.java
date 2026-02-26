@@ -3,6 +3,7 @@ package io.github.lijinhong11.mittellib.utils;
 import io.github.lijinhong11.mittellib.MittelLib;
 import lombok.experimental.UtilityClass;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
 public class NumberUtils {
@@ -24,6 +25,10 @@ public class NumberUtils {
     public static float asUnsigned(float f) {
         f = f < 0 ? -f : f;
         return f;
+    }
+
+    public static @Nullable Number asNumber(Object obj) {
+        return obj instanceof Number n ? n : null;
     }
 
     public static String formatSeconds(CommandSender cs, int totalSeconds) {
