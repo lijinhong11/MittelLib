@@ -13,6 +13,10 @@ import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.set.RegistryKeySet;
 import io.papermc.paper.registry.set.RegistrySet;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.key.Key;
@@ -23,11 +27,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.util.List;
 
 @ItemComponentSpec(key = "equippable", requiredVersion = MCVersion.V1_21_2)
 @RequiredArgsConstructor
@@ -55,30 +54,29 @@ public class EquippableComponent extends ReadWriteItemComponent {
     private @Nullable RegistryKeySet<EntityType> allowedEntities;
     private boolean dispensable = true;
 
-    //1.21.2
+    // 1.21.2
     private boolean swappable = true;
     private boolean damageOnHurt = true;
     private @Nullable Key cameraOverlay;
 
-    //1.21.5
+    // 1.21.5
     private boolean equipOnInteract = false;
 
-    //1.21.6
+    // 1.21.6
     private boolean canBeSheared = false;
     private @Nullable Key shearSound;
 
-    //for 1.21.2 lower
+    // for 1.21.2 lower
     public EquippableComponent(
             @NotNull EquipmentSlot slot,
             @Nullable Key equipSound,
             @Nullable Key assetId,
             @Nullable RegistryKeySet<EntityType> allowedEntities,
-            boolean dispensable
-    ) {
+            boolean dispensable) {
         this(slot, equipSound, assetId, allowedEntities, dispensable, true, true, null, false, false, null);
     }
 
-    //for 1.21.2 - 1.21.4
+    // for 1.21.2 - 1.21.4
     public EquippableComponent(
             @NotNull EquipmentSlot slot,
             @Nullable Key equipSound,
@@ -87,23 +85,57 @@ public class EquippableComponent extends ReadWriteItemComponent {
             @Nullable RegistryKeySet<EntityType> allowedEntities,
             boolean dispensable,
             boolean swappable,
-            boolean damageOnHurt
-    ) {
-        this(slot, equipSound, assetId, allowedEntities, dispensable, swappable, damageOnHurt, cameraOverlay, false, false, null);
+            boolean damageOnHurt) {
+        this(
+                slot,
+                equipSound,
+                assetId,
+                allowedEntities,
+                dispensable,
+                swappable,
+                damageOnHurt,
+                cameraOverlay,
+                false,
+                false,
+                null);
     }
 
     public static EquippableComponent fromMinecraftComponent(Equippable equippable) {
         MCVersion current = MCVersion.getCurrent();
 
         if (current.isLowerThan(MCVersion.V1_21_2)) {
-            return new EquippableComponent(equippable.slot(), equippable.equipSound(), equippable.assetId(), equippable.allowedEntities(), equippable.dispensable());
+            return new EquippableComponent(
+                    equippable.slot(),
+                    equippable.equipSound(),
+                    equippable.assetId(),
+                    equippable.allowedEntities(),
+                    equippable.dispensable());
         }
 
         if (current.isAtLeast(MCVersion.V1_21_2) && current.isLowerThan(MCVersion.V1_21_5)) {
-            return new EquippableComponent(equippable.slot(), equippable.equipSound(), equippable.assetId(), equippable.cameraOverlay(), equippable.allowedEntities(), equippable.dispensable(), equippable.swappable(), equippable.damageOnHurt());
+            return new EquippableComponent(
+                    equippable.slot(),
+                    equippable.equipSound(),
+                    equippable.assetId(),
+                    equippable.cameraOverlay(),
+                    equippable.allowedEntities(),
+                    equippable.dispensable(),
+                    equippable.swappable(),
+                    equippable.damageOnHurt());
         }
 
-        return new EquippableComponent(equippable.slot(), equippable.equipSound(), equippable.assetId(), equippable.allowedEntities(), equippable.dispensable(), equippable.swappable(), equippable.damageOnHurt(), equippable.cameraOverlay(), equippable.equipOnInteract(), equippable.canBeSheared(), equippable.shearSound());
+        return new EquippableComponent(
+                equippable.slot(),
+                equippable.equipSound(),
+                equippable.assetId(),
+                equippable.allowedEntities(),
+                equippable.dispensable(),
+                equippable.swappable(),
+                equippable.damageOnHurt(),
+                equippable.cameraOverlay(),
+                equippable.equipOnInteract(),
+                equippable.canBeSheared(),
+                equippable.shearSound());
     }
 
     public static DataComponentType getDataComponentType() {
@@ -114,9 +146,7 @@ public class EquippableComponent extends ReadWriteItemComponent {
         String slotStr = cs.getString("slot", "null");
         EquipmentSlot slot = EnumUtils.readEnum(EquipmentSlot.class, slotStr);
         if (slot == null) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Failed to find a equipment slot with name " + slotStr);
+            MittelLib.getInstance().getLogger().severe("Failed to find a equipment slot with name " + slotStr);
             return null;
         }
 
@@ -150,8 +180,7 @@ public class EquippableComponent extends ReadWriteItemComponent {
         RegistryKeySet<EntityType> allowedEntities = null;
         List<String> entities = cs.getStringList("allowedEntities");
         if (!entities.isEmpty()) {
-            List<TypedKey<EntityType>> keys = BukkitUtils.getNamespacedKeys(entities)
-                    .stream()
+            List<TypedKey<EntityType>> keys = BukkitUtils.getNamespacedKeys(entities).stream()
                     .map(RegistryKey.ENTITY_TYPE::typedKey)
                     .toList();
 
@@ -175,15 +204,24 @@ public class EquippableComponent extends ReadWriteItemComponent {
             }
         }
 
-        return new EquippableComponent(slot, equipSound, assetId, allowedEntities, dispensable,
-                swappable, damageOnHurt, cameraOverlay, equipOnInteract, canBeSheared, shearSound);
+        return new EquippableComponent(
+                slot,
+                equipSound,
+                assetId,
+                allowedEntities,
+                dispensable,
+                swappable,
+                damageOnHurt,
+                cameraOverlay,
+                equipOnInteract,
+                canBeSheared,
+                shearSound);
     }
 
     @Override
     public void applyToItem(ItemStack item) {
-        Equippable.Builder builder = Equippable.equippable(slot)
-                .equipSound(equipSound)
-                .dispensable(dispensable);
+        Equippable.Builder builder =
+                Equippable.equippable(slot).equipSound(equipSound).dispensable(dispensable);
 
         try {
             ASSET_SET.invoke(assetId);
@@ -192,9 +230,7 @@ public class EquippableComponent extends ReadWriteItemComponent {
         }
 
         if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_21_2)) {
-            builder.cameraOverlay(cameraOverlay)
-                    .swappable(swappable)
-                    .damageOnHurt(damageOnHurt);
+            builder.cameraOverlay(cameraOverlay).swappable(swappable).damageOnHurt(damageOnHurt);
         }
 
         if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_21_5)) {
@@ -202,8 +238,7 @@ public class EquippableComponent extends ReadWriteItemComponent {
         }
 
         if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_21_6)) {
-            builder.canBeSheared(canBeSheared)
-                    .shearSound(shearSound);
+            builder.canBeSheared(canBeSheared).shearSound(shearSound);
         }
 
         if (allowedEntities != null) {
@@ -229,7 +264,11 @@ public class EquippableComponent extends ReadWriteItemComponent {
         }
 
         if (allowedEntities != null) {
-            cs.set("allowedEntities", allowedEntities.values().stream().map(k -> k.key().asString()).toList());
+            cs.set(
+                    "allowedEntities",
+                    allowedEntities.values().stream()
+                            .map(k -> k.key().asString())
+                            .toList());
         }
 
         cs.set("dispensable", dispensable);

@@ -22,8 +22,10 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 @ItemComponentSpec(key = "trim", requiredVersion = MCVersion.V1_21_2)
 @AllArgsConstructor
 public class ArmorTrimComponent extends ReadWriteItemComponent {
-    private static final Registry<TrimMaterial> TRIM_MATERIAL_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL);
-    private static final Registry<TrimPattern> TRIM_PATTERN_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_PATTERN);
+    private static final Registry<TrimMaterial> TRIM_MATERIAL_REGISTRY =
+            RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL);
+    private static final Registry<TrimPattern> TRIM_PATTERN_REGISTRY =
+            RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_PATTERN);
 
     private final ArmorTrim armorTrim;
 
@@ -41,7 +43,8 @@ public class ArmorTrimComponent extends ReadWriteItemComponent {
 
     @Override
     public void applyToItem(ItemStack item) {
-        item.setData(DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(armorTrim).build());
+        item.setData(
+                DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(armorTrim).build());
     }
 
     @Override

@@ -3,9 +3,6 @@ package io.github.lijinhong11.mittellib.utils;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -17,6 +14,8 @@ import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * A modrinth update checker
@@ -53,8 +52,7 @@ public class ModrinthUpdateChecker {
                         .GET()
                         .build();
 
-                HttpResponse<String> response =
-                        httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() != 200) {
                     plugin.getLogger().warning("Update check failed (HTTP " + response.statusCode() + ")");
@@ -62,8 +60,7 @@ public class ModrinthUpdateChecker {
                 }
 
                 Type listType = new TypeToken<List<ModrinthVersion>>() {}.getType();
-                List<ModrinthVersion> versions =
-                        gson.fromJson(response.body(), listType);
+                List<ModrinthVersion> versions = gson.fromJson(response.body(), listType);
 
                 if (versions == null || versions.isEmpty()) {
                     plugin.getLogger().info("No updates found.");
@@ -105,9 +102,7 @@ public class ModrinthUpdateChecker {
 
     private void runSync(Runnable runnable) {
         if (isFolia()) {
-            plugin.getServer()
-                    .getGlobalRegionScheduler()
-                    .execute(plugin, runnable);
+            plugin.getServer().getGlobalRegionScheduler().execute(plugin, runnable);
         } else {
             Bukkit.getScheduler().runTask(plugin, runnable);
         }
@@ -139,9 +134,7 @@ public class ModrinthUpdateChecker {
     }
 
     private String[] normalize(String v) {
-        return v.replace("v", "")
-                .replace("-SNAPSHOT", "")
-                .split("\\.");
+        return v.replace("v", "").replace("-SNAPSHOT", "").split("\\.");
     }
 
     private int parseInt(String s) {

@@ -4,6 +4,14 @@ import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.ConfigFileUtils;
 import io.github.lijinhong11.mittellib.utils.StringUtils;
+import java.io.File;
+import java.net.JarURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -20,15 +28,6 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.net.JarURLConnection;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
 /**
  * A class to manage language files and messages.
  * <br>
@@ -42,6 +41,7 @@ public final class LanguageManager {
 
     @Setter
     private boolean detectPlayerLocale = true;
+
     @Setter
     private boolean autoComplete;
 
@@ -145,8 +145,10 @@ public final class LanguageManager {
         commandSender.sendMessage(parseToComponent(getMsg(commandSender, key, args)));
     }
 
-    public void sendMessage(CommandSender commandSender, String key, ClickEvent clickEvent, MessageReplacement... args) {
-        commandSender.sendMessage(parseToComponent(getMsg(commandSender, key, args)).clickEvent(clickEvent));
+    public void sendMessage(
+            CommandSender commandSender, String key, ClickEvent clickEvent, MessageReplacement... args) {
+        commandSender.sendMessage(
+                parseToComponent(getMsg(commandSender, key, args)).clickEvent(clickEvent));
     }
 
     public void sendMessages(CommandSender commandSender, String key, MessageReplacement... args) {
@@ -173,9 +175,7 @@ public final class LanguageManager {
         return parseToComponentList(getMsgListByLanguage(lang, key, args));
     }
 
-    public String getMsg(@Nullable CommandSender sender,
-                         String key,
-                         MessageReplacement... args) {
+    public String getMsg(@Nullable CommandSender sender, String key, MessageReplacement... args) {
         String msg = getConfiguration(sender).getString(key);
 
         if (msg == null) {
@@ -226,7 +226,11 @@ public final class LanguageManager {
         return msgList;
     }
 
-    public @NotNull ItemStack getMessagedItem(@NotNull Material material, @NotNull String sectionKey, @Nullable Player player, MessageReplacement... args) {
+    public @NotNull ItemStack getMessagedItem(
+            @NotNull Material material,
+            @NotNull String sectionKey,
+            @Nullable Player player,
+            MessageReplacement... args) {
         ItemStack is = new ItemStack(material);
         ItemMeta meta = is.getItemMeta();
         meta.displayName(getMsgComponent(player, sectionKey + ".name", args));

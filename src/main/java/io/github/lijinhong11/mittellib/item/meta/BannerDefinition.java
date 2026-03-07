@@ -5,6 +5,8 @@ import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,15 +19,12 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @Data
 public class BannerDefinition extends ReadWriteObject {
-    private static final Registry<PatternType> REGISTRY = RegistryAccess.registryAccess()
-            .getRegistry(RegistryKey.BANNER_PATTERN);
+    private static final Registry<PatternType> REGISTRY =
+            RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN);
 
     private List<Pattern> bannerPatterns;
 

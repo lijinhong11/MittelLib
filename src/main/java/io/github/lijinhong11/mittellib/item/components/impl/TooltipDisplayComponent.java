@@ -7,15 +7,14 @@ import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.TooltipDisplay;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @ItemComponentSpec(key = "tooltipDisplay", requiredVersion = MCVersion.V1_21_2)
 @NoArgsConstructor
@@ -46,7 +45,9 @@ public class TooltipDisplayComponent extends ReadWriteItemComponent {
     @Override
     public void write(ConfigurationSection cs) {
         cs.set("hideTooltip", hideTooltip);
-        cs.set("hiddenComponents", hiddenComponents.stream().map(c -> c.key().asString()).toList());
+        cs.set(
+                "hiddenComponents",
+                hiddenComponents.stream().map(c -> c.key().asString()).toList());
     }
 
     public static TooltipDisplayComponent readFromSection(ConfigurationSection cs) {

@@ -1,10 +1,9 @@
 package io.github.lijinhong11.mittellib.iface;
 
 import io.github.lijinhong11.mittellib.utils.random.FastRandom;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A list for random selection

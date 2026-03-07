@@ -12,6 +12,10 @@ import io.papermc.paper.datacomponent.item.Enchantable;
 import io.papermc.paper.datacomponent.item.JukeboxPlayable;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import lombok.experimental.UtilityClass;
 import org.bukkit.DyeColor;
 import org.bukkit.JukeboxSong;
@@ -23,11 +27,6 @@ import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.reflections.Reflections;
-
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 @UtilityClass
 @ApiStatus.Internal
@@ -45,8 +44,7 @@ public class ItemComponentSerializer {
 
     @SuppressWarnings("unchecked")
     private static void scanAndRegister() {
-        Reflections reflections =
-                new Reflections("me.mmmjjkx.mittellib.item.components.impl");
+        Reflections reflections = new Reflections("me.mmmjjkx.mittellib.item.components.impl");
 
         MCVersion current = MCVersion.getCurrent();
 
@@ -56,8 +54,7 @@ public class ItemComponentSerializer {
                 continue;
             }
 
-            Class<? extends ReadWriteItemComponent> clazz =
-                    (Class<? extends ReadWriteItemComponent>) raw;
+            Class<? extends ReadWriteItemComponent> clazz = (Class<? extends ReadWriteItemComponent>) raw;
 
             ItemComponentSpec spec = clazz.getAnnotation(ItemComponentSpec.class);
 
@@ -66,47 +63,37 @@ public class ItemComponentSerializer {
             }
 
             try {
-                Method readMethod =
-                        clazz.getDeclaredMethod("readFromSection", ConfigurationSection.class);
+                Method readMethod = clazz.getDeclaredMethod("readFromSection", ConfigurationSection.class);
                 readMethod.setAccessible(true);
 
                 READERS.put(spec.key(), new ReadMethod(readMethod));
                 KEYS.put(clazz, spec.key());
 
-                Method typeMethod =
-                        clazz.getDeclaredMethod("getDataComponentType");
+                Method typeMethod = clazz.getDeclaredMethod("getDataComponentType");
                 typeMethod.setAccessible(true);
 
                 DataComponentType type = (DataComponentType) typeMethod.invoke(null);
 
                 TYPE_KEYS.put(type, spec.key());
 
-                Method fromMethod = Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getName().equals("fromMinecraftComponent")).findAny().get();
+                Method fromMethod = Arrays.stream(clazz.getDeclaredMethods())
+                        .filter(m -> m.getName().equals("fromMinecraftComponent"))
+                        .findAny()
+                        .get();
 
                 fromMethod.setAccessible(true);
                 FROM_METHODS.put(type, fromMethod);
             } catch (NoSuchMethodException e) {
-                throw new IllegalStateException(
-                        clazz.getName() + " missing required static methods"
-                );
+                throw new IllegalStateException(clazz.getName() + " missing required static methods");
             } catch (Exception e) {
-                throw new RuntimeException(
-                        "Failed to register component " + clazz.getName(),
-                        e
-                );
+                throw new RuntimeException("Failed to register component " + clazz.getName(), e);
             }
         }
     }
 
     private static <T> void registerSimple(
-            String key,
-            Class<T> type,
-            DataComponentType dataType,
-            BiConsumer<ItemStack, T> applier
-    ) {
-        READERS.put(key, new ReadMethod(cs ->
-                SimpleItemComponent.readFromSection(key, cs, type, applier), true
-        ));
+            String key, Class<T> type, DataComponentType dataType, BiConsumer<ItemStack, T> applier) {
+        READERS.put(key, new ReadMethod(cs -> SimpleItemComponent.readFromSection(key, cs, type, applier), true));
 
         TYPE_KEYS.put(dataType, key);
     }
@@ -114,17 +101,31 @@ public class ItemComponentSerializer {
     private static void registerSimples() {
         MCVersion current = MCVersion.getCurrent();
         if (current.isAtLeast(MCVersion.V1_20_5)) {
-            registerSimple("damage", Integer.class, DataComponentTypes.DAMAGE, (i, e) -> i.setData(DataComponentTypes.DAMAGE, e));
-            registerSimple("maxDamage", Integer.class, DataComponentTypes.MAX_DAMAGE, (i, e) -> i.setData(DataComponentTypes.MAX_DAMAGE, e));
-            registerSimple("maxStackSize", Integer.class, DataComponentTypes.MAX_STACK_SIZE, (i, e) -> i.setData(DataComponentTypes.MAX_STACK_SIZE, e));
-            registerSimple("enchantable", Integer.class, DataComponentTypes.ENCHANTABLE, (i, e) -> i.setData(DataComponentTypes.ENCHANTABLE, Enchantable.enchantable(e)));
+            registerSimple(
+                    "damage",
+                    Integer.class,
+                    DataComponentTypes.DAMAGE,
+                    (i, e) -> i.setData(DataComponentTypes.DAMAGE, e));
+            registerSimple(
+                    "maxDamage",
+                    Integer.class,
+                    DataComponentTypes.MAX_DAMAGE,
+                    (i, e) -> i.setData(DataComponentTypes.MAX_DAMAGE, e));
+            registerSimple(
+                    "maxStackSize",
+                    Integer.class,
+                    DataComponentTypes.MAX_STACK_SIZE,
+                    (i, e) -> i.setData(DataComponentTypes.MAX_STACK_SIZE, e));
+            registerSimple(
+                    "enchantable",
+                    Integer.class,
+                    DataComponentTypes.ENCHANTABLE,
+                    (i, e) -> i.setData(DataComponentTypes.ENCHANTABLE, Enchantable.enchantable(e)));
 
             registerSimple("baseColor", String.class, DataComponentTypes.BASE_COLOR, (i, e) -> {
                 DyeColor dyeColor = EnumUtils.readEnum(DyeColor.class, e);
                 if (dyeColor == null) {
-                    MittelLib.getInstance()
-                            .getLogger()
-                            .severe("Failed to find a dye color with name " + e);
+                    MittelLib.getInstance().getLogger().severe("Failed to find a dye color with name " + e);
                     return;
                 }
 
@@ -134,9 +135,7 @@ public class ItemComponentSerializer {
             registerSimple("rarity", String.class, DataComponentTypes.RARITY, (i, e) -> {
                 ItemRarity rarity = EnumUtils.readEnum(ItemRarity.class, e);
                 if (rarity == null) {
-                    MittelLib.getInstance()
-                            .getLogger()
-                            .severe("Failed to find a item rarity with name " + e);
+                    MittelLib.getInstance().getLogger().severe("Failed to find a item rarity with name " + e);
                     return;
                 }
 
@@ -148,7 +147,9 @@ public class ItemComponentSerializer {
             registerSimple("jukeboxPlayable", String.class, DataComponentTypes.JUKEBOX_PLAYABLE, (i, e) -> {
                 NamespacedKey key = BukkitUtils.getNamespacedKey(e);
                 if (key != null) {
-                    JukeboxSong song = RegistryAccess.registryAccess().getRegistry(RegistryKey.JUKEBOX_SONG).get(key);
+                    JukeboxSong song = RegistryAccess.registryAccess()
+                            .getRegistry(RegistryKey.JUKEBOX_SONG)
+                            .get(key);
                     if (song == null) {
                         MittelLib.getInstance()
                                 .getLogger()
@@ -156,7 +157,9 @@ public class ItemComponentSerializer {
                         return;
                     }
 
-                    i.setData(DataComponentTypes.JUKEBOX_PLAYABLE, JukeboxPlayable.jukeboxPlayable(song).build());
+                    i.setData(
+                            DataComponentTypes.JUKEBOX_PLAYABLE,
+                            JukeboxPlayable.jukeboxPlayable(song).build());
                 }
             });
         }
@@ -210,15 +213,15 @@ public class ItemComponentSerializer {
                 }
             });
 
-            registerSimple("minimumAttackCharge", float.class, DataComponentTypes.INTANGIBLE_PROJECTILE, (i, e) ->
-                i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e)
-            );
+            registerSimple(
+                    "minimumAttackCharge",
+                    float.class,
+                    DataComponentTypes.INTANGIBLE_PROJECTILE,
+                    (i, e) -> i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e));
         }
     }
 
-    public static List<ReadWriteItemComponent> readComponentsFromSection(
-            ConfigurationSection cs
-    ) {
+    public static List<ReadWriteItemComponent> readComponentsFromSection(ConfigurationSection cs) {
         List<ReadWriteItemComponent> list = new ArrayList<>();
 
         for (String key : cs.getKeys(false)) {
@@ -226,9 +229,7 @@ public class ItemComponentSerializer {
             if (reader == null) continue;
 
             ReadWriteItemComponent component =
-                    cs.isConfigurationSection(key)
-                            ? reader.invoke(cs.getConfigurationSection(key))
-                            : reader.invoke(cs);
+                    cs.isConfigurationSection(key) ? reader.invoke(cs.getConfigurationSection(key)) : reader.invoke(cs);
 
             if (component != null) {
                 list.add(component);
@@ -238,9 +239,7 @@ public class ItemComponentSerializer {
         return list;
     }
 
-    public static List<ReadWriteItemComponent> readComponentsFromItem(
-            ItemStack item
-    ) {
+    public static List<ReadWriteItemComponent> readComponentsFromItem(ItemStack item) {
         List<ReadWriteItemComponent> list = new ArrayList<>();
 
         for (DataComponentType type : item.getDataTypes()) {
@@ -273,8 +272,7 @@ public class ItemComponentSerializer {
                 if (value == null) continue;
 
                 try {
-                    ReadWriteItemComponent component =
-                            (ReadWriteItemComponent) fromMethod.invoke(null, value);
+                    ReadWriteItemComponent component = (ReadWriteItemComponent) fromMethod.invoke(null, value);
 
                     if (component != null) {
                         list.add(component);
@@ -292,26 +290,17 @@ public class ItemComponentSerializer {
     }
 
     private static <T> SimpleItemComponent<T> getSimpleValuedComponent(
-            String key,
-            DataComponentType.Valued<T> va,
-            ItemStack item
-    ) {
+            String key, DataComponentType.Valued<T> va, ItemStack item) {
         T value = item.getData(va);
         if (value != null) {
-            return new SimpleItemComponent<>(
-                    key,
-                    value,
-                    (i, b) -> i.setData(va, b)
-            );
+            return new SimpleItemComponent<>(key, value, (i, b) -> i.setData(va, b));
         }
 
         return null;
     }
 
     public static void writeComponentsToConfiguration(
-            List<ReadWriteItemComponent> components,
-            ConfigurationSection cs
-    ) {
+            List<ReadWriteItemComponent> components, ConfigurationSection cs) {
         for (ReadWriteItemComponent component : components) {
 
             String key = KEYS.get(component.getClass());
@@ -328,18 +317,17 @@ public class ItemComponentSerializer {
     }
 
     @ApiStatus.Internal
-    private record ReadMethod(
-            Function<ConfigurationSection, ReadWriteItemComponent> reader,
-            boolean simple
-    ) {
+    private record ReadMethod(Function<ConfigurationSection, ReadWriteItemComponent> reader, boolean simple) {
         ReadMethod(Method method) {
-            this(cs -> {
-                try {
-                    return (ReadWriteItemComponent) method.invoke(null, cs);
-                } catch (Exception e) {
-                    return null;
-                }
-            }, false);
+            this(
+                    cs -> {
+                        try {
+                            return (ReadWriteItemComponent) method.invoke(null, cs);
+                        } catch (Exception e) {
+                            return null;
+                        }
+                    },
+                    false);
         }
 
         ReadWriteItemComponent invoke(ConfigurationSection cs) {

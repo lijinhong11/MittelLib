@@ -3,6 +3,11 @@ package io.github.lijinhong11.mittellib.hook;
 import io.github.lijinhong11.mittellib.hook.content.MinecraftContentProvider;
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,12 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("unchecked")
 @UtilityClass
@@ -27,7 +26,8 @@ public class ContentProviders {
             String name = plugin.getName() + "ContentProvider";
             try {
                 Class<?> theClass = Class.forName("io.github.lijinhong11.mittellib.hook." + name);
-                Constructor<? extends ContentProvider> constructor = ((Class<? extends ContentProvider>) theClass).getConstructor();
+                Constructor<? extends ContentProvider> constructor =
+                        ((Class<? extends ContentProvider>) theClass).getConstructor();
                 contentProviders.put(name.toLowerCase(), constructor.newInstance());
             } catch (Exception ignore) {
             }
@@ -159,7 +159,8 @@ public class ContentProviders {
     public static @NotNull List<PackedBlock> getAllUsableBlocks() {
         List<PackedBlock> blocks = new ArrayList<>();
         for (ContentProvider cp : contentProviders.values()) {
-            blocks.addAll(cp.getAllBlocks().stream().filter(b -> b.toItem() != null).toList());
+            blocks.addAll(
+                    cp.getAllBlocks().stream().filter(b -> b.toItem() != null).toList());
         }
 
         return blocks;

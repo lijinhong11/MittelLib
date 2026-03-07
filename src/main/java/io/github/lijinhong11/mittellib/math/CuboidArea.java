@@ -1,12 +1,11 @@
 package io.github.lijinhong11.mittellib.math;
 
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a cuboid (rectangular) area defined by two block positions.

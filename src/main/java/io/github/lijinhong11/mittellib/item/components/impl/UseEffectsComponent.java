@@ -23,7 +23,8 @@ public class UseEffectsComponent extends ReadWriteItemComponent {
     private @Range(from = 0, to = 1) @NonNegative float speedMultiplier = 0.2f;
 
     public static UseEffectsComponent fromMinecraftComponent(UseEffects useEffects) {
-        return new UseEffectsComponent(useEffects.canSprint(), useEffects.interactVibrations(), useEffects.speedMultiplier());
+        return new UseEffectsComponent(
+                useEffects.canSprint(), useEffects.interactVibrations(), useEffects.speedMultiplier());
     }
 
     public static DataComponentType getDataComponentType() {

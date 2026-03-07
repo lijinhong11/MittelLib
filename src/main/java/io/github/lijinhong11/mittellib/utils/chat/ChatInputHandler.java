@@ -1,9 +1,8 @@
 package io.github.lijinhong11.mittellib.utils.chat;
 
-import org.bukkit.entity.Player;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
+import javax.annotation.ParametersAreNonnullByDefault;
+import org.bukkit.entity.Player;
 
 /**
  * A chat input handler

@@ -7,15 +7,14 @@ import io.th0rgal.oraxen.api.OraxenBlocks;
 import io.th0rgal.oraxen.api.OraxenItems;
 import io.th0rgal.oraxen.items.ItemBuilder;
 import io.th0rgal.oraxen.mechanics.Mechanic;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 public class OraxenContentProvider implements ContentProvider {
     @Override
@@ -36,7 +35,10 @@ public class OraxenContentProvider implements ContentProvider {
 
     @Override
     public @Nullable PackedBlock getBlock(@NotNull String id) {
-        Mechanic block = NullUtils.findAnyNonNull(OraxenBlocks.getChorusMechanic(id), OraxenBlocks.getNoteBlockMechanic(id), OraxenBlocks.getStringMechanic(id));
+        Mechanic block = NullUtils.findAnyNonNull(
+                OraxenBlocks.getChorusMechanic(id),
+                OraxenBlocks.getNoteBlockMechanic(id),
+                OraxenBlocks.getStringMechanic(id));
         if (block == null) {
             return null;
         }

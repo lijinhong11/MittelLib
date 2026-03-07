@@ -7,6 +7,8 @@ import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.CustomModelData;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Color;
@@ -14,9 +16,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @ItemComponentSpec(key = "modelData", requiredVersion = MCVersion.V1_21_4)
 @RequiredArgsConstructor
@@ -28,7 +27,8 @@ public class CustomModelDataComponent extends ReadWriteItemComponent {
     private List<Color> colors = new ArrayList<>();
 
     public static CustomModelDataComponent fromMinecraftComponent(CustomModelData customModelData) {
-        return new CustomModelDataComponent(customModelData.floats(), customModelData.flags(), customModelData.strings(), customModelData.colors());
+        return new CustomModelDataComponent(
+                customModelData.floats(), customModelData.flags(), customModelData.strings(), customModelData.colors());
     }
 
     public static DataComponentType getDataComponentType() {

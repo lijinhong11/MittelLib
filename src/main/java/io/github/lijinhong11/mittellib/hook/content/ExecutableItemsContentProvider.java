@@ -6,13 +6,12 @@ import com.ssomar.score.api.executableitems.config.ExecutableItemsManagerInterfa
 import com.ssomar.score.sobject.SObjectInterface;
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
+import java.util.List;
+import java.util.Optional;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.Optional;
 
 public class ExecutableItemsContentProvider implements ContentProvider {
     @Override
@@ -41,12 +40,13 @@ public class ExecutableItemsContentProvider implements ContentProvider {
     }
 
     @Override
-    public void destroyBlock(Location loc) {
-    }
+    public void destroyBlock(Location loc) {}
 
     @Override
     public List<String> getItemSuggestions() {
-        return ExecutableItemsAPI.getExecutableItemsManager().getExecutableItemIdsList().stream().map(s -> "executableitems:" + s).toList();
+        return ExecutableItemsAPI.getExecutableItemsManager().getExecutableItemIdsList().stream()
+                .map(s -> "executableitems:" + s)
+                .toList();
     }
 
     @Override

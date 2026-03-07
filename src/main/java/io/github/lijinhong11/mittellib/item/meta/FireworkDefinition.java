@@ -5,6 +5,10 @@ import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,11 +17,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -77,15 +76,13 @@ public class FireworkDefinition extends ReadWriteObject {
                 continue;
             }
 
-            this.fireworkEffects.add(
-                    FireworkEffect.builder()
-                            .flicker((Boolean) fireworkEffectMap.getOrDefault("flicker", false))
-                            .trail((Boolean) fireworkEffectMap.getOrDefault("trail", false))
-                            .with(type)
-                            .withColor(BukkitUtils.toColors((List<Map<?, ?>>) fireworkEffectMap.get("colors")))
-                            .withFade(BukkitUtils.toColors((List<Map<?, ?>>) fireworkEffectMap.get("fadeColors")))
-                            .build()
-            );
+            this.fireworkEffects.add(FireworkEffect.builder()
+                    .flicker((Boolean) fireworkEffectMap.getOrDefault("flicker", false))
+                    .trail((Boolean) fireworkEffectMap.getOrDefault("trail", false))
+                    .with(type)
+                    .withColor(BukkitUtils.toColors((List<Map<?, ?>>) fireworkEffectMap.get("colors")))
+                    .withFade(BukkitUtils.toColors((List<Map<?, ?>>) fireworkEffectMap.get("fadeColors")))
+                    .build());
         }
     }
 

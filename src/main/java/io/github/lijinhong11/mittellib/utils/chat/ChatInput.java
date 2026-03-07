@@ -1,13 +1,12 @@
 package io.github.lijinhong11.mittellib.utils.chat;
 
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public final class ChatInput {
     static ChatInputListener listener;

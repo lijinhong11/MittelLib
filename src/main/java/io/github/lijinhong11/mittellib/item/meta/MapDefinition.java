@@ -109,7 +109,14 @@ public class MapDefinition extends ReadWriteObject {
                 throw new NullPointerException();
             }
 
-            return new MapViewDefinition(mv.getWorld(), mv.getScale(), mv.getCenterX(), mv.getCenterZ(), mv.isLocked(), mv.isTrackingPosition(), mv.isUnlimitedTracking());
+            return new MapViewDefinition(
+                    mv.getWorld(),
+                    mv.getScale(),
+                    mv.getCenterX(),
+                    mv.getCenterZ(),
+                    mv.isLocked(),
+                    mv.isTrackingPosition(),
+                    mv.isUnlimitedTracking());
         }
 
         public void applyTo(MapView mv) {

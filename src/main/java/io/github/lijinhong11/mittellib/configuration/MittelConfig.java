@@ -4,6 +4,9 @@ import io.github.lijinhong11.mittellib.item.MittelItem;
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -14,10 +17,6 @@ import org.bukkit.configuration.file.YamlConfigurationOptions;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
 
 public class MittelConfig {
     private YamlConfiguration backend;
@@ -226,18 +225,12 @@ public class MittelConfig {
         }
     }
 
-    public <T extends ReadWriteObject> @Nullable T getRWObject(
-            @NotNull String path,
-            @NotNull Class<T> clazz
-    ) {
+    public <T extends ReadWriteObject> @Nullable T getRWObject(@NotNull String path, @NotNull Class<T> clazz) {
         return getRWObject(path, clazz, null);
     }
 
     public <T extends ReadWriteObject> @Nullable T getRWObject(
-            @NotNull String path,
-            @NotNull Class<T> clazz,
-            @Nullable T def
-    ) {
+            @NotNull String path, @NotNull Class<T> clazz, @Nullable T def) {
         ConfigurationSection cs = getSection(path);
         if (cs == null) return def;
 

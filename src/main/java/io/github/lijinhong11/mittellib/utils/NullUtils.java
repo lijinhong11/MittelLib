@@ -1,10 +1,9 @@
 package io.github.lijinhong11.mittellib.utils;
 
-import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.experimental.UtilityClass;
+import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
 public class NullUtils {

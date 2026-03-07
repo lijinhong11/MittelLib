@@ -58,9 +58,8 @@ public class UseCooldownComponent extends ReadWriteItemComponent {
 
     @Override
     public void applyToItem(ItemStack item) {
-        UseCooldown useCooldown = UseCooldown.useCooldown(cooldown)
-                .cooldownGroup(cooldownGroup)
-                .build();
+        UseCooldown useCooldown =
+                UseCooldown.useCooldown(cooldown).cooldownGroup(cooldownGroup).build();
 
         item.setData(DataComponentTypes.USE_COOLDOWN, useCooldown);
     }

@@ -3,6 +3,7 @@ package io.github.lijinhong11.mittellib.utils;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.message.LanguageManager;
 import io.github.miniplaceholders.api.MiniPlaceholders;
+import lombok.experimental.UtilityClass;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -13,10 +14,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@UtilityClass
 public class StringUtils {
     private static final PlainTextComponentSerializer COMPONENT_PLAIN = PlainTextComponentSerializer.plainText();
 
-    public static String getBooleanStatus(@Nullable CommandSender cs, boolean b) {
+    public static String toBooleanStatus(@Nullable CommandSender cs, boolean b) {
         LanguageManager lm = MittelLib.getInstance().getLanguageManager();
         return b ? lm.getMsg(cs, "common.enabled") : lm.getMsg(cs, "common.disabled");
     }

@@ -5,6 +5,8 @@ import io.github.lijinhong11.mittellib.item.components.impl.CustomModelDataCompo
 import io.github.lijinhong11.mittellib.item.meta.*;
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
+import java.util.*;
+import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
@@ -14,9 +16,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -38,8 +37,7 @@ public class MittelItemMeta extends ReadWriteObject {
     private @Nullable PotionDefinition potion;
     private @Nullable Color leatherArmorColor;
 
-    private MittelItemMeta() {
-    }
+    private MittelItemMeta() {}
 
     public static MittelItemMeta empty() {
         return new MittelItemMeta();
@@ -122,6 +120,10 @@ public class MittelItemMeta extends ReadWriteObject {
 
         if (meta instanceof PotionMeta pm && potion != null) {
             potion.applyTo(pm);
+        }
+
+        if (meta instanceof MapMeta mm && map != null) {
+            map.applyTo(mm);
         }
 
         if (meta instanceof LeatherArmorMeta lam && leatherArmorColor != null) {

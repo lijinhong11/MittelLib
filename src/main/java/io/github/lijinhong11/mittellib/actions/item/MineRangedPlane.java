@@ -1,6 +1,8 @@
 package io.github.lijinhong11.mittellib.actions.item;
 
 import io.github.lijinhong11.mittellib.actions.ItemAction;
+import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -8,9 +10,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.index.qual.Positive;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.List;
 
 @AllArgsConstructor
 class MineRangedPlane implements ItemAction {
@@ -52,7 +51,8 @@ class MineRangedPlane implements ItemAction {
                 Block target = world.getBlockAt(x, y, z);
 
                 if (target.isEmpty()) continue;
-                if (!target.getType().isBlock()) continue;
+
+                if (!target.isPreferredTool(tool)) continue;
 
                 Collection<ItemStack> blockDrops = target.getDrops(tool);
 

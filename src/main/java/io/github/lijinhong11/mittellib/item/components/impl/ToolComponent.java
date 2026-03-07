@@ -12,6 +12,10 @@ import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.set.RegistryKeySet;
 import io.papermc.paper.registry.set.RegistrySet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.key.Key;
@@ -20,11 +24,6 @@ import org.bukkit.block.BlockType;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.index.qual.NonNegative;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @ItemComponentSpec(key = "tool", requiredVersion = MCVersion.V1_20_5)
 @NoArgsConstructor
@@ -36,7 +35,8 @@ public class ToolComponent extends ReadWriteItemComponent {
     private List<Tool.Rule> rules = new ArrayList<>();
 
     public static ToolComponent fromMinecraftComponent(Tool tool) {
-        return new ToolComponent(tool.defaultMiningSpeed(), tool.damagePerBlock(), tool.canDestroyBlocksInCreative(), tool.rules());
+        return new ToolComponent(
+                tool.defaultMiningSpeed(), tool.damagePerBlock(), tool.canDestroyBlocksInCreative(), tool.rules());
     }
 
     public static DataComponentType getDataComponentType() {
@@ -54,7 +54,9 @@ public class ToolComponent extends ReadWriteItemComponent {
             for (Map<?, ?> rawRule : rawRules) {
                 Map<String, Object> map = (Map<String, Object>) rawRule;
                 List<String> rawKeys = (List<String>) map.get("blocks");
-                List<TypedKey<BlockType>> keys = BukkitUtils.getNamespacedKeys(rawKeys).stream().map(RegistryKey.BLOCK::typedKey).toList();
+                List<TypedKey<BlockType>> keys = BukkitUtils.getNamespacedKeys(rawKeys).stream()
+                        .map(RegistryKey.BLOCK::typedKey)
+                        .toList();
                 RegistryKeySet<BlockType> regSet = RegistrySet.keySet(RegistryKey.BLOCK, keys);
 
                 Float speed = null;
@@ -93,17 +95,21 @@ public class ToolComponent extends ReadWriteItemComponent {
         cs.set("canDestroyBlocksInCreative", canDestroyBlocksInCreative);
 
         if (rules != null && !rules.isEmpty()) {
-            List<Map<String, Object>> rules = this.rules.stream().map(r -> {
-                Map<String, Object> map = new HashMap<>();
-                map.put("blocks", r.blocks().values().stream().map(Key::asString).toList());
-                map.put("correctForDrops", r.correctForDrops().toString());
+            List<Map<String, Object>> rules = this.rules.stream()
+                    .map(r -> {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put(
+                                "blocks",
+                                r.blocks().values().stream().map(Key::asString).toList());
+                        map.put("correctForDrops", r.correctForDrops().toString());
 
-                if (r.speed() != null) {
-                    map.put("speed", r.speed());
-                }
+                        if (r.speed() != null) {
+                            map.put("speed", r.speed());
+                        }
 
-                return map;
-            }).toList();
+                        return map;
+                    })
+                    .toList();
 
             cs.set("rules", rules);
         }

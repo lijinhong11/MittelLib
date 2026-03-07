@@ -1,6 +1,7 @@
 package io.github.lijinhong11.mittellib.math;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.bukkit.Location;
@@ -8,8 +9,6 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
-
-import java.util.Map;
 
 /**
  * Represents a block position in 3D space with integer coordinates.
@@ -172,18 +171,16 @@ public class BlockPos extends ReadWriteObject implements Comparable<BlockPos> {
      * @return a long number which represents this BlockPos
      */
     public long getBlockKey() {
-        return (long)x & 134217727L | ((long)z & 134217727L) << 27 | (long)y << 54;
+        return (long) x & 134217727L | ((long) z & 134217727L) << 27 | (long) y << 54;
     }
 
     @Override
     public int compareTo(BlockPos other) {
         int cmpX = Integer.compare(this.x, other.x);
-        if (cmpX != 0)
-            return cmpX;
+        if (cmpX != 0) return cmpX;
 
         int cmpY = Integer.compare(this.y, other.y);
-        if (cmpY != 0)
-            return cmpY;
+        if (cmpY != 0) return cmpY;
 
         return Integer.compare(this.z, other.z);
     }

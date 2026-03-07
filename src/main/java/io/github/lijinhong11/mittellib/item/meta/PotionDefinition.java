@@ -2,6 +2,9 @@ package io.github.lijinhong11.mittellib.item.meta;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,11 +16,6 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -53,7 +51,7 @@ public class PotionDefinition extends ReadWriteObject {
 
             cs.set("customEffects", maps);
         }
-        
+
         if (color != null) {
             ConfigurationSection colorSection = cs.createSection("color");
             colorSection.set("alpha", color.getAlpha());
@@ -71,7 +69,9 @@ public class PotionDefinition extends ReadWriteObject {
         }
 
         if (cs.contains("customEffects")) {
-            this.customEffects = cs.getMapList("customEffects").stream().map(m -> BukkitUtils.readPotionEffect((Map<String, Object>) m)).toList();
+            this.customEffects = cs.getMapList("customEffects").stream()
+                    .map(m -> BukkitUtils.readPotionEffect((Map<String, Object>) m))
+                    .toList();
         }
 
         ConfigurationSection colorSection = cs.getConfigurationSection("color");

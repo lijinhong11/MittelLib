@@ -12,6 +12,8 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Consumable;
 import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
 import io.papermc.paper.datacomponent.item.consumable.ItemUseAnimation;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.key.Key;
@@ -20,9 +22,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @ItemComponentSpec(key = "consumable", requiredVersion = MCVersion.V1_21_2)
 @NoArgsConstructor
@@ -35,7 +34,12 @@ public class ConsumableComponent extends ReadWriteItemComponent {
     private List<ConsumeEffect> effects = new ArrayList<>();
 
     public static ConsumableComponent fromMinecraftComponent(Consumable consumable) {
-        return new ConsumableComponent(consumable.consumeSeconds(), consumable.animation(), consumable.sound(), consumable.hasConsumeParticles(), consumable.consumeEffects());
+        return new ConsumableComponent(
+                consumable.consumeSeconds(),
+                consumable.animation(),
+                consumable.sound(),
+                consumable.hasConsumeParticles(),
+                consumable.consumeEffects());
     }
 
     public static DataComponentType getDataComponentType() {

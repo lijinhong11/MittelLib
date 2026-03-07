@@ -25,7 +25,13 @@ public class AttackRangeComponent extends ReadWriteItemComponent {
     private @Range(from = 0, to = 2) float mobFactor = 1;
 
     public static AttackRangeComponent fromMinecraftComponent(AttackRange attackRange) {
-        return new AttackRangeComponent(attackRange.minReach(), attackRange.maxReach(), attackRange.minCreativeReach(), attackRange.maxCreativeReach(), attackRange.hitboxMargin(), attackRange.mobFactor());
+        return new AttackRangeComponent(
+                attackRange.minReach(),
+                attackRange.maxReach(),
+                attackRange.minCreativeReach(),
+                attackRange.maxCreativeReach(),
+                attackRange.hitboxMargin(),
+                attackRange.mobFactor());
     }
 
     public static DataComponentType getDataComponentType() {
@@ -40,7 +46,8 @@ public class AttackRangeComponent extends ReadWriteItemComponent {
         float hitboxMargin = NumberUtils.asUnsigned((float) cs.getDouble("hitboxMargin", 0.3));
         float mobFactor = NumberUtils.asUnsigned((float) cs.getDouble("mobFactor", 1));
 
-        return new AttackRangeComponent(minReach, maxReach, minCreativeReach, maxCreativeReach, hitboxMargin, mobFactor);
+        return new AttackRangeComponent(
+                minReach, maxReach, minCreativeReach, maxCreativeReach, hitboxMargin, mobFactor);
     }
 
     @Override

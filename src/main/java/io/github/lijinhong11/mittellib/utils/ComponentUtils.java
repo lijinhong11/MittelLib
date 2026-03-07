@@ -9,11 +9,8 @@ import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
 public class ComponentUtils {
-    private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer
-            .legacyAmpersand()
-            .toBuilder()
-            .hexColors()
-            .build();
+    private static final LegacyComponentSerializer LEGACY =
+            LegacyComponentSerializer.legacyAmpersand().toBuilder().hexColors().build();
 
     private static final Component RESET = Component.empty().decoration(TextDecoration.ITALIC, false);
 

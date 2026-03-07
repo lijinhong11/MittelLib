@@ -36,16 +36,12 @@ public class FoodComponent extends ReadWriteItemComponent {
     @Nullable
     public static FoodComponent readFromSection(ConfigurationSection cs) {
         if (!cs.contains("nutrition")) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Failed to define food component: 'nutrition' is not set");
+            MittelLib.getInstance().getLogger().severe("Failed to define food component: 'nutrition' is not set");
             return null;
         }
 
         if (!cs.contains("saturation")) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Failed to define food component: 'saturation' is not set");
+            MittelLib.getInstance().getLogger().severe("Failed to define food component: 'saturation' is not set");
             return null;
         }
 
@@ -55,7 +51,8 @@ public class FoodComponent extends ReadWriteItemComponent {
         if (saturationDouble < 0.0d) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Failed to define food component: 'saturation' must be >= 0 (was " + saturationDouble + ")");
+                    .severe("Failed to define food component: 'saturation' must be >= 0 (was " + saturationDouble
+                            + ")");
             return null;
         }
 
@@ -83,4 +80,3 @@ public class FoodComponent extends ReadWriteItemComponent {
         cs.set("canAlwaysEat", canAlwaysEat);
     }
 }
-

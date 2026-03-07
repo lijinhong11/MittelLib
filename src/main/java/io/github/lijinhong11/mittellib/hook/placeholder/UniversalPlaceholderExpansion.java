@@ -2,21 +2,20 @@ package io.github.lijinhong11.mittellib.hook.placeholder;
 
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.miniplaceholders.api.Expansion;
+import java.util.*;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-
 public abstract class UniversalPlaceholderExpansion {
-    private final Map<String, Pair<PlaceholderType, PlaceholderHandle>> placeholderHandleMap = new HashMap<>();
+    private final Map<String, PlaceholderEntry> placeholders = new HashMap<>();
+    private boolean registered = false;
 
     public abstract @NotNull String identifier();
 
@@ -24,11 +23,18 @@ public abstract class UniversalPlaceholderExpansion {
 
     public abstract @NotNull String version();
 
-    protected void registerPlaceholder(String placeholder, PlaceholderType type, PlaceholderHandle placeholderHandle) {
-        placeholderHandleMap.put(placeholder, ImmutablePair.of(type, placeholderHandle));
+    protected void registerPlaceholder(
+            @NotNull String placeholder, @NotNull PlaceholderType type, @NotNull PlaceholderHandle handle) {
+        if (registered) {
+            throw new IllegalStateException("Cannot register placeholder after expansion registered");
+        }
+
+        placeholders.put(placeholder.toLowerCase(Locale.ROOT), new PlaceholderEntry(type, handle));
     }
 
     public final void register() {
+        registered = true;
+
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PAPI().register();
         }
@@ -40,13 +46,16 @@ public abstract class UniversalPlaceholderExpansion {
 
     @FunctionalInterface
     public interface PlaceholderHandle {
-        String parse(@Nullable OfflinePlayer player, @Nullable OfflinePlayer relationalPlayerTwo, String[] args);
+        String parse(@Nullable OfflinePlayer viewer, @Nullable OfflinePlayer target, String[] args);
     }
 
     public enum PlaceholderType {
         GLOBAL,
+        AUDIENCE,
         RELATIONAL
     }
+
+    private record PlaceholderEntry(PlaceholderType type, PlaceholderHandle handle) {}
 
     private class PAPI extends PlaceholderExpansion implements Relational {
         @Override
@@ -65,79 +74,93 @@ public abstract class UniversalPlaceholderExpansion {
         }
 
         @Override
-        public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
-            String[] args = params.split("_");
-
-            if (args.length < 1) {
-                return null;
-            }
-
-            Pair<PlaceholderType, PlaceholderHandle> pair = placeholderHandleMap.get(args[0]);
-            PlaceholderHandle handle = pair.getRight();
-            if (handle == null) {
-                return null;
-            }
-
-            PlaceholderType type = pair.getLeft();
-            if (type == PlaceholderType.RELATIONAL) {
-                return null;
-            }
-
-            String[] copy = Arrays.copyOfRange(args, 1, args.length);
-            return handle.parse(player, null, copy);
+        public boolean persist() {
+            return true;
         }
 
         @Override
-        public String onPlaceholderRequest(Player one, Player two, String identifier) {
-            Pair<PlaceholderType, PlaceholderHandle> pair = placeholderHandleMap.get(identifier);
-            PlaceholderHandle handle = pair.getRight();
-            if (handle == null) {
-                return null;
-            }
+        public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
+            if (params.isEmpty()) return null;
 
-            PlaceholderType type = pair.getLeft();
-            if (type != PlaceholderType.RELATIONAL) {
-                return null;
-            }
+            String[] split = params.split("_");
+            String key = split[0].toLowerCase(Locale.ROOT);
 
-            return handle.parse(one, two, new String[]{});
+            PlaceholderEntry entry = placeholders.get(key);
+            if (entry == null) return null;
+
+            if (entry.type == PlaceholderType.RELATIONAL) return null;
+
+            String[] args = Arrays.copyOfRange(split, 1, split.length);
+
+            return entry.handle.parse(player, null, args);
+        }
+
+        @Override
+        public @Nullable String onPlaceholderRequest(Player one, Player two, String identifier) {
+            if (identifier.isEmpty()) return null;
+
+            String[] split = identifier.split("_");
+            String key = split[0].toLowerCase(Locale.ROOT);
+
+            PlaceholderEntry entry = placeholders.get(key);
+            if (entry == null) return null;
+
+            if (entry.type != PlaceholderType.RELATIONAL) return null;
+
+            String[] args = Arrays.copyOfRange(split, 1, split.length);
+
+            return entry.handle.parse(one, two, args);
         }
     }
 
     private void registerMiniPlaceholders() {
-        Expansion.Builder expansionBuilder = Expansion.builder(identifier())
-                .author(author())
-                .version(version());
+        Expansion.Builder builder =
+                Expansion.builder(identifier()).author(author()).version(version());
 
-        for (Map.Entry<String, Pair<PlaceholderType, PlaceholderHandle>> pair : placeholderHandleMap.entrySet()) {
-            String placeholder = pair.getKey();
-            PlaceholderType type = pair.getValue().getKey();
-            PlaceholderHandle handle = pair.getValue().getValue();
+        for (Map.Entry<String, PlaceholderEntry> entry : placeholders.entrySet()) {
+            String placeholder = entry.getKey();
+            PlaceholderEntry data = entry.getValue();
 
-            if (type == PlaceholderType.GLOBAL) {
-                expansionBuilder.globalPlaceholder(placeholder, (q, ctx) -> {
-                    List<String> args = new ArrayList<>();
-                    while (q.hasNext()) {
-                        args.add(q.pop().value());
-                    }
+            switch (data.type) {
+                case GLOBAL ->
+                    builder.globalPlaceholder(placeholder, (q, ctx) -> {
+                        List<String> args = new ArrayList<>();
+                        while (q.hasNext()) {
+                            args.add(q.pop().value());
+                        }
 
-                    return Tag.inserting(ComponentUtils.deserialize(handle.parse(null, null, args.toArray(new String[0]))));
-                });
-            }
+                        String result = data.handle.parse(null, null, args.toArray(new String[0]));
+                        if (result == null) return Tag.inserting(Component.empty());
 
-            if (type == PlaceholderType.RELATIONAL) {
-                expansionBuilder.relationalPlaceholder(Player.class, placeholder, (a1, a2, q, ctx) -> {
-                    List<String> args = new ArrayList<>();
-                    while (q.hasNext()) {
-                        args.add(q.pop().value());
-                    }
+                        return Tag.inserting(ComponentUtils.deserialize(result));
+                    });
+                case AUDIENCE ->
+                    builder.audiencePlaceholder(Player.class, placeholder, (player, q, ctx) -> {
+                        List<String> args = new ArrayList<>();
+                        while (q.hasNext()) {
+                            args.add(q.pop().value());
+                        }
 
-                    return Tag.inserting(ComponentUtils.deserialize(handle.parse(a1, a2, args.toArray(new String[0]))));
-                });
+                        String result = data.handle.parse(player, null, args.toArray(new String[0]));
+                        if (result == null) return Tag.inserting(Component.empty());
+
+                        return Tag.inserting(ComponentUtils.deserialize(result));
+                    });
+                case RELATIONAL ->
+                    builder.relationalPlaceholder(Player.class, placeholder, (a1, a2, q, ctx) -> {
+                        List<String> args = new ArrayList<>();
+                        while (q.hasNext()) {
+                            args.add(q.pop().value());
+                        }
+
+                        String result = data.handle.parse(a1, a2, args.toArray(new String[0]));
+                        if (result == null) return Tag.inserting(Component.empty());
+
+                        return Tag.inserting(ComponentUtils.deserialize(result));
+                    });
             }
         }
 
-        Expansion expansion = expansionBuilder.build();
-        expansion.register();
+        builder.build().register();
     }
 }

@@ -6,15 +6,14 @@ import com.nexomc.nexo.items.ItemBuilder;
 import com.nexomc.nexo.mechanics.custom_block.CustomBlockMechanic;
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 public class NexoContentProvider implements ContentProvider {
     @Override

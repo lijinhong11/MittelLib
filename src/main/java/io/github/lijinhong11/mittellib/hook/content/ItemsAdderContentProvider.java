@@ -4,13 +4,12 @@ import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.CustomStack;
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
+import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
-
-import java.util.List;
 
 public class ItemsAdderContentProvider implements ContentProvider {
     @Override
@@ -55,12 +54,16 @@ public class ItemsAdderContentProvider implements ContentProvider {
 
     @Override
     public List<String> getItemSuggestions() {
-        return CustomStack.getNamespacedIdsInRegistry().stream().map(s -> "itemsadder:" + s).toList();
+        return CustomStack.getNamespacedIdsInRegistry().stream()
+                .map(s -> "itemsadder:" + s)
+                .toList();
     }
 
     @Override
     public List<String> getBlockSuggestions() {
-        return CustomBlock.getNamespacedIdsInRegistry().stream().map(s -> "itemsadder:" + s).toList();
+        return CustomBlock.getNamespacedIdsInRegistry().stream()
+                .map(s -> "itemsadder:" + s)
+                .toList();
     }
 
     @Override

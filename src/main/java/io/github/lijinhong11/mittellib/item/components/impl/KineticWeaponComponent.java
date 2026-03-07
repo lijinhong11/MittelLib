@@ -1,6 +1,5 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
-
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
@@ -37,7 +36,16 @@ public class KineticWeaponComponent extends ReadWriteItemComponent {
     private @Positive int contactCooldownTicks = 10;
 
     public static KineticWeaponComponent fromMinecraftComponent(KineticWeapon kineticWeapon) {
-        return new KineticWeaponComponent(kineticWeapon.dismountConditions(), kineticWeapon.knockbackConditions(), kineticWeapon.damageConditions(), kineticWeapon.delayTicks(), kineticWeapon.forwardMovement(), kineticWeapon.damageMultiplier(), kineticWeapon.sound(), kineticWeapon.hitSound(), kineticWeapon.contactCooldownTicks());
+        return new KineticWeaponComponent(
+                kineticWeapon.dismountConditions(),
+                kineticWeapon.knockbackConditions(),
+                kineticWeapon.damageConditions(),
+                kineticWeapon.delayTicks(),
+                kineticWeapon.forwardMovement(),
+                kineticWeapon.damageMultiplier(),
+                kineticWeapon.sound(),
+                kineticWeapon.hitSound(),
+                kineticWeapon.contactCooldownTicks());
     }
 
     public static DataComponentType getDataComponentType() {
@@ -93,7 +101,8 @@ public class KineticWeaponComponent extends ReadWriteItemComponent {
         if (dismount == null || knockback == null || damage == null) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("Failed to define a kinetic weapon component: dismount condition & knockback condition & damage condition are required, one of them is missing");
+                    .severe(
+                            "Failed to define a kinetic weapon component: dismount condition & knockback condition & damage condition are required, one of them is missing");
             return null;
         }
 
@@ -110,9 +119,19 @@ public class KineticWeaponComponent extends ReadWriteItemComponent {
         float damageMultiplier = NumberUtils.asUnsigned((float) cs.getDouble("damageMultiplier", 1));
 
         NamespacedKey sound = cs.contains("sound") ? BukkitUtils.getNamespacedKey(cs.getString("sound")) : null;
-        NamespacedKey hitSound = cs.contains("hitSound") ? BukkitUtils.getNamespacedKey(cs.getString("hitSound")) : null;
+        NamespacedKey hitSound =
+                cs.contains("hitSound") ? BukkitUtils.getNamespacedKey(cs.getString("hitSound")) : null;
 
-        return new KineticWeaponComponent(dismount, knockback, damage, delayTicks, forwardMovement, damageMultiplier, sound, hitSound, contactCooldownTicks);
+        return new KineticWeaponComponent(
+                dismount,
+                knockback,
+                damage,
+                delayTicks,
+                forwardMovement,
+                damageMultiplier,
+                sound,
+                hitSound,
+                contactCooldownTicks);
     }
 
     private static KineticWeapon.Condition readCondition(ConfigurationSection cs) {

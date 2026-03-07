@@ -2,13 +2,12 @@ package io.github.lijinhong11.mittellib.configuration;
 
 import com.google.common.base.Preconditions;
 import io.github.lijinhong11.mittellib.MittelLib;
-import org.bukkit.configuration.ConfigurationSection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
+import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unchecked")
 public abstract class ReadWriteObject {
@@ -22,22 +21,20 @@ public abstract class ReadWriteObject {
         }
     }
 
-    protected ReadWriteObject() {
-    }
+    protected ReadWriteObject() {}
 
     public ReadWriteObject(ConfigurationSection cs) {
         read(cs);
     }
 
-    public static @Nullable <T extends ReadWriteObject> T read(@NotNull Class<T> clazz, @NotNull ConfigurationSection cs) {
+    public static @Nullable <T extends ReadWriteObject> T read(
+            @NotNull Class<T> clazz, @NotNull ConfigurationSection cs) {
         Preconditions.checkNotNull(clazz);
 
         try {
             return (T) CONSTRUCTOR.newInstance(cs);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .log(Level.SEVERE, "Failed to instance " + clazz.getName(), e);
+            MittelLib.getInstance().getLogger().log(Level.SEVERE, "Failed to instance " + clazz.getName(), e);
         }
 
         return null;

@@ -25,7 +25,11 @@ public class PiercingWeaponComponent extends ReadWriteItemComponent {
     private boolean dismounts = false;
 
     public static PiercingWeaponComponent fromMinecraftComponent(PiercingWeapon piercingWeapon) {
-        return new PiercingWeaponComponent(piercingWeapon.sound(), piercingWeapon.hitSound(), piercingWeapon.dealsKnockback(), piercingWeapon.dismounts());
+        return new PiercingWeaponComponent(
+                piercingWeapon.sound(),
+                piercingWeapon.hitSound(),
+                piercingWeapon.dealsKnockback(),
+                piercingWeapon.dismounts());
     }
 
     public static DataComponentType getDataComponentType() {
@@ -60,7 +64,8 @@ public class PiercingWeaponComponent extends ReadWriteItemComponent {
 
     public static PiercingWeaponComponent readFromSection(ConfigurationSection cs) {
         NamespacedKey sound = cs.contains("sound") ? BukkitUtils.getNamespacedKey(cs.getString("sound")) : null;
-        NamespacedKey hitSound = cs.contains("hitSound") ? BukkitUtils.getNamespacedKey(cs.getString("hitSound")) : null;
+        NamespacedKey hitSound =
+                cs.contains("hitSound") ? BukkitUtils.getNamespacedKey(cs.getString("hitSound")) : null;
 
         boolean dealsKnockback = cs.getBoolean("dealsKnockback", true);
         boolean dismounts = cs.getBoolean("dismounts", false);

@@ -12,6 +12,10 @@ import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.Material;
@@ -22,11 +26,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -40,8 +39,7 @@ public class MittelItem extends ReadWriteObject {
     private @Nullable Map<Enchantment, Integer> enchantments = new HashMap<>();
     private @Nullable List<ReadWriteItemComponent> components = new ArrayList<>();
 
-    private MittelItem() {
-    }
+    private MittelItem() {}
 
     /**
      * Create a mittel item using item provider and item id
@@ -54,7 +52,8 @@ public class MittelItem extends ReadWriteObject {
 
         ItemStack get = itemProvider.getItem(itemIdByProvider);
         if (get == null) {
-            throw new RuntimeException(new IllegalArgumentException("Failed to find a item with id " + itemIdByProvider + " at " + itemProvider.getId()));
+            throw new RuntimeException(new IllegalArgumentException(
+                    "Failed to find a item with id " + itemIdByProvider + " at " + itemProvider.getId()));
         }
 
         this.itemProvider = itemProvider;
@@ -131,7 +130,9 @@ public class MittelItem extends ReadWriteObject {
 
         meta.write(cs.createSection("meta"));
 
-        if (components != null && !components.isEmpty() && MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5)) {
+        if (components != null
+                && !components.isEmpty()
+                && MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5)) {
             ConfigurationSection componentsSection = cs.createSection("components");
             ItemComponentSerializer.writeComponentsToConfiguration(components, componentsSection);
         }
@@ -150,8 +151,7 @@ public class MittelItem extends ReadWriteObject {
                 if (item == null) {
                     MittelLib.getInstance()
                             .getLogger()
-                            .severe("Failed to find a item with id " + id + " at "
-                                    + cs.getCurrentPath());
+                            .severe("Failed to find a item with id " + id + " at " + cs.getCurrentPath());
                 } else {
                     this.itemProvider = contentProvider;
                     applyFromItemStack(item);
@@ -159,8 +159,7 @@ public class MittelItem extends ReadWriteObject {
             } else {
                 MittelLib.getInstance()
                         .getLogger()
-                        .severe("Failed to find a content provider called " + provider + " at "
-                                + cs.getCurrentPath());
+                        .severe("Failed to find a content provider called " + provider + " at " + cs.getCurrentPath());
             }
         } else {
             String mat = cs.getString("material", "null");
@@ -168,8 +167,7 @@ public class MittelItem extends ReadWriteObject {
             if (material == null) {
                 MittelLib.getInstance()
                         .getLogger()
-                        .severe("Failed to find a material called " + mat + " at "
-                                + cs.getCurrentPath());
+                        .severe("Failed to find a material called " + mat + " at " + cs.getCurrentPath());
                 material = Material.BARRIER;
             }
         }
@@ -178,8 +176,7 @@ public class MittelItem extends ReadWriteObject {
         if (amount < 1) {
             MittelLib.getInstance()
                     .getLogger()
-                    .severe("the item amount " + amount + " must not lower than 1 (at "
-                            + cs.getCurrentPath() + ")");
+                    .severe("the item amount " + amount + " must not lower than 1 (at " + cs.getCurrentPath() + ")");
             amount = 1;
         }
 
@@ -205,7 +202,9 @@ public class MittelItem extends ReadWriteObject {
                     continue;
                 }
 
-                Enchantment ench = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
+                Enchantment ench = RegistryAccess.registryAccess()
+                        .getRegistry(RegistryKey.ENCHANTMENT)
+                        .get(key);
                 if (ench == null) {
                     MittelLib.getInstance()
                             .getLogger()

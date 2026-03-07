@@ -38,11 +38,11 @@ public class InstrumentComponent extends ReadWriteItemComponent {
             return null;
         }
 
-        MusicInstrument instrument = RegistryAccess.registryAccess().getRegistry(RegistryKey.INSTRUMENT).get(key);
+        MusicInstrument instrument = RegistryAccess.registryAccess()
+                .getRegistry(RegistryKey.INSTRUMENT)
+                .get(key);
         if (instrument == null) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Failed to find a MusicInstrument with key " + key.asString());
+            MittelLib.getInstance().getLogger().severe("Failed to find a MusicInstrument with key " + key.asString());
             return null;
         }
 
@@ -56,9 +56,10 @@ public class InstrumentComponent extends ReadWriteItemComponent {
 
     @Override
     public void write(ConfigurationSection cs) {
-        NamespacedKey key = RegistryAccess.registryAccess().getRegistry(RegistryKey.INSTRUMENT).getKey(instrument);
+        NamespacedKey key = RegistryAccess.registryAccess()
+                .getRegistry(RegistryKey.INSTRUMENT)
+                .getKey(instrument);
 
         cs.set("instrument", key.asString());
     }
 }
-

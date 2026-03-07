@@ -16,7 +16,7 @@ public abstract class ReadWriteItemComponent extends ReadWriteObject {
     public abstract void applyToItem(ItemStack item);
 
     public final void read(ConfigurationSection cs) {
-        //Should move to static readFromSection method
+        // Should move to static readFromSection method
         throw new RuntimeException(new IllegalAccessException("Please use #readFromSection method"));
     }
 }

@@ -2,6 +2,9 @@ package io.github.lijinhong11.mittellib.utils;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import io.github.lijinhong11.mittellib.MittelLib;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.util.*;
 import lombok.experimental.UtilityClass;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
@@ -13,10 +16,6 @@ import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.util.*;
 
 @UtilityClass
 public class BukkitUtils {
@@ -86,7 +85,8 @@ public class BukkitUtils {
 
         MittelLib.getInstance()
                 .getLogger()
-                .severe("Failed to define a namespaced key: " + input + " does not match format or invalid character detected");
+                .severe("Failed to define a namespaced key: " + input
+                        + " does not match format or invalid character detected");
         return null;
     }
 
@@ -107,8 +107,7 @@ public class BukkitUtils {
 
         PotionEffectType type = Registry.EFFECT.get(key);
         if (type == null) {
-            MittelLib.getInstance().getLogger()
-                    .severe("Unknown potion effect type: " + key.asString());
+            MittelLib.getInstance().getLogger().severe("Unknown potion effect type: " + key.asString());
             return null;
         }
 
@@ -148,8 +147,7 @@ public class BukkitUtils {
                 amplifierNum == null ? 0 : amplifierNum.intValue(),
                 ambient,
                 particle,
-                icon
-        );
+                icon);
     }
 
     public static @NotNull Map<String, Object> writePotionEffect(@NotNull PotionEffect effect) {
@@ -163,7 +161,6 @@ public class BukkitUtils {
         return map;
     }
 
-
     public static @NotNull List<Color> toColors(@NotNull List<Map<?, ?>> maps) {
         List<Color> list = new ArrayList<>();
 
@@ -175,12 +172,7 @@ public class BukkitUtils {
 
             if (r == null || g == null || b == null) continue;
 
-            list.add(Color.fromARGB(
-                    a == null ? 255 : a.intValue(),
-                    r.intValue(),
-                    g.intValue(),
-                    b.intValue()
-            ));
+            list.add(Color.fromARGB(a == null ? 255 : a.intValue(), r.intValue(), g.intValue(), b.intValue()));
         }
 
         return list;
@@ -218,14 +210,14 @@ public class BukkitUtils {
     public static @Nullable Location readLocation(@NotNull ConfigurationSection cs) {
         String worldName = cs.getString("world");
         if (worldName == null || worldName.isBlank()) {
-            MittelLib.getInstance().getLogger()
-                    .severe("Failed to read location: world is missing");
+            MittelLib.getInstance().getLogger().severe("Failed to read location: world is missing");
             return null;
         }
 
         World world = Bukkit.getWorld(worldName);
         if (world == null) {
-            MittelLib.getInstance().getLogger()
+            MittelLib.getInstance()
+                    .getLogger()
                     .severe("Failed to read location: world " + worldName + " does not exist");
             return null;
         }

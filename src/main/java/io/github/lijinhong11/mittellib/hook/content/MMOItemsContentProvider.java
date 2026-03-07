@@ -2,6 +2,7 @@ package io.github.lijinhong11.mittellib.hook.content;
 
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
+import java.util.List;
 import net.Indyuce.mmoitems.MMOItems;
 import net.Indyuce.mmoitems.api.Type;
 import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
@@ -10,8 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
-
-import java.util.List;
 
 public class MMOItemsContentProvider implements ContentProvider {
     @Override
@@ -58,26 +57,28 @@ public class MMOItemsContentProvider implements ContentProvider {
 
     @Override
     public @Nullable PackedBlock getBlock(@NotNull String id) {
-        return null; //its custom blocks are very limited
+        return null; // its custom blocks are very limited
     }
 
     @Override
     public void destroyBlock(Location loc) {
-        //its custom blocks are very limited
+        // its custom blocks are very limited
     }
 
     @Override
     public List<String> getItemSuggestions() {
-        return MMOItems.plugin.getTemplates().collectTemplates().stream().map(t -> "mmoitems:" + t.getType().toString() + ":" + t.getId()).toList();
+        return MMOItems.plugin.getTemplates().collectTemplates().stream()
+                .map(t -> "mmoitems:" + t.getType().toString() + ":" + t.getId())
+                .toList();
     }
 
     @Override
     public List<String> getBlockSuggestions() {
-        return List.of(); //its custom blocks are very limited
+        return List.of(); // its custom blocks are very limited
     }
 
     @Override
     public @Nullable PackedBlock getBlockByLocation(Location loc) {
-        return null; //its custom blocks are very limited
+        return null; // its custom blocks are very limited
     }
 }

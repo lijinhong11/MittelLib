@@ -5,9 +5,7 @@ package io.github.lijinhong11.mittellib.utils.random;
  */
 @SuppressWarnings("deprecation")
 public final class FastRandom {
-    private static final ThreadLocal<SplitMix64> LOCAL =
-            ThreadLocal.withInitial(() ->
-                    new SplitMix64(mixSeed()));
+    private static final ThreadLocal<SplitMix64> LOCAL = ThreadLocal.withInitial(() -> new SplitMix64(mixSeed()));
 
     private static long mixSeed() {
         long id = Thread.currentThread().getId();
@@ -80,8 +78,7 @@ public final class FastRandom {
         }
 
         int nextInt(int bound) {
-            if (bound <= 0)
-                throw new IllegalArgumentException("bound must be positive");
+            if (bound <= 0) throw new IllegalArgumentException("bound must be positive");
             return nextInt(0, bound);
         }
 

@@ -5,17 +5,15 @@ import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.set.RegistrySet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @ApiStatus.Internal
 class ComponentCommons {
@@ -28,7 +26,8 @@ class ComponentCommons {
             }
 
             if (effects.contains("sound")) {
-                NamespacedKey key = BukkitUtils.getNamespacedKey(effects.getString("sound", "minecraft:entity.generic.eat"));
+                NamespacedKey key =
+                        BukkitUtils.getNamespacedKey(effects.getString("sound", "minecraft:entity.generic.eat"));
                 if (key != null) {
                     effectList.add(ConsumeEffect.playSoundConsumeEffect(key));
                 }
@@ -38,14 +37,17 @@ class ComponentCommons {
                 effectList.add(ConsumeEffect.clearAllStatusEffects());
             }
 
-            List<TypedKey<PotionEffectType>> removeEffects = effects.getStringList("removeEffects").stream().map(e -> {
-                NamespacedKey key = BukkitUtils.getNamespacedKey(e);
-                if (key == null) {
-                    return null;
-                }
+            List<TypedKey<PotionEffectType>> removeEffects = effects.getStringList("removeEffects").stream()
+                    .map(e -> {
+                        NamespacedKey key = BukkitUtils.getNamespacedKey(e);
+                        if (key == null) {
+                            return null;
+                        }
 
-                return TypedKey.create(RegistryKey.MOB_EFFECT, key);
-            }).filter(Objects::nonNull).toList();
+                        return TypedKey.create(RegistryKey.MOB_EFFECT, key);
+                    })
+                    .filter(Objects::nonNull)
+                    .toList();
 
             effectList.add(ConsumeEffect.removeEffects(RegistrySet.keySet(RegistryKey.MOB_EFFECT, removeEffects)));
 
@@ -53,14 +55,17 @@ class ComponentCommons {
             if (applyEffects != null) {
                 float probability = (float) applyEffects.getDouble("probability");
                 List<Map<?, ?>> potionEffects = applyEffects.getMapList("effects");
-                List<PotionEffect> pe = potionEffects.stream().map(s -> {
-                    Map<String, Object> effect = (Map<String, Object>) s;
-                    if (effect == null) {
-                        return null;
-                    }
+                List<PotionEffect> pe = potionEffects.stream()
+                        .map(s -> {
+                            Map<String, Object> effect = (Map<String, Object>) s;
+                            if (effect == null) {
+                                return null;
+                            }
 
-                    return BukkitUtils.readPotionEffect(effect);
-                }).filter(Objects::nonNull).toList();
+                            return BukkitUtils.readPotionEffect(effect);
+                        })
+                        .filter(Objects::nonNull)
+                        .toList();
 
                 effectList.add(ConsumeEffect.applyStatusEffects(pe, probability));
             }
@@ -91,7 +96,9 @@ class ComponentCommons {
             }
 
             if (ce instanceof ConsumeEffect.RemoveStatusEffects rse) {
-                List<String> keys = rse.removeEffects().values().stream().map(k -> k.key().asString()).toList();
+                List<String> keys = rse.removeEffects().values().stream()
+                        .map(k -> k.key().asString())
+                        .toList();
                 effectsSection.set("removeEffects", keys);
             }
         }

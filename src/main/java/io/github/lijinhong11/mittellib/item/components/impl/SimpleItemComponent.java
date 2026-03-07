@@ -1,13 +1,12 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
+import java.util.function.BiConsumer;
+import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.Getter;
 import net.kyori.adventure.key.Key;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.BiConsumer;
 
 /**
  * THIS IS A UNIVERSAL COMPONENT FOR PRIMITIVES
@@ -17,15 +16,12 @@ import java.util.function.BiConsumer;
 public final class SimpleItemComponent<T> extends ReadWriteItemComponent {
     @Getter
     private final String key;
+
     private final T value;
     private final BiConsumer<ItemStack, T> applier;
 
     @ParametersAreNonnullByDefault
-    public SimpleItemComponent(
-            String key,
-            T value,
-            BiConsumer<ItemStack, T> applier
-    ) {
+    public SimpleItemComponent(String key, T value, BiConsumer<ItemStack, T> applier) {
         this.key = key;
         this.value = value;
         this.applier = applier;
@@ -33,11 +29,7 @@ public final class SimpleItemComponent<T> extends ReadWriteItemComponent {
 
     @ParametersAreNonnullByDefault
     public static <T> SimpleItemComponent<T> readFromSection(
-            String key,
-            ConfigurationSection cs,
-            Class<T> type,
-            BiConsumer<ItemStack, T> applier
-    ) {
+            String key, ConfigurationSection cs, Class<T> type, BiConsumer<ItemStack, T> applier) {
         T value = cs.getObject(key, type);
         return new SimpleItemComponent<>(key, value, applier);
     }

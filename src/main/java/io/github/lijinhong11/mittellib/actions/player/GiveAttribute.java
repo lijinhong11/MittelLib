@@ -13,12 +13,8 @@ class GiveAttribute implements PlayerAction {
     @Override
     public void accept(Player player) {
         switch (playerAttributeType) {
-            case MONEY -> {
-
-            }
-            case POINTS -> {
-
-            }
+            case MONEY -> {}
+            case POINTS -> {}
             case EXP -> player.giveExp((int) Math.floor(num));
             case HEALTH -> player.heal(num);
         }
@@ -27,7 +23,6 @@ class GiveAttribute implements PlayerAction {
     @Override
     public void revert(Player player) {
         switch (playerAttributeType) {
-
         }
     }
 }

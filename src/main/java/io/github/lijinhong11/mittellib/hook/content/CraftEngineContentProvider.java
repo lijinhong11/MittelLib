@@ -3,6 +3,7 @@ package io.github.lijinhong11.mittellib.hook.content;
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
+import java.util.List;
 import net.momirealms.craftengine.bukkit.api.CraftEngineBlocks;
 import net.momirealms.craftengine.bukkit.api.CraftEngineItems;
 import net.momirealms.craftengine.core.block.CustomBlock;
@@ -16,8 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
-
-import java.util.List;
 
 public class CraftEngineContentProvider implements ContentProvider {
     @Override
@@ -73,12 +72,17 @@ public class CraftEngineContentProvider implements ContentProvider {
 
     @Override
     public List<String> getItemSuggestions() {
-        return CraftEngineItems.loadedItems().keySet().stream().map(k -> "craftengine:" + k.asString()).toList();
+        return CraftEngineItems.loadedItems().keySet().stream()
+                .map(k -> "craftengine:" + k.asString())
+                .toList();
     }
 
     @Override
     public List<String> getBlockSuggestions() {
-        return CraftEngineBlocks.loadedBlocks().entrySet().stream().filter(b -> new PackedCraftEngineBlock(b.getValue()).toItem() != null).map(k -> "craftengine:" + k.getKey().asString()).toList();
+        return CraftEngineBlocks.loadedBlocks().entrySet().stream()
+                .filter(b -> new PackedCraftEngineBlock(b.getValue()).toItem() != null)
+                .map(k -> "craftengine:" + k.getKey().asString())
+                .toList();
     }
 
     @Override

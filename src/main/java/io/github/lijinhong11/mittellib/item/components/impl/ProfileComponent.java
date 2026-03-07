@@ -10,14 +10,13 @@ import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
+import java.util.*;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.profile.PlayerTextures;
-
-import java.util.*;
 
 @ItemComponentSpec(key = "profile", requiredVersion = MCVersion.V1_20_5)
 @SuppressWarnings("unchecked")
@@ -43,9 +42,7 @@ public class ProfileComponent extends ReadWriteItemComponent {
         try {
             uuid = UUID.fromString(id);
         } catch (Exception e) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Failed to define profile component: " + id + " is not an UUID");
+            MittelLib.getInstance().getLogger().severe("Failed to define profile component: " + id + " is not an UUID");
             return null;
         }
         String name = cs.getString("name");
@@ -53,10 +50,12 @@ public class ProfileComponent extends ReadWriteItemComponent {
         List<Map<?, ?>> propertiesMap = cs.getMapList("properties");
         List<ProfileProperty> properties = new ArrayList<>();
         if (!propertiesMap.isEmpty()) {
-            properties = propertiesMap.stream().map(m -> {
-                Map<String, String> map = (Map<String, String>) m;
-                return new ProfileProperty(map.get("name"), map.get("value"), map.get("signature"));
-            }).toList();
+            properties = propertiesMap.stream()
+                    .map(m -> {
+                        Map<String, String> map = (Map<String, String>) m;
+                        return new ProfileProperty(map.get("name"), map.get("value"), map.get("signature"));
+                    })
+                    .toList();
         }
 
         ResolvableProfile.SkinPatch skinPatch = ResolvableProfile.SkinPatch.empty();
@@ -109,13 +108,15 @@ public class ProfileComponent extends ReadWriteItemComponent {
 
     @Override
     public void write(ConfigurationSection cs) {
-        List<Map<String, String>> propertiesMap = properties.stream().map(s -> {
-            Map<String, String> map = new HashMap<>();
-            map.put("name", s.getName());
-            map.put("value", s.getValue());
-            map.put("signature", s.getSignature());
-            return map;
-        }).toList();
+        List<Map<String, String>> propertiesMap = properties.stream()
+                .map(s -> {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("name", s.getName());
+                    map.put("value", s.getValue());
+                    map.put("signature", s.getSignature());
+                    return map;
+                })
+                .toList();
 
         cs.set("id", uuid.toString());
         cs.set("name", name);
@@ -133,9 +134,7 @@ public class ProfileComponent extends ReadWriteItemComponent {
     @Override
     public void applyToItem(ItemStack item) {
         if (uuid == null) {
-            MittelLib.getInstance()
-                    .getLogger()
-                    .severe("Failed to define a profile without an UUID");
+            MittelLib.getInstance().getLogger().severe("Failed to define a profile without an UUID");
             return;
         }
 
