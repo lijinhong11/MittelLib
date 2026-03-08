@@ -29,8 +29,7 @@ public enum MCVersion {
     /**
      * <b>NOTE: this is not a final version</b>
      */
-    V26_1(0x40000130),
-    V26_2(0x40000200);
+    V26_1(1073742120);
 
     private static MCVersion current;
     private final @NonNegative int protocolVersion;

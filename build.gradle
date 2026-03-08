@@ -1,9 +1,9 @@
 plugins {
     id("java")
     id("maven-publish")
-    id("org.jreleaser") version "1.22.0"
+    id("org.jreleaser") version "1.23.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("com.diffplug.spotless") version "8.3.0"
+    //id("com.diffplug.spotless") version "8.3.0"
 }
 
 group = "io.github.lijinhong11"
@@ -44,8 +44,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-    implementation("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT:javadoc")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-20260109.190012-50")
 
     //libraries
     implementation("org.reflections:reflections:0.10.2")
@@ -76,19 +75,25 @@ dependencies {
     //lombok
     compileOnly("org.projectlombok:lombok:1.18.42")
     annotationProcessor("org.projectlombok:lombok:1.18.42")
+
+    compileOnly("org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r")
 }
 
 tasks.runServer {
     minecraftVersion("1.20.1")
 }
 
+/*
 spotless {
     java {
         palantirJavaFormat()
         removeUnusedImports()
         importOrder()
+        trimTrailingWhitespace()
     }
 }
+
+ */
 
 def targetJavaVersion = 21
 java {
@@ -168,8 +173,15 @@ publishing {
     }
 }
 
+configurations.configureEach {
+    resolutionStrategy {
+        force 'org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r'
+    }
+}
 
 jreleaser {
+    gitRootSearch = false
+
     signing {
         pgp {
             active = 'ALWAYS'

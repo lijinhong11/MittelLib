@@ -15,6 +15,6 @@ public class ToolActions {
     }
 
     public static ItemAction mineCubeBlocks(@NonNegative short range) {
-        return new MineRangedCube();
+        return new MineRangedCube(range);
     }
 }

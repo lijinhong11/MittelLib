@@ -16,7 +16,6 @@ class GiveAttribute implements PlayerAction {
             case MONEY -> {}
             case POINTS -> {}
             case EXP -> player.giveExp((int) Math.floor(num));
-            case HEALTH -> player.heal(num);
         }
     }
 

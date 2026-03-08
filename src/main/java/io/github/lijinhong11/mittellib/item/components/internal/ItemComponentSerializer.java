@@ -79,7 +79,7 @@ public class ItemComponentSerializer {
                 Method fromMethod = Arrays.stream(clazz.getDeclaredMethods())
                         .filter(m -> m.getName().equals("fromMinecraftComponent"))
                         .findAny()
-                        .get();
+                        .orElseThrow();
 
                 fromMethod.setAccessible(true);
                 FROM_METHODS.put(type, fromMethod);

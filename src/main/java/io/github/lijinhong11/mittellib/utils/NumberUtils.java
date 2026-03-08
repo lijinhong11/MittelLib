@@ -1,9 +1,12 @@
 package io.github.lijinhong11.mittellib.utils;
 
 import io.github.lijinhong11.mittellib.MittelLib;
+import io.github.lijinhong11.mittellib.utils.random.FastRandom;
 import lombok.experimental.UtilityClass;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 @UtilityClass
 public class NumberUtils {
@@ -29,6 +32,10 @@ public class NumberUtils {
 
     public static @Nullable Number asNumber(Object obj) {
         return obj instanceof Number n ? n : null;
+    }
+
+    public static boolean matchChance(double chancePercent) {
+        return (chancePercent / 100) >= 1 || FastRandom.nextDouble(1) < (chancePercent / 100);
     }
 
     public static String formatSeconds(CommandSender cs, int totalSeconds) {

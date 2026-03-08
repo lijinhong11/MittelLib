@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 
 /**
@@ -16,9 +17,9 @@ import org.jetbrains.annotations.Unmodifiable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BlockPos extends ReadWriteObject implements Comparable<BlockPos> {
-    private int x = 0;
-    private int y = 0;
-    private int z = 0;
+    private @Range(from = Integer.MIN_VALUE + 1, to = Integer.MAX_VALUE - 1) int x = 0;
+    private @Range(from = Integer.MIN_VALUE + 1, to = Integer.MAX_VALUE - 1) int y = 0;
+    private @Range(from = Integer.MIN_VALUE + 1, to = Integer.MAX_VALUE - 1) int z = 0;
 
     public BlockPos(ConfigurationSection cs) {
         super(cs);
@@ -55,6 +56,10 @@ public class BlockPos extends ReadWriteObject implements Comparable<BlockPos> {
      * @return a new BlockPos with the location's block coordinates
      */
     public static BlockPos fromLocation(Location location) {
+        if (!location.getWorld().getWorldBorder().isInside(location)) {
+            throw new IllegalArgumentException("The location must in the world boarder");
+        }
+
         return new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 
@@ -65,7 +70,13 @@ public class BlockPos extends ReadWriteObject implements Comparable<BlockPos> {
      * @return a new Location at this block position
      */
     public Location toLocation(World world) {
-        return new Location(world, x, y, z);
+        Location loc = new Location(world, x, y, z);
+
+        if (!world.getWorldBorder().isInside(loc)) {
+            throw new IllegalArgumentException("The BlockPos isn't in the world boarder");
+        }
+
+        return loc;
     }
 
     /**
