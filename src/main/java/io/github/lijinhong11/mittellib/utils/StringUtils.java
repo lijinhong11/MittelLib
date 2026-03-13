@@ -14,6 +14,12 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
+
 @UtilityClass
 public class StringUtils {
     private static final PlainTextComponentSerializer COMPONENT_PLAIN = PlainTextComponentSerializer.plainText();
@@ -36,10 +42,63 @@ public class StringUtils {
 
         if (Bukkit.getPluginManager().isPluginEnabled("MiniPlaceholders")) {
             String plain = COMPONENT_PLAIN.serialize(result);
-            return COMPONENT_PLAIN.serialize(
-                    MiniMessage.miniMessage().deserialize(plain, MiniPlaceholders.globalPlaceholders()));
+            if (cs != null) {
+                return COMPONENT_PLAIN.serialize(
+                        MiniMessage.miniMessage().deserialize(plain, cs, MiniPlaceholders.audienceGlobalPlaceholders()));
+            } else {
+                return COMPONENT_PLAIN.serialize(
+                        MiniMessage.miniMessage().deserialize(plain, MiniPlaceholders.globalPlaceholders()));
+            }
         }
 
         return text;
+    }
+
+    public static String compress(@NotNull String input) {
+        if (input.isEmpty()) {
+            return "";
+        }
+
+        byte[] data = input.getBytes(StandardCharsets.UTF_8);
+
+        Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION);
+        deflater.setInput(data);
+        deflater.finish();
+
+        byte[] buffer = new byte[1024];
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            while (!deflater.finished()) {
+                int count = deflater.deflate(buffer);
+                baos.write(buffer, 0, count);
+            }
+            deflater.end();
+            return Base64.getEncoder().encodeToString(baos.toByteArray());
+        } catch (Exception e) {
+            deflater.end();
+            throw new RuntimeException("Failed to compress string", e);
+        }
+    }
+
+    public static String decompress(@NotNull String compressed) {
+        if (compressed.isEmpty()) {
+            return "";
+        }
+
+        byte[] data = Base64.getDecoder().decode(compressed);
+        Inflater inflater = new Inflater();
+        inflater.setInput(data);
+
+        byte[] buffer = new byte[1024];
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            while (!inflater.finished()) {
+                int count = inflater.inflate(buffer);
+                baos.write(buffer, 0, count);
+            }
+            inflater.end();
+            return baos.toString(StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            inflater.end();
+            throw new RuntimeException("Failed to decompress string", e);
+        }
     }
 }

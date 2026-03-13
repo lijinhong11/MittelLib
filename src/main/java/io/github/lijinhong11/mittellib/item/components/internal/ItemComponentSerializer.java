@@ -12,6 +12,8 @@ import io.papermc.paper.datacomponent.item.Enchantable;
 import io.papermc.paper.datacomponent.item.JukeboxPlayable;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -26,6 +28,7 @@ import org.bukkit.damage.DamageType;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 
 @UtilityClass
@@ -66,22 +69,23 @@ public class ItemComponentSerializer {
                 Method readMethod = clazz.getDeclaredMethod("readFromSection", ConfigurationSection.class);
                 readMethod.setAccessible(true);
 
-                READERS.put(spec.key(), new ReadMethod(readMethod));
-                KEYS.put(clazz, spec.key());
-
-                Method typeMethod = clazz.getDeclaredMethod("getDataComponentType");
-                typeMethod.setAccessible(true);
-
-                DataComponentType type = (DataComponentType) typeMethod.invoke(null);
-
-                TYPE_KEYS.put(type, spec.key());
-
                 Method fromMethod = Arrays.stream(clazz.getDeclaredMethods())
                         .filter(m -> m.getName().equals("fromMinecraftComponent"))
                         .findAny()
                         .orElseThrow();
 
                 fromMethod.setAccessible(true);
+
+                Method typeMethod = clazz.getDeclaredMethod("getDataComponentType");
+                typeMethod.setAccessible(true);
+
+                DataComponentType type = (DataComponentType) typeMethod.invoke(null);
+
+                READERS.put(spec.key(), new ReadMethod(readMethod, fromMethod));
+                KEYS.put(clazz, spec.key());
+
+                TYPE_KEYS.put(type, spec.key());
+
                 FROM_METHODS.put(type, fromMethod);
             } catch (NoSuchMethodException e) {
                 throw new IllegalStateException(clazz.getName() + " missing required static methods");
@@ -93,7 +97,11 @@ public class ItemComponentSerializer {
 
     private static <T> void registerSimple(
             String key, Class<T> type, DataComponentType dataType, BiConsumer<ItemStack, T> applier) {
-        READERS.put(key, new ReadMethod(cs -> SimpleItemComponent.readFromSection(key, cs, type, applier), true));
+        READERS.put(key, new ReadMethod(
+                cs -> SimpleItemComponent.readFromSection(key, cs, type, applier),
+                obj -> SimpleItemComponent.pack(key, obj, type, applier),
+                true)
+        );
 
         TYPE_KEYS.put(dataType, key);
     }
@@ -289,6 +297,20 @@ public class ItemComponentSerializer {
         return list;
     }
 
+    public static @Nullable ReadWriteItemComponent getFromMinecraftComponent(DataComponentType type, @Nullable Object context) {
+        String key = TYPE_KEYS.get(type);
+        if (key == null) {
+            return null;
+        }
+
+        ReadMethod rm = READERS.get(key);
+        if (rm == null) {
+            return null;
+        }
+
+        return rm.fromMinecraftComponent(context);
+    }
+
     private static <T> SimpleItemComponent<T> getSimpleValuedComponent(
             String key, DataComponentType.Valued<T> va, ItemStack item) {
         T value = item.getData(va);
@@ -317,14 +339,21 @@ public class ItemComponentSerializer {
     }
 
     @ApiStatus.Internal
-    private record ReadMethod(Function<ConfigurationSection, ReadWriteItemComponent> reader, boolean simple) {
-        ReadMethod(Method method) {
+    private record ReadMethod(Function<ConfigurationSection, ReadWriteItemComponent> reader, Function<Object, ReadWriteItemComponent> fromMC, boolean simple) {
+        ReadMethod(Method method1, Method method2) {
             this(
                     cs -> {
                         try {
-                            return (ReadWriteItemComponent) method.invoke(null, cs);
+                            return (ReadWriteItemComponent) method1.invoke(null, cs);
                         } catch (Exception e) {
                             return null;
+                        }
+                    },
+                    obj -> {
+                        try {
+                            return (ReadWriteItemComponent) method2.invoke(null, obj);
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            throw new RuntimeException(e);
                         }
                     },
                     false);
@@ -332,6 +361,10 @@ public class ItemComponentSerializer {
 
         ReadWriteItemComponent invoke(ConfigurationSection cs) {
             return reader.apply(cs);
+        }
+
+        ReadWriteItemComponent fromMinecraftComponent(Object object) {
+            return fromMC.apply(object);
         }
     }
 }

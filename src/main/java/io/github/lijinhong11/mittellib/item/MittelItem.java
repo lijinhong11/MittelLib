@@ -10,6 +10,7 @@ import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSerializer;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
+import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import java.util.ArrayList;
@@ -68,6 +69,15 @@ public class MittelItem extends ReadWriteObject {
      */
     public MittelItem(@NotNull ItemStack itemStack) {
         applyFromItemStack(itemStack);
+    }
+
+    /**
+     * Create a mittel item using {@link ItemStack} but specify its amount
+     * @param itemStack the item stack
+     * @param amount the amount
+     */
+    public MittelItem(@NotNull ItemStack itemStack, int amount) {
+        applyFromItemStack(itemStack.asQuantity(amount));
     }
 
     public MittelItem(@NotNull Material material) {
@@ -255,6 +265,32 @@ public class MittelItem extends ReadWriteObject {
             }
 
             components.add(component);
+        }
+
+        return this;
+    }
+
+    /**
+     * Set an item component into the item
+     * @param dataComponentType the paper data component type. See {@link io.papermc.paper.datacomponent.DataComponentTypes}
+     * @param dataComponentContext the paper data component context
+     * @return the item itself
+     *
+     * @throws IllegalArgumentException if the component context's type mismatch to the {@link DataComponentType}<br>
+     * or <code>dataComponentType</code> is not a {@link DataComponentType}
+     */
+    @CanIgnoreReturnValue
+    public MittelItem component(@NotNull Object dataComponentType, @Nullable Object dataComponentContext) {
+        if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5)) {
+            if (components == null) {
+                components = new ArrayList<>();
+            }
+
+            if (!(dataComponentType instanceof DataComponentType dct)) {
+                throw new IllegalArgumentException("dataComponentType must be a Paper's data component type");
+            }
+
+            components.add(ItemComponentSerializer.getFromMinecraftComponent(dct, dataComponentContext));
         }
 
         return this;

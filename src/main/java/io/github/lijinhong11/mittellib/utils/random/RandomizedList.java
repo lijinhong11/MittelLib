@@ -1,6 +1,5 @@
-package io.github.lijinhong11.mittellib.iface;
+package io.github.lijinhong11.mittellib.utils.random;
 
-import io.github.lijinhong11.mittellib.utils.random.FastRandom;
 import java.util.ArrayList;
 import java.util.List;
 import org.jetbrains.annotations.Nullable;

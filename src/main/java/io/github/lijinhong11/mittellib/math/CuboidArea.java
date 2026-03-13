@@ -2,6 +2,7 @@ package io.github.lijinhong11.mittellib.math;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,7 +14,12 @@ import org.jetbrains.annotations.NotNull;
  * @param pos1 the point 1
  * @param pos2 the point 2
  */
-public record CuboidArea(BlockPos pos1, BlockPos pos2) {
+public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) {
+    public CuboidArea {
+        Objects.requireNonNull(pos1, "pos1 = null");
+        Objects.requireNonNull(pos2, "pos2 = null");
+    }
+
     /**
      * Creates a CuboidArea from two Bukkit Locations.
      *
@@ -21,7 +27,7 @@ public record CuboidArea(BlockPos pos1, BlockPos pos2) {
      * @param loc2 the second location
      * @return a new CuboidArea
      */
-    public static CuboidArea createFromLocation(Location loc1, Location loc2) {
+    public static CuboidArea createFromLocation(@NotNull Location loc1, @NotNull Location loc2) {
         return new CuboidArea(BlockPos.fromLocation(loc1), BlockPos.fromLocation(loc2));
     }
 
@@ -49,7 +55,7 @@ public record CuboidArea(BlockPos pos1, BlockPos pos2) {
      * @param world the world for the location
      * @return the center location
      */
-    public Location getCenterLocation(World world) {
+    public Location getCenterLocation(final @NotNull World world) {
         BlockPos min = getMin();
         BlockPos max = getMax();
         double centerX = (min.x() + max.x()) / 2.0 + 0.5;
@@ -63,7 +69,7 @@ public record CuboidArea(BlockPos pos1, BlockPos pos2) {
      * @param x the amount to expand in X direction
      * @return a new expanded CuboidArea
      */
-    public CuboidArea expand(int x) {
+    public CuboidArea expand(final int x) {
         return expand(x, 0);
     }
 
@@ -74,7 +80,7 @@ public record CuboidArea(BlockPos pos1, BlockPos pos2) {
      * @param y the amount to expand in Y direction
      * @return a new expanded CuboidArea
      */
-    public CuboidArea expand(int x, int y) {
+    public CuboidArea expand(final int x, final int y) {
         return expand(x, y, 0);
     }
 
@@ -86,7 +92,7 @@ public record CuboidArea(BlockPos pos1, BlockPos pos2) {
      * @param z the amount to expand in Z direction
      * @return a new expanded CuboidArea
      */
-    public CuboidArea expand(int x, int y, int z) {
+    public CuboidArea expand(final int x, final int y, final int z) {
         return new CuboidArea(pos1.minus(x, y, z), pos2.plus(x, y, z));
     }
 
@@ -96,7 +102,7 @@ public record CuboidArea(BlockPos pos1, BlockPos pos2) {
      * @param pos the position to check
      * @return true if the position is within the area, false otherwise
      */
-    public boolean contains(BlockPos pos) {
+    public boolean contains(final BlockPos pos) {
         BlockPos min = getMin();
         BlockPos max = getMax();
         return pos.x() >= min.x()
@@ -148,7 +154,7 @@ public record CuboidArea(BlockPos pos1, BlockPos pos2) {
      *
      * @param action the action to perform for each position
      */
-    public void forEach(Consumer<BlockPos> action) {
+    public void forEach(final Consumer<BlockPos> action) {
         BlockPos min = getMin();
         BlockPos max = getMax();
         for (int x = min.x(); x <= max.x(); x++) {

@@ -1,13 +1,41 @@
 package io.github.lijinhong11.mittellib.utils.random;
 
+import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
+
 import java.util.*;
 
-public class WeightedRandomMap<K> extends LinkedHashMap<K, Double> {
+@SuppressWarnings("deprecation")
+public class WeightedRandomMap<K> extends Object2DoubleOpenHashMap<K> {
     private List<K> keys;
     private double[] probability;
     private int[] alias;
 
     private boolean dirty = true;
+
+    public WeightedRandomMap() {
+        super();
+    }
+
+    public WeightedRandomMap(Map<K, Double> map) {
+        super(map);
+    }
+
+    public WeightedRandomMap(Object2DoubleMap<K> map) {
+        super(map);
+    }
+
+    @Override
+    public double put(K key, double weight) {
+        if (weight <= 0) {
+            throw new IllegalArgumentException("Weight must be positive and not null");
+        }
+
+        super.put(key, weight);
+        dirty = true;
+
+        return weight;
+    }
 
     @Override
     public Double put(K key, Double weight) {
@@ -39,7 +67,7 @@ public class WeightedRandomMap<K> extends LinkedHashMap<K, Double> {
     }
 
     public double getWeight(K key) {
-        return getOrDefault(key, 0.0);
+        return getOrDefault(key, 0d);
     }
 
     public K randomOne() {

@@ -9,10 +9,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * THIS IS A UNIVERSAL COMPONENT FOR PRIMITIVES
+ * THIS IS A UNIVERSAL COMPONENT FOR PRIMITIVES and NAMESPACED KEYS
  *
  * @param <T> the type of value
  */
+@SuppressWarnings("unchecked")
 public final class SimpleItemComponent<T> extends ReadWriteItemComponent {
     @Getter
     private final String key;
@@ -33,6 +34,16 @@ public final class SimpleItemComponent<T> extends ReadWriteItemComponent {
         T value = cs.getObject(key, type);
         return new SimpleItemComponent<>(key, value, applier);
     }
+
+    @ParametersAreNonnullByDefault
+    public static <T> SimpleItemComponent<T> pack(
+            String key, Object o, Class<T> type, BiConsumer<ItemStack, T> applier) {
+        if (!type.isInstance(o)) {
+            throw new IllegalArgumentException("argument type mismatch");
+        }
+        return new SimpleItemComponent<>(key, (T) o, applier);
+    }
+
 
     @Override
     public void write(ConfigurationSection cs) {
