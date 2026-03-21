@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 
 import java.util.*;
+import java.util.stream.DoubleStream;
 
 @SuppressWarnings("deprecation")
 public class WeightedRandomMap<K> extends Object2DoubleOpenHashMap<K> {
@@ -68,6 +69,26 @@ public class WeightedRandomMap<K> extends Object2DoubleOpenHashMap<K> {
 
     public double getWeight(K key) {
         return getOrDefault(key, 0d);
+    }
+
+    public double getProbability(K key) {
+        double weight = getWeight(key);
+
+        if (isEmpty() || weight <= 0d) {
+            return 0d;
+        }
+
+        double totalWeight = DoubleStream.of(value).sum();
+
+        if (totalWeight <= 0) {
+            return 0d;
+        }
+
+        return weight / totalWeight;
+    }
+
+    public String getDisplayProbability(K key) {
+        return String.format("%.2f", getProbability(key));
     }
 
     public K randomOne() {

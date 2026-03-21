@@ -32,10 +32,6 @@ public class NumberUtils {
         return obj instanceof Number n ? n : null;
     }
 
-    public static boolean matchChance(double chancePercent) {
-        return (chancePercent / 100) >= 1 || FastRandom.nextDouble(1) < (chancePercent / 100);
-    }
-
     public static String formatSeconds(CommandSender cs, int totalSeconds) {
         String secondText = MittelLib.getInstance().getLanguageManager().getMsg(cs, "time.second");
         String secondsText = MittelLib.getInstance().getLanguageManager().getMsg(cs, "time.seconds");

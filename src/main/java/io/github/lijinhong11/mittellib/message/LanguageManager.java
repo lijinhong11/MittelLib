@@ -71,8 +71,16 @@ public final class LanguageManager {
         return ComponentUtils.deserialize(msg);
     }
 
+    public static Component parseToComponent(@Nullable CommandSender sender, String msg) {
+        return ComponentUtils.deserialize(sender, msg);
+    }
+
     public static List<Component> parseToComponentList(List<String> msgList) {
         return msgList.stream().map(LanguageManager::parseToComponent).toList();
+    }
+
+    public static List<Component> parseToComponentList(@Nullable CommandSender sender, List<String> msgList) {
+        return msgList.stream().map(msg -> parseToComponent(sender, msg)).toList();
     }
 
     private void loadLanguages() {
@@ -142,23 +150,23 @@ public final class LanguageManager {
     }
 
     public void sendMessage(CommandSender commandSender, String key, MessageReplacement... args) {
-        commandSender.sendMessage(parseToComponent(getMsg(commandSender, key, args)));
+        commandSender.sendMessage(parseToComponent(commandSender, getMsg(commandSender, key, args)));
     }
 
     public void sendMessage(
             CommandSender commandSender, String key, ClickEvent clickEvent, MessageReplacement... args) {
         commandSender.sendMessage(
-                parseToComponent(getMsg(commandSender, key, args)).clickEvent(clickEvent));
+                parseToComponent(commandSender, getMsg(commandSender, key, args)).clickEvent(clickEvent));
     }
 
     public void sendMessages(CommandSender commandSender, String key, MessageReplacement... args) {
         for (String msg : getMsgList(commandSender, key, args)) {
-            commandSender.sendMessage(parseToComponent(msg));
+            commandSender.sendMessage(parseToComponent(commandSender, msg));
         }
     }
 
     public Component getMsgComponent(@Nullable CommandSender commandSender, String key, MessageReplacement... args) {
-        return parseToComponent(getMsg(commandSender, key, args));
+        return parseToComponent(commandSender, getMsg(commandSender, key, args));
     }
 
     public Component getMsgComponentByLanguage(@Nullable String lang, String key, MessageReplacement... args) {
@@ -167,7 +175,7 @@ public final class LanguageManager {
 
     public List<Component> getMsgComponentList(
             @Nullable CommandSender commandSender, String key, MessageReplacement... args) {
-        return parseToComponentList(getMsgList(commandSender, key, args));
+        return parseToComponentList(commandSender, getMsgList(commandSender, key, args));
     }
 
     public List<Component> getMsgComponentListByLanguage(

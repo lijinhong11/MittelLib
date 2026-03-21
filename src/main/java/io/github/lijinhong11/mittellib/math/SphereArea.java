@@ -7,10 +7,6 @@ import java.util.function.Consumer;
 
 /**
  * Represents a spherical area defined by a center position and radius.
- * <p>
- * Internally uses cached offset masks to achieve high-performance iteration.
- * The offsets are generated once per radius and reused for all spheres with
- * the same radius.
  */
 public record SphereArea(@NotNull BlockPos center, int radius) {
     private static final Map<Integer, int[]> CACHE = new HashMap<>();

@@ -71,6 +71,7 @@ public class StringUtils {
                 int count = deflater.deflate(buffer);
                 baos.write(buffer, 0, count);
             }
+
             deflater.end();
             return Base64.getEncoder().encodeToString(baos.toByteArray());
         } catch (Exception e) {
@@ -94,6 +95,7 @@ public class StringUtils {
                 int count = inflater.inflate(buffer);
                 baos.write(buffer, 0, count);
             }
+
             inflater.end();
             return baos.toString(StandardCharsets.UTF_8);
         } catch (Exception e) {
