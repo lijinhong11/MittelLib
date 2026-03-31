@@ -227,6 +227,10 @@ public class ItemComponentSerializer {
                     DataComponentTypes.INTANGIBLE_PROJECTILE,
                     (i, e) -> i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e));
         }
+
+        if (current.isAtLeast(MCVersion.V26_1)) {
+
+        }
     }
 
     public static List<ReadWriteItemComponent> readComponentsFromSection(ConfigurationSection cs) {

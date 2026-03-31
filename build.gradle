@@ -75,8 +75,6 @@ dependencies {
     //lombok
     compileOnly("org.projectlombok:lombok:1.18.42")
     annotationProcessor("org.projectlombok:lombok:1.18.42")
-
-    compileOnly("org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r")
 }
 
 tasks.runServer {

@@ -21,6 +21,9 @@ public class MinecraftContentProvider implements ContentProvider {
     @Override
     public @Nullable ItemStack getItem(@NotNull String id) {
         Material material = BukkitUtils.getMaterial(id);
+        if (material == null) {
+            return null;
+        }
         return new ItemStack(material);
     }
 
@@ -85,7 +88,7 @@ public class MinecraftContentProvider implements ContentProvider {
         }
 
         @Override
-        public @Nullable ItemStack toItem() {
+        public @NotNull ItemStack toItem() {
             return new ItemStack(material);
         }
     }
