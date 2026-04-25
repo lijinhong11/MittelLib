@@ -8,6 +8,7 @@ description: A library for mmmjjkx's plugins
 folia-supported: true
 libraries:
   - "org.reflections:reflections:0.10.2"
+  - "org.bstats:bstats-bukkit:3.2.1"
 softdepend:
   - CraftEngine
   - EcoItems

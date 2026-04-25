@@ -2,6 +2,7 @@ package io.github.lijinhong11.mittellib;
 
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
+import io.github.lijinhong11.mittellib.utils.ModrinthUpdateChecker;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +30,8 @@ public final class MittelLib extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        new ModrinthUpdateChecker(this, "mittellib").check();
+
         languageManager = new SyncLanguageManager(this);
 
         ContentProviders.init();
