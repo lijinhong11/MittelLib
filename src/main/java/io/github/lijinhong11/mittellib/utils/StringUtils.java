@@ -1,7 +1,7 @@
 package io.github.lijinhong11.mittellib.utils;
 
 import io.github.lijinhong11.mittellib.MittelLib;
-import io.github.lijinhong11.mittellib.message.LanguageManager;
+import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import lombok.experimental.UtilityClass;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -25,7 +25,7 @@ public class StringUtils {
     private static final PlainTextComponentSerializer COMPONENT_PLAIN = PlainTextComponentSerializer.plainText();
 
     public static String toBooleanStatus(@Nullable CommandSender cs, boolean b) {
-        LanguageManager lm = MittelLib.getInstance().getLanguageManager();
+        SyncLanguageManager lm = MittelLib.getInstance().getLanguageManager();
         return b ? lm.getMsg(cs, "common.enabled") : lm.getMsg(cs, "common.disabled");
     }
 
@@ -52,6 +52,17 @@ public class StringUtils {
         }
 
         return text;
+    }
+
+    public static String convertToRightLangCode(String lang) {
+        if (lang == null || lang.isBlank()) return "en-US";
+        String[] split = lang.split("-");
+        if (split.length == 1) {
+            String[] split2 = lang.split("_");
+            if (split2.length == 1) return lang;
+            return lang.replace(split2[1], split2[1].toUpperCase());
+        }
+        return lang.replace(split[1], split[1].toUpperCase());
     }
 
     public static String compress(@NotNull String input) {

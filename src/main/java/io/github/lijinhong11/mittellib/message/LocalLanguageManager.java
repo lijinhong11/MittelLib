@@ -2,16 +2,7 @@ package io.github.lijinhong11.mittellib.message;
 
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
-import io.github.lijinhong11.mittellib.utils.ConfigFileUtils;
 import io.github.lijinhong11.mittellib.utils.StringUtils;
-import java.io.File;
-import java.net.JarURLConnection;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -27,101 +18,55 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+
+import java.io.File;
+import java.util.*;
 
 /**
- * A class to manage language files and messages.
- * <br>
- * Please use {@link MittelLib#getLanguageManager(Plugin)} to get language manager!
+ * A class to manage language files and messages from local folders.
  */
-public final class LanguageManager {
+public final class LocalLanguageManager implements ILanguageManager {
     private final Plugin plugin;
-    private final String defaultLanguage;
 
     private final Map<String, YamlConfiguration> configurations = new HashMap<>();
 
     @Setter
-    private boolean detectPlayerLocale = true;
-
-    @Setter
-    private boolean autoComplete;
+    private Options options;
 
     private YamlConfiguration defaultConfiguration;
 
     @Getter
     @Setter
-    private LanguageManager fallback;
+    private ILanguageManager fallback;
 
-    public LanguageManager(Plugin plugin) {
-        this(plugin, "en-US");
+    public LocalLanguageManager(Plugin plugin) {
+        this(plugin, new Options());
     }
 
-    public LanguageManager(Plugin plugin, String defaultLanguage) {
-        this(plugin, defaultLanguage, true);
-    }
-
-    public LanguageManager(Plugin plugin, String defaultLanguage, boolean autoComplete) {
+    public LocalLanguageManager(Plugin plugin, Options options) {
         this.plugin = plugin;
-        this.defaultLanguage = defaultLanguage;
-        this.autoComplete = autoComplete;
+        this.options = options;
 
         loadLanguages();
     }
 
-    public static Component parseToComponent(String msg) {
-        return ComponentUtils.deserialize(msg);
-    }
-
-    public static Component parseToComponent(@Nullable CommandSender sender, String msg) {
+    private static Component parseToComponent(@Nullable CommandSender sender, String msg) {
         return ComponentUtils.deserialize(sender, msg);
     }
 
-    public static List<Component> parseToComponentList(List<String> msgList) {
-        return msgList.stream().map(LanguageManager::parseToComponent).toList();
+    private static List<Component> parseToComponentList(List<String> msgList) {
+        return msgList.stream().map(ComponentUtils::deserialize).toList();
     }
 
-    public static List<Component> parseToComponentList(@Nullable CommandSender sender, List<String> msgList) {
+    private static List<Component> parseToComponentList(@Nullable CommandSender sender, List<String> msgList) {
         return msgList.stream().map(msg -> parseToComponent(sender, msg)).toList();
     }
 
     private void loadLanguages() {
-        detectPlayerLocale = plugin.getConfig().getBoolean("detect-player-locale", true);
-
         File pluginFolder = plugin.getDataFolder();
 
-        URL fileURL = Objects.requireNonNull(plugin.getClass().getClassLoader().getResource("language/"));
-        String jarPath = fileURL.toString().substring(0, fileURL.toString().indexOf("!/") + 2);
         File languageFolder = new File(pluginFolder, "language");
-
-        try {
-            languageFolder.mkdirs();
-            URL jar = URI.create(jarPath).toURL();
-            JarURLConnection jarCon = (JarURLConnection) jar.openConnection();
-            JarFile jarFile = jarCon.getJarFile();
-            Enumeration<JarEntry> jarEntries = jarFile.entries();
-
-            while (jarEntries.hasMoreElements()) {
-                JarEntry entry = jarEntries.nextElement();
-                String name = entry.getName();
-                if (!name.startsWith("language/")) {
-                    continue;
-                }
-
-                if (!entry.isDirectory()) {
-                    String realName = name.replaceFirst("language/", "");
-                    Path path = languageFolder.toPath().resolve(realName);
-                    if (!path.toFile().exists()) {
-                        plugin.saveResource("language/" + realName, false);
-                    } else {
-                        if (autoComplete) {
-                            ConfigFileUtils.completeLangFile(plugin, "language/" + realName);
-                        } else {
-                            path.toFile().createNewFile();
-                        }
-                    }
-                }
-            }
-        } catch (Exception ignored) {
-        }
 
         defaultConfiguration =
                 YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "language/en-US.yml"));
@@ -129,60 +74,54 @@ public final class LanguageManager {
         File[] languageFiles = languageFolder.listFiles(f -> f.getName().endsWith(".yml"));
         if (languageFiles != null) {
             for (File languageFile : languageFiles) {
-                String language = convertToRightLangCode(languageFile.getName().replaceAll(".yml", ""));
-                if (autoComplete) {
-                    ConfigFileUtils.completeLangFile(plugin, "language/" + languageFile.getName());
-                }
+                String language = StringUtils.convertToRightLangCode(languageFile.getName().replaceAll(".yml", ""));
                 configurations.put(language, YamlConfiguration.loadConfiguration(languageFile));
             }
         }
     }
 
-    private String convertToRightLangCode(String lang) {
-        if (lang == null || lang.isBlank()) return "en-US";
-        String[] split = lang.split("-");
-        if (split.length == 1) {
-            String[] split2 = lang.split("_");
-            if (split2.length == 1) return lang;
-            return lang.replace(split2[1], split2[1].toUpperCase());
-        }
-        return lang.replace(split[1], split[1].toUpperCase());
-    }
-
-    public void sendMessage(CommandSender commandSender, String key, MessageReplacement... args) {
+    @Override
+    public void sendMessage(@NonNull CommandSender commandSender, String key, MessageReplacement... args) {
         commandSender.sendMessage(parseToComponent(commandSender, getMsg(commandSender, key, args)));
     }
 
+    @Override
     public void sendMessage(
-            CommandSender commandSender, String key, ClickEvent clickEvent, MessageReplacement... args) {
+            @NotNull CommandSender commandSender, String key, ClickEvent clickEvent, MessageReplacement... args) {
         commandSender.sendMessage(
                 parseToComponent(commandSender, getMsg(commandSender, key, args)).clickEvent(clickEvent));
     }
 
-    public void sendMessages(CommandSender commandSender, String key, MessageReplacement... args) {
+    @Override
+    public void sendMessages(@NotNull CommandSender commandSender, String key, MessageReplacement... args) {
         for (String msg : getMsgList(commandSender, key, args)) {
             commandSender.sendMessage(parseToComponent(commandSender, msg));
         }
     }
 
+    @Override
     public Component getMsgComponent(@Nullable CommandSender commandSender, String key, MessageReplacement... args) {
         return parseToComponent(commandSender, getMsg(commandSender, key, args));
     }
 
+    @Override
     public Component getMsgComponentByLanguage(@Nullable String lang, String key, MessageReplacement... args) {
-        return parseToComponent(getMsgByLanguage(lang, key, args));
+        return ComponentUtils.deserialize(getMsgByLanguage(lang, key, args));
     }
 
+    @Override
     public List<Component> getMsgComponentList(
             @Nullable CommandSender commandSender, String key, MessageReplacement... args) {
         return parseToComponentList(commandSender, getMsgList(commandSender, key, args));
     }
 
+    @Override
     public List<Component> getMsgComponentListByLanguage(
             @Nullable String lang, String key, MessageReplacement... args) {
         return parseToComponentList(getMsgListByLanguage(lang, key, args));
     }
 
+    @Override
     public String getMsg(@Nullable CommandSender sender, String key, MessageReplacement... args) {
         String msg = getConfiguration(sender).getString(key);
 
@@ -203,6 +142,7 @@ public final class LanguageManager {
         return msg;
     }
 
+    @Override
     public List<String> getMsgList(@Nullable CommandSender commandSender, String key, MessageReplacement... args) {
         List<String> msgList = getConfiguration(commandSender).getStringList(key);
         for (MessageReplacement arg : args) {
@@ -212,6 +152,7 @@ public final class LanguageManager {
         return msgList;
     }
 
+    @Override
     public String getMsgByLanguage(@Nullable String lang, String key, MessageReplacement... args) {
         String msg = getConfiguration(lang).getString(key);
         if (msg == null) {
@@ -225,6 +166,7 @@ public final class LanguageManager {
         return msg;
     }
 
+    @Override
     public List<String> getMsgListByLanguage(@Nullable String lang, String key, MessageReplacement... args) {
         List<String> msgList = getConfiguration(lang).getStringList(key);
         for (MessageReplacement arg : args) {
@@ -234,6 +176,7 @@ public final class LanguageManager {
         return msgList;
     }
 
+    @Override
     public @NotNull ItemStack getMessagedItem(
             @NotNull Material material,
             @NotNull String sectionKey,
@@ -247,14 +190,17 @@ public final class LanguageManager {
         return is;
     }
 
-    public String getParsedLocation(@Nullable CommandSender cs, @NotNull Location loc) {
+    @Override
+    public @NonNull String getParsedLocation(@Nullable CommandSender cs, @NotNull Location loc) {
         return getParsedLocation(cs, loc.getX(), loc.getY(), loc.getZ());
     }
 
-    public String getParsedBlockLocation(@Nullable CommandSender cs, @NotNull Location loc) {
+    @Override
+    public @NonNull String getParsedBlockLocation(@Nullable CommandSender cs, @NotNull Location loc) {
         return getParsedLocation(cs, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
+    @Override
     public String getParsedLocation(@Nullable CommandSender cs, double x, double y, double z) {
         MessageReplacement xm = MessageReplacement.replace("%x%", String.valueOf(x));
         MessageReplacement ym = MessageReplacement.replace("%y%", String.valueOf(y));
@@ -263,17 +209,19 @@ public final class LanguageManager {
         return MittelLib.getInstance().getLanguageManager().getMsg(cs, "common.location-format", xm, ym, zm);
     }
 
+    @Override
     public void reload() {
         loadLanguages();
     }
 
+    @Override
     public @NotNull Set<String> getTranslationKeys() {
         return defaultConfiguration.getKeys(true);
     }
 
     private Configuration getConfiguration(CommandSender p) {
-        if (!detectPlayerLocale || !(p instanceof Player pl)) {
-            String lang = plugin.getConfig().getString("language", defaultLanguage);
+        if (!options.isDetectPlayerLocale() || !(p instanceof Player pl)) {
+            String lang = plugin.getConfig().getString(options.getLanguageSetterKey(), options.getDefaultLanguage());
             return configurations.getOrDefault(lang, defaultConfiguration);
         }
 
@@ -281,6 +229,6 @@ public final class LanguageManager {
     }
 
     private Configuration getConfiguration(String lang) {
-        return configurations.getOrDefault(Objects.requireNonNullElse(lang, defaultLanguage), defaultConfiguration);
+        return configurations.getOrDefault(Objects.requireNonNullElse(lang, options.getDefaultLanguage()), defaultConfiguration);
     }
 }

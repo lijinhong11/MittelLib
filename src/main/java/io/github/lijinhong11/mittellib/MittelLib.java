@@ -1,7 +1,7 @@
 package io.github.lijinhong11.mittellib;
 
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
-import io.github.lijinhong11.mittellib.message.LanguageManager;
+import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MittelLib extends JavaPlugin {
-    private final Map<Plugin, LanguageManager> pluginLanguages = new HashMap<>();
+    private final Map<Plugin, SyncLanguageManager> pluginLanguages = new HashMap<>();
 
     @Getter
     private static MittelLib instance;
@@ -20,7 +20,7 @@ public final class MittelLib extends JavaPlugin {
      * For other plugin, use {@link #getLanguageManager(Plugin)}
      */
     @Getter
-    private LanguageManager languageManager;
+    private SyncLanguageManager languageManager;
 
     @Override
     public void onLoad() {
@@ -29,7 +29,7 @@ public final class MittelLib extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        languageManager = new LanguageManager(this);
+        languageManager = new SyncLanguageManager(this);
 
         ContentProviders.init();
 
@@ -47,13 +47,13 @@ public final class MittelLib extends JavaPlugin {
      * @param plugin the plugin
      * @return the language manager for the plugin
      */
-    public LanguageManager getLanguageManager(Plugin plugin) {
+    public SyncLanguageManager getLanguageManager(Plugin plugin) {
         if (plugin == this) {
             return languageManager;
         }
 
         return pluginLanguages.computeIfAbsent(plugin, pl -> {
-            LanguageManager manager = new LanguageManager(pl);
+            SyncLanguageManager manager = new SyncLanguageManager(pl);
             manager.setFallback(languageManager);
             return manager;
         });

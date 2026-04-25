@@ -1,10 +1,11 @@
 package io.github.lijinhong11.mittellib.utils;
 
+import io.github.miniplaceholders.api.MiniPlaceholders;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,13 @@ import java.util.Map;
 
 @UtilityClass
 public class ComponentUtils {
+    private static final TagResolver COMBINE_TAG_RESOLVER = TagResolver
+            .resolver(
+                    MiniMessage.miniMessage().tags(),
+                    MiniPlaceholders.globalPlaceholders(),
+                    MiniPlaceholders.audiencePlaceholders()
+            );
+
     public static final Map<String, String> REPLACES = Map.ofEntries(
         Map.entry("0", "<black>"),
         Map.entry("1", "<dark_blue>"),
@@ -51,10 +59,15 @@ public class ComponentUtils {
         }
 
         input = StringUtils.parsePlaceholders(cs, input);
+
         input = fromLegacy(input, "&");
         input = fromLegacy(input, "§");
 
-        return MINI.deserialize(input);
+        if (cs != null) {
+            return MINI.deserialize(input, cs, COMBINE_TAG_RESOLVER);
+        } else {
+            return MINI.deserialize(input, COMBINE_TAG_RESOLVER);
+        }
     }
 
     public static String fromLegacy(String legacy, String character) {

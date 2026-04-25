@@ -228,7 +228,7 @@ public class ItemComponentSerializer {
                     (i, e) -> i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e));
         }
 
-        if (current.isAtLeast(MCVersion.V26_1)) {
+        if (current.isAtLeast(MCVersion.V26_1_X)) {
 
         }
     }

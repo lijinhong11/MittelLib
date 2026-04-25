@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @param pos1 the point 1
  * @param pos2 the point 2
  */
-public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) {
+public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) implements AreaOfBlocks {
     public CuboidArea {
         Objects.requireNonNull(pos1, "pos1 = null");
         Objects.requireNonNull(pos2, "pos2 = null");
@@ -96,12 +96,6 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) {
         return new CuboidArea(pos1.minus(x, y, z), pos2.plus(x, y, z));
     }
 
-    /**
-     * Checks if a block position is contained within this cuboid area.
-     *
-     * @param pos the position to check
-     * @return true if the position is within the area, false otherwise
-     */
     public boolean contains(final BlockPos pos) {
         BlockPos min = getMin();
         BlockPos max = getMax();
@@ -140,11 +134,6 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) {
         return Math.abs(pos1.z() - pos2.z()) + 1;
     }
 
-    /**
-     * Gets the total number of blocks in this cuboid area.
-     *
-     * @return the total number of blocks
-     */
     public int volume() {
         return sizeX() * sizeY() * sizeZ();
     }
@@ -166,11 +155,6 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) {
         }
     }
 
-    /**
-     * Converts this cuboid area to a list of all block positions it contains.
-     *
-     * @return a list of all BlockPos in this area
-     */
     public List<BlockPos> asPosList() {
         List<BlockPos> list = new ArrayList<>(volume());
         forEach(list::add);

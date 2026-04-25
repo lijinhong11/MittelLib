@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 /**
  * Represents a spherical area defined by a center position and radius.
  */
-public record SphereArea(@NotNull BlockPos center, int radius) {
+public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOfBlocks {
     private static final Map<Integer, int[]> CACHE = new HashMap<>();
 
     /**
@@ -87,12 +87,6 @@ public record SphereArea(@NotNull BlockPos center, int radius) {
         return CACHE.computeIfAbsent(radius, SphereArea::computeOffsets);
     }
 
-    /**
-     * Checks if a position is inside this sphere.
-     *
-     * @param pos the position to check
-     * @return true if inside the sphere
-     */
     public boolean contains(@NotNull BlockPos pos) {
 
         int dx = pos.x() - center.x();
@@ -102,17 +96,13 @@ public record SphereArea(@NotNull BlockPos center, int radius) {
         return dx * dx + dy * dy + dz * dz <= radius * radius;
     }
 
-    /**
-     * Performs an action for each block position inside this sphere.
-     *
-     * @param action the action to perform
-     */
     public void forEach(@NotNull Consumer<BlockPos> action) {
+        int[] off = offsets(radius);
+
         int cx = center.x();
         int cy = center.y();
         int cz = center.z();
 
-        int[] off = offsets(radius);
 
         for (int i = 0; i < off.length; i += 3) {
             action.accept(new BlockPos(
@@ -123,11 +113,6 @@ public record SphereArea(@NotNull BlockPos center, int radius) {
         }
     }
 
-    /**
-     * Converts this sphere into a list of block positions.
-     *
-     * @return a list of all BlockPos inside this sphere
-     */
     public List<BlockPos> asPosList() {
         int[] off = offsets(radius);
 
@@ -148,11 +133,6 @@ public record SphereArea(@NotNull BlockPos center, int radius) {
         return list;
     }
 
-    /**
-     * Gets the number of blocks contained in this sphere.
-     *
-     * @return block count
-     */
     public int volume() {
         return offsets(radius).length / 3;
     }
