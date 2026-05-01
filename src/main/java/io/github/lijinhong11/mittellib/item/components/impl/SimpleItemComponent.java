@@ -44,7 +44,6 @@ public final class SimpleItemComponent<T> extends ReadWriteItemComponent {
         return new SimpleItemComponent<>(key, (T) o, applier);
     }
 
-
     @Override
     public void write(ConfigurationSection cs) {
         if (value instanceof Key k) {

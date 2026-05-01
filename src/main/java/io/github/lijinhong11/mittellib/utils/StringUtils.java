@@ -3,6 +3,11 @@ package io.github.lijinhong11.mittellib.utils;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.miniplaceholders.api.MiniPlaceholders;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 import lombok.experimental.UtilityClass;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -13,12 +18,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
 
 @UtilityClass
 public class StringUtils {
@@ -43,8 +42,8 @@ public class StringUtils {
         if (Bukkit.getPluginManager().isPluginEnabled("MiniPlaceholders")) {
             String plain = COMPONENT_PLAIN.serialize(result);
             if (cs != null) {
-                return COMPONENT_PLAIN.serialize(
-                        MiniMessage.miniMessage().deserialize(plain, cs, MiniPlaceholders.audienceGlobalPlaceholders()));
+                return COMPONENT_PLAIN.serialize(MiniMessage.miniMessage()
+                        .deserialize(plain, cs, MiniPlaceholders.audienceGlobalPlaceholders()));
             } else {
                 return COMPONENT_PLAIN.serialize(
                         MiniMessage.miniMessage().deserialize(plain, MiniPlaceholders.globalPlaceholders()));

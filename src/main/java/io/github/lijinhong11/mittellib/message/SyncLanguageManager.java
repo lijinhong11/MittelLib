@@ -42,6 +42,7 @@ public final class SyncLanguageManager implements ILanguageManager {
 
     @Setter
     private boolean detectPlayerLocale = true;
+
     @Setter
     private boolean autoComplete;
 
@@ -125,7 +126,8 @@ public final class SyncLanguageManager implements ILanguageManager {
         File[] languageFiles = languageFolder.listFiles(f -> f.getName().endsWith(".yml"));
         if (languageFiles != null) {
             for (File languageFile : languageFiles) {
-                String language = StringUtils.convertToRightLangCode(languageFile.getName().replaceAll(".yml", ""));
+                String language = StringUtils.convertToRightLangCode(
+                        languageFile.getName().replaceAll(".yml", ""));
                 if (autoComplete) {
                     ConfigFileUtils.completeLangFile(plugin, "language/" + languageFile.getName());
                 }
@@ -142,8 +144,8 @@ public final class SyncLanguageManager implements ILanguageManager {
     @Override
     public void sendMessage(
             @NotNull CommandSender commandSender, String key, ClickEvent clickEvent, MessageReplacement... args) {
-        commandSender.sendMessage(
-                parseToComponent(commandSender, getMsg(commandSender, key, args)).clickEvent(clickEvent));
+        commandSender.sendMessage(parseToComponent(commandSender, getMsg(commandSender, key, args))
+                .clickEvent(clickEvent));
     }
 
     @Override

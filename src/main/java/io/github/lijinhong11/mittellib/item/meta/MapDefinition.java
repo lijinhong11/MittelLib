@@ -15,10 +15,10 @@ import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
 import org.jetbrains.annotations.Nullable;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
-public class MapDefinition extends ReadWriteObject {
+public class MapDefinition implements ReadWriteObject {
     private @Nullable MapViewDefinition mapView;
     private boolean scaling = false;
     private @Nullable Color color;
@@ -32,7 +32,7 @@ public class MapDefinition extends ReadWriteObject {
     }
 
     public MapDefinition(ConfigurationSection cs) {
-        super(cs);
+        read(cs);
     }
 
     @Override
@@ -86,11 +86,11 @@ public class MapDefinition extends ReadWriteObject {
         mm.setScaling(scaling);
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
     @AllArgsConstructor
     @Data
-    public static class MapViewDefinition extends ReadWriteObject {
+    public static class MapViewDefinition implements ReadWriteObject {
         private World world;
 
         private MapView.Scale scale = MapView.Scale.NORMAL;
@@ -117,6 +117,10 @@ public class MapDefinition extends ReadWriteObject {
                     mv.isLocked(),
                     mv.isTrackingPosition(),
                     mv.isUnlimitedTracking());
+        }
+
+        public MapViewDefinition(ConfigurationSection cs) {
+            read(cs);
         }
 
         public void applyTo(MapView mv) {

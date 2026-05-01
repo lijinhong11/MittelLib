@@ -15,6 +15,11 @@ import org.jetbrains.annotations.NotNull;
  * @param pos2 the point 2
  */
 public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) implements AreaOfBlocks {
+    /**
+     * Construct a cuboid area
+     * @param pos1 the point 1
+     * @param pos2 the point 2
+     */
     public CuboidArea {
         Objects.requireNonNull(pos1, "pos1 = null");
         Objects.requireNonNull(pos2, "pos2 = null");

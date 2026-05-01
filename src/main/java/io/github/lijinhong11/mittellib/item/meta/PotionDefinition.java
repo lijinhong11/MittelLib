@@ -17,10 +17,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.Nullable;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
-public class PotionDefinition extends ReadWriteObject {
+public class PotionDefinition implements ReadWriteObject {
     private @Nullable PotionType type;
     private @Nullable List<PotionEffect> customEffects;
     private @Nullable Color color;
@@ -34,7 +34,7 @@ public class PotionDefinition extends ReadWriteObject {
     }
 
     public PotionDefinition(ConfigurationSection cs) {
-        super(cs);
+        read(cs);
     }
 
     @Override

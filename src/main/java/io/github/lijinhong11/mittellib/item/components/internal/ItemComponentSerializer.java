@@ -12,7 +12,6 @@ import io.papermc.paper.datacomponent.item.Enchantable;
 import io.papermc.paper.datacomponent.item.JukeboxPlayable;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -97,11 +96,12 @@ public class ItemComponentSerializer {
 
     private static <T> void registerSimple(
             String key, Class<T> type, DataComponentType dataType, BiConsumer<ItemStack, T> applier) {
-        READERS.put(key, new ReadMethod(
-                cs -> SimpleItemComponent.readFromSection(key, cs, type, applier),
-                obj -> SimpleItemComponent.pack(key, obj, type, applier),
-                true)
-        );
+        READERS.put(
+                key,
+                new ReadMethod(
+                        cs -> SimpleItemComponent.readFromSection(key, cs, type, applier),
+                        obj -> SimpleItemComponent.pack(key, obj, type, applier),
+                        true));
 
         TYPE_KEYS.put(dataType, key);
     }
@@ -228,9 +228,7 @@ public class ItemComponentSerializer {
                     (i, e) -> i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e));
         }
 
-        if (current.isAtLeast(MCVersion.V26_1_X)) {
-
-        }
+        if (current.isAtLeast(MCVersion.V26_1_X)) {}
     }
 
     public static List<ReadWriteItemComponent> readComponentsFromSection(ConfigurationSection cs) {
@@ -301,7 +299,8 @@ public class ItemComponentSerializer {
         return list;
     }
 
-    public static @Nullable ReadWriteItemComponent getFromMinecraftComponent(DataComponentType type, @Nullable Object context) {
+    public static @Nullable ReadWriteItemComponent getFromMinecraftComponent(
+            DataComponentType type, @Nullable Object context) {
         String key = TYPE_KEYS.get(type);
         if (key == null) {
             return null;
@@ -343,7 +342,10 @@ public class ItemComponentSerializer {
     }
 
     @ApiStatus.Internal
-    private record ReadMethod(Function<ConfigurationSection, ReadWriteItemComponent> reader, Function<Object, ReadWriteItemComponent> fromMC, boolean simple) {
+    private record ReadMethod(
+            Function<ConfigurationSection, ReadWriteItemComponent> reader,
+            Function<Object, ReadWriteItemComponent> fromMC,
+            boolean simple) {
         ReadMethod(Method method1, Method method2) {
             this(
                     cs -> {

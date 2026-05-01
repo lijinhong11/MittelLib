@@ -14,13 +14,13 @@ import org.jetbrains.annotations.Range;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class BlockPos extends ReadWriteObject implements Comparable<BlockPos> {
+public class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
     private @Range(from = Integer.MIN_VALUE + 1, to = Integer.MAX_VALUE - 1) int x = 0;
     private @Range(from = Integer.MIN_VALUE + 1, to = Integer.MAX_VALUE - 1) int y = 0;
     private @Range(from = Integer.MIN_VALUE + 1, to = Integer.MAX_VALUE - 1) int z = 0;
 
     public BlockPos(final ConfigurationSection cs) {
-        super(cs);
+        read(cs);
     }
 
     /**

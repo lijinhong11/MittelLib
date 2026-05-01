@@ -3,6 +3,8 @@ package io.github.lijinhong11.mittellib.message;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.StringUtils;
+import java.io.File;
+import java.util.*;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -19,9 +21,6 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
-
-import java.io.File;
-import java.util.*;
 
 /**
  * A class to manage language files and messages from local folders.
@@ -74,7 +73,8 @@ public final class LocalLanguageManager implements ILanguageManager {
         File[] languageFiles = languageFolder.listFiles(f -> f.getName().endsWith(".yml"));
         if (languageFiles != null) {
             for (File languageFile : languageFiles) {
-                String language = StringUtils.convertToRightLangCode(languageFile.getName().replaceAll(".yml", ""));
+                String language = StringUtils.convertToRightLangCode(
+                        languageFile.getName().replaceAll(".yml", ""));
                 configurations.put(language, YamlConfiguration.loadConfiguration(languageFile));
             }
         }
@@ -88,8 +88,8 @@ public final class LocalLanguageManager implements ILanguageManager {
     @Override
     public void sendMessage(
             @NotNull CommandSender commandSender, String key, ClickEvent clickEvent, MessageReplacement... args) {
-        commandSender.sendMessage(
-                parseToComponent(commandSender, getMsg(commandSender, key, args)).clickEvent(clickEvent));
+        commandSender.sendMessage(parseToComponent(commandSender, getMsg(commandSender, key, args))
+                .clickEvent(clickEvent));
     }
 
     @Override
@@ -229,6 +229,7 @@ public final class LocalLanguageManager implements ILanguageManager {
     }
 
     private Configuration getConfiguration(String lang) {
-        return configurations.getOrDefault(Objects.requireNonNullElse(lang, options.getDefaultLanguage()), defaultConfiguration);
+        return configurations.getOrDefault(
+                Objects.requireNonNullElse(lang, options.getDefaultLanguage()), defaultConfiguration);
     }
 }

@@ -1,7 +1,6 @@
 package io.github.lijinhong11.mittellib.utils;
 
 import io.github.lijinhong11.mittellib.MittelLib;
-import io.github.lijinhong11.mittellib.utils.random.FastRandom;
 import lombok.experimental.UtilityClass;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;

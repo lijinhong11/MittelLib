@@ -1,6 +1,7 @@
 package io.github.lijinhong11.mittellib.utils;
 
 import io.github.miniplaceholders.api.MiniPlaceholders;
+import java.util.Map;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -9,41 +10,36 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-
 @UtilityClass
 public class ComponentUtils {
-    private static final TagResolver COMBINE_TAG_RESOLVER = TagResolver
-            .resolver(
-                    MiniMessage.miniMessage().tags(),
-                    MiniPlaceholders.globalPlaceholders(),
-                    MiniPlaceholders.audiencePlaceholders()
-            );
+    private static final TagResolver COMBINE_TAG_RESOLVER = TagResolver.resolver(
+            MiniMessage.miniMessage().tags(),
+            MiniPlaceholders.globalPlaceholders(),
+            MiniPlaceholders.audiencePlaceholders());
 
     public static final Map<String, String> REPLACES = Map.ofEntries(
-        Map.entry("0", "<black>"),
-        Map.entry("1", "<dark_blue>"),
-        Map.entry("2", "<dark_green>"),
-        Map.entry("3", "<dark_aqua>"),
-        Map.entry("4", "<dark_red>"),
-        Map.entry("5", "<dark_purple>"),
-        Map.entry("6", "<gold>"),
-        Map.entry("7", "<gray>"),
-        Map.entry("8", "<dark_gray>"),
-        Map.entry("9", "<blue>"),
-        Map.entry("a", "<green>"),
-        Map.entry("b", "<aqua>"),
-        Map.entry("c", "<red>"),
-        Map.entry("d", "<light_purple>"),
-        Map.entry("e", "<yellow>"),
-        Map.entry("f", "<white>"),
-        Map.entry("k", "<magic>"),
-        Map.entry("l", "<bold>"),
-        Map.entry("m", "<strikethrough>"),
-        Map.entry("n", "<underline>"),
-        Map.entry("o", "<italic>"),
-        Map.entry("r", "<reset>")
-    );
+            Map.entry("0", "<black>"),
+            Map.entry("1", "<dark_blue>"),
+            Map.entry("2", "<dark_green>"),
+            Map.entry("3", "<dark_aqua>"),
+            Map.entry("4", "<dark_red>"),
+            Map.entry("5", "<dark_purple>"),
+            Map.entry("6", "<gold>"),
+            Map.entry("7", "<gray>"),
+            Map.entry("8", "<dark_gray>"),
+            Map.entry("9", "<blue>"),
+            Map.entry("a", "<green>"),
+            Map.entry("b", "<aqua>"),
+            Map.entry("c", "<red>"),
+            Map.entry("d", "<light_purple>"),
+            Map.entry("e", "<yellow>"),
+            Map.entry("f", "<white>"),
+            Map.entry("k", "<magic>"),
+            Map.entry("l", "<bold>"),
+            Map.entry("m", "<strikethrough>"),
+            Map.entry("n", "<underline>"),
+            Map.entry("o", "<italic>"),
+            Map.entry("r", "<reset>"));
 
     private static final MiniMessage MINI = MiniMessage.miniMessage();
 

@@ -19,10 +19,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.jetbrains.annotations.NotNull;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
-public class BannerDefinition extends ReadWriteObject {
+public class BannerDefinition implements ReadWriteObject {
     private static final Registry<PatternType> REGISTRY =
             RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN);
 
@@ -37,7 +37,7 @@ public class BannerDefinition extends ReadWriteObject {
     }
 
     public BannerDefinition(ConfigurationSection cs) {
-        super(cs);
+        read(cs);
     }
 
     @NotNull

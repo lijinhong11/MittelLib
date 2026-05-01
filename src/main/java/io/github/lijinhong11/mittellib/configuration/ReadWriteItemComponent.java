@@ -4,7 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 @SuppressWarnings("unused")
-public abstract class ReadWriteItemComponent extends ReadWriteObject {
+public abstract class ReadWriteItemComponent implements ReadWriteObject {
     protected ReadWriteItemComponent() {
         super();
     }

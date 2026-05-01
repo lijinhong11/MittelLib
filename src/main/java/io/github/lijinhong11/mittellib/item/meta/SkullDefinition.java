@@ -15,10 +15,10 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.Nullable;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
-public class SkullDefinition extends ReadWriteObject {
+public class SkullDefinition implements ReadWriteObject {
     private @Nullable PlayerProfile profile;
     private @Nullable NamespacedKey noteBlockSound;
 
@@ -31,7 +31,7 @@ public class SkullDefinition extends ReadWriteObject {
     }
 
     public SkullDefinition(ConfigurationSection cs) {
-        super(cs);
+        read(cs);
     }
 
     @Override

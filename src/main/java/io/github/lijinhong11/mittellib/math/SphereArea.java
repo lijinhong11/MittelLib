@@ -1,9 +1,8 @@
 package io.github.lijinhong11.mittellib.math;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 import java.util.function.Consumer;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a spherical area defined by a center position and radius.
@@ -103,13 +102,8 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
         int cy = center.y();
         int cz = center.z();
 
-
         for (int i = 0; i < off.length; i += 3) {
-            action.accept(new BlockPos(
-                    cx + off[i],
-                    cy + off[i + 1],
-                    cz + off[i + 2]
-            ));
+            action.accept(new BlockPos(cx + off[i], cy + off[i + 1], cz + off[i + 2]));
         }
     }
 
@@ -123,11 +117,7 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
         List<BlockPos> list = new ArrayList<>(off.length / 3);
 
         for (int i = 0; i < off.length; i += 3) {
-            list.add(new BlockPos(
-                    cx + off[i],
-                    cy + off[i + 1],
-                    cz + off[i + 2]
-            ));
+            list.add(new BlockPos(cx + off[i], cy + off[i + 1], cz + off[i + 2]));
         }
 
         return list;

@@ -17,9 +17,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.jetbrains.annotations.Nullable;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Data
-public class MittelItemMeta extends ReadWriteObject {
+public class MittelItemMeta implements ReadWriteObject {
     private @Nullable Component displayName;
     private @Nullable List<Component> lore;
     private @Nullable Set<ItemFlag> itemFlags;

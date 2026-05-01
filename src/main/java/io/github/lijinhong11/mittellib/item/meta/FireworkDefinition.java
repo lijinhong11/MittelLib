@@ -18,10 +18,10 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.NotNull;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
-public class FireworkDefinition extends ReadWriteObject {
+public class FireworkDefinition implements ReadWriteObject {
     private @NotNull List<FireworkEffect> fireworkEffects = new ArrayList<>();
     private @NonNegative int power;
 
@@ -34,7 +34,7 @@ public class FireworkDefinition extends ReadWriteObject {
     }
 
     public FireworkDefinition(ConfigurationSection cs) {
-        super(cs);
+        read(cs);
     }
 
     @Override

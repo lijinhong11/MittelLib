@@ -28,9 +28,9 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Data
-public class MittelItem extends ReadWriteObject {
+public class MittelItem implements ReadWriteObject {
     private @Nullable ContentProvider itemProvider = null;
     private @Nullable String itemIdByProvider = null;
     private @NotNull Material material = Material.BARRIER;
