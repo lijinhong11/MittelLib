@@ -5,16 +5,17 @@ import org.bukkit.Bukkit;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * An enum which contains Minecraft versions to identify current Minecraft version
+ */
 @Getter
 public enum MCVersion {
-    V1_20(763),
     V1_20_1(763),
     V1_20_2(764),
     V1_20_3(765),
     V1_20_4(765),
     V1_20_5(766),
     V1_20_6(766),
-    V1_21(767),
     V1_21_1(767),
     V1_21_2(768),
     V1_21_3(768),
@@ -27,6 +28,7 @@ public enum MCVersion {
     V1_21_10(773),
     V1_21_11(774),
     V26_1_X(775),
+    V26_2_X(776),
     ;
 
     private static MCVersion current;
@@ -36,6 +38,11 @@ public enum MCVersion {
         this.protocolVersion = protocolVersion;
     }
 
+    /**
+     * Get current Minecraft version
+     * <b>Note: versions with the same protocol version will get the oldest one</b>
+     * @return current Minecraft version
+     */
     @NotNull
     public static MCVersion getCurrent() {
         if (current == null) {

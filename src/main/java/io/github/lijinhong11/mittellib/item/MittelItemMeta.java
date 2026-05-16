@@ -2,10 +2,19 @@ package io.github.lijinhong11.mittellib.item;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
 import io.github.lijinhong11.mittellib.item.components.impl.CustomModelDataComponent;
-import io.github.lijinhong11.mittellib.item.meta.*;
+import io.github.lijinhong11.mittellib.item.meta.BannerDefinition;
+import io.github.lijinhong11.mittellib.item.meta.FireworkDefinition;
+import io.github.lijinhong11.mittellib.item.meta.MapDefinition;
+import io.github.lijinhong11.mittellib.item.meta.PotionDefinition;
+import io.github.lijinhong11.mittellib.item.meta.SkullDefinition;
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +23,13 @@ import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.Nullable;
 
 @EqualsAndHashCode(callSuper = false)
@@ -222,6 +237,10 @@ public class MittelItemMeta implements ReadWriteObject {
             int blue = colorSection.getInt("blue", 0);
             leatherArmorColor = Color.fromARGB(alpha, red, green, blue);
         }
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = ComponentUtils.deserialize(displayName);
     }
 
     public void setLore(Component... lore) {

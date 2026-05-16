@@ -1,5 +1,6 @@
 package io.github.lijinhong11.mittellib;
 
+import io.github.lijinhong11.mittellib.gui.MittelGUIListener;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.lijinhong11.mittellib.utils.ModrinthUpdateChecker;
@@ -7,6 +8,7 @@ import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,6 +37,8 @@ public final class MittelLib extends JavaPlugin {
         languageManager = new SyncLanguageManager(this);
 
         ContentProviders.init();
+
+        Bukkit.getPluginManager().registerEvents(new MittelGUIListener(), this);
 
         getLogger().info("MittelLib is enabled!");
         getLogger().info("Detected MC version: " + MCVersion.getCurrent());

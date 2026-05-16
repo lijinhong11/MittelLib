@@ -14,7 +14,11 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import lombok.experimental.UtilityClass;
@@ -151,7 +155,7 @@ public class ItemComponentSerializer {
             });
         }
 
-        if (current.isAtLeast(MCVersion.V1_21)) {
+        if (current.isAtLeast(MCVersion.V1_21_1)) {
             registerSimple("jukeboxPlayable", String.class, DataComponentTypes.JUKEBOX_PLAYABLE, (i, e) -> {
                 NamespacedKey key = BukkitUtils.getNamespacedKey(e);
                 if (key != null) {

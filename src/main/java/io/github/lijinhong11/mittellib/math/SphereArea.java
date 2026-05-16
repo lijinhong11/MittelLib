@@ -1,6 +1,10 @@
 package io.github.lijinhong11.mittellib.math;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 
@@ -125,6 +129,11 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
 
     public int volume() {
         return offsets(radius).length / 3;
+    }
+
+    @Override
+    public AreaType getType() {
+        return AreaType.SPHERE;
     }
 
     /**

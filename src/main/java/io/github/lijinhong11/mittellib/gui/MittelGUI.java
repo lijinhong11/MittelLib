@@ -9,7 +9,11 @@ import java.util.function.Consumer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.view.AnvilView;
 import org.checkerframework.common.value.qual.ArrayLenRange;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +22,12 @@ public interface MittelGUI extends InventoryHolder {
 
     @NotNull
     List<HumanEntity> viewers();
+
+    void handleClick(int slot, @NotNull InventoryClickEvent e);
+
+    void handleOpen(@NotNull InventoryOpenEvent e);
+
+    void handleClose(@NotNull InventoryCloseEvent e);
 
     static ChestBuilder chestBuilder() {
         return new ChestGUI.Builder();
@@ -50,11 +60,11 @@ public interface MittelGUI extends InventoryHolder {
 
         AnvilBuilder resultItem(@NotNull MittelGUIItem item);
 
-        AnvilBuilder textListener(@NotNull Consumer<String> consumer);
+        AnvilBuilder prepareListener(@NotNull Consumer<AnvilView> consumer);
 
-        AnvilBuilder onOpen(@NotNull BiConsumer<Player, MittelGUI> openConsumer);
+        AnvilBuilder onOpen(@NotNull BiConsumer<Player, AnvilGUI> openConsumer);
 
-        AnvilBuilder onClose(@NotNull BiConsumer<Player, MittelGUI> closeConsumer);
+        AnvilBuilder onClose(@NotNull BiConsumer<Player, AnvilGUI> closeConsumer);
 
         AnvilGUI build();
     }

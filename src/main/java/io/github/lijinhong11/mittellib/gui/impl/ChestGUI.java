@@ -16,21 +16,23 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.checkerframework.common.value.qual.ArrayLenRange;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 import org.jspecify.annotations.NonNull;
 
-public class ChestGUI implements MittelGUI {
+public final class ChestGUI implements MittelGUI {
+    private final Inventory inv;
     private final Map<Integer, MittelGUIItem> items = new HashMap<>();
-    private Inventory inv;
 
     private BiConsumer<Player, ChestGUI> openConsumer;
     private BiConsumer<Player, ChestGUI> closeConsumer;
 
     private ChestGUI(Builder builder) {
+        this.inv = Bukkit.createInventory(this, builder.size, builder.title);
+
         init(builder);
     }
 
     private void init(Builder builder) {
-        this.inv = Bukkit.createInventory(this, builder.size, builder.title);
         this.openConsumer = builder.openConsumer;
         this.closeConsumer = builder.closeConsumer;
 
@@ -86,7 +88,7 @@ public class ChestGUI implements MittelGUI {
         return this.inv;
     }
 
-    public void putItem(int slot, MittelGUIItem item) {
+    public void putItem(@Range(from = 0, to = 53) int slot, @NotNull MittelGUIItem item) {
         if (this.items.containsKey(slot)) {
             return;
         }
@@ -95,25 +97,28 @@ public class ChestGUI implements MittelGUI {
         this.inv.setItem(slot, item.getItem());
     }
 
-    public void removeItem(int slot) {
+    public void removeItem(@Range(from = 0, to = 53) int slot) {
         this.items.remove(slot);
         this.inv.setItem(slot, null);
     }
 
-    public void handleClick(int slot, InventoryClickEvent e) {
+    @Override
+    public void handleClick(int slot, @NotNull InventoryClickEvent e) {
         MittelGUIItem item = items.get(slot);
         if (item != null) {
             e.setCancelled(!item.onClick(this, e));
         }
     }
 
-    public void handleOpen(InventoryOpenEvent e) {
+    @Override
+    public void handleOpen(@NotNull InventoryOpenEvent e) {
         if (e.getPlayer() instanceof Player p && openConsumer != null) {
             openConsumer.accept(p, this);
         }
     }
 
-    public void handleClose(InventoryCloseEvent e) {
+    @Override
+    public void handleClose(@NotNull InventoryCloseEvent e) {
         if (e.getPlayer() instanceof Player p && closeConsumer != null) {
             closeConsumer.accept(p, this);
         }

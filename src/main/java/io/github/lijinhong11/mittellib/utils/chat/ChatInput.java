@@ -57,7 +57,7 @@ public final class ChatInput {
 
     /**
      * This method waits for the Player to write something in chat.
-     * Afterwards the given callback will be invoked.
+     * Afterward the given callback will be invoked.
      *
      * @param plugin  The Plugin performing this action
      * @param p       The Player that we are waiting for
@@ -70,7 +70,7 @@ public final class ChatInput {
 
     /**
      * This method waits for the Player to write something in chat.
-     * Afterwards the given callback will be invoked.
+     * Afterward the given callback will be invoked.
      * With the predicate you can filter out unwanted inputs.
      * Like commands for example.
      *

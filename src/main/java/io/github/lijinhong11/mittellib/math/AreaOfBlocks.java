@@ -35,4 +35,10 @@ public interface AreaOfBlocks {
      * @return the total number of blocks
      */
     int volume();
+
+    /**
+     * Gets the area type
+     * @return the area type
+     */
+    AreaType getType();
 }

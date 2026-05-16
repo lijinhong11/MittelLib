@@ -143,6 +143,11 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
         return sizeX() * sizeY() * sizeZ();
     }
 
+    @Override
+    public AreaType getType() {
+        return AreaType.CUBOID;
+    }
+
     /**
      * Performs an action for each block position in this cuboid area.
      *

@@ -2,7 +2,12 @@ package io.github.lijinhong11.mittellib.hook.placeholder;
 
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.miniplaceholders.api.Expansion;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
 import net.kyori.adventure.text.Component;
