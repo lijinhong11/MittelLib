@@ -1,5 +1,6 @@
 package io.github.lijinhong11.mittellib.gui;
 
+import io.github.lijinhong11.mittellib.gui.impl.AnvilGUI;
 import io.github.lijinhong11.mittellib.gui.impl.ChestGUI;
 import io.github.lijinhong11.mittellib.gui.item.MittelGUIItem;
 import java.util.List;
@@ -55,6 +56,6 @@ public interface MittelGUI extends InventoryHolder {
 
         AnvilBuilder onClose(@NotNull BiConsumer<Player, MittelGUI> closeConsumer);
 
-        ChestGUI build();
+        AnvilGUI build();
     }
 }
