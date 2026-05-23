@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unchecked")
 @UtilityClass
-public class ContentProviders {
+public final class ContentProviders {
     private static final Map<String, ContentProvider> contentProviders = new LinkedHashMap<>();
 
     public static void init() {

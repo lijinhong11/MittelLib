@@ -5,7 +5,6 @@ import io.github.lijinhong11.mittellib.gui.impl.ChestGUI;
 import io.github.lijinhong11.mittellib.gui.item.MittelGUIItem;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -15,6 +14,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.view.AnvilView;
 import org.checkerframework.common.value.qual.ArrayLenRange;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public interface MittelGUI extends InventoryHolder {
@@ -31,6 +31,11 @@ public interface MittelGUI extends InventoryHolder {
 
     static ChestBuilder chestBuilder() {
         return new ChestGUI.Builder();
+    }
+
+    @ApiStatus.Experimental
+    static AnvilBuilder anvilBuilder() {
+        return new AnvilGUI.Builder();
     }
 
     interface ChestBuilder {
@@ -60,7 +65,7 @@ public interface MittelGUI extends InventoryHolder {
 
         AnvilBuilder resultItem(@NotNull MittelGUIItem item);
 
-        AnvilBuilder prepareListener(@NotNull Consumer<AnvilView> consumer);
+        AnvilBuilder prepareListener(@NotNull BiConsumer<Player, AnvilView> consumer);
 
         AnvilBuilder onOpen(@NotNull BiConsumer<Player, AnvilGUI> openConsumer);
 

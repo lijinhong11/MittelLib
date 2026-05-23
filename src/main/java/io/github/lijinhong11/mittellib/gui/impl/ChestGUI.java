@@ -43,14 +43,14 @@ public final class ChestGUI implements MittelGUI {
         }
 
         if (!builder.bindings.isEmpty()) {
-            for (int i = 1; i <= len; i++) {
+            for (int i = 0; i < len; i++) {
                 String structure = builder.structure[i];
                 if (structure.length() > 9) {
                     throw new IllegalArgumentException("the structure element length should be length <= 9");
                 }
 
                 if (!structure.isEmpty()) {
-                    for (int c = 1; c <= structure.length(); c++) {
+                    for (int c = 0; c < structure.length(); c++) {
                         char ch = structure.charAt(c);
 
                         if (ch == ' ') {
@@ -62,7 +62,10 @@ public final class ChestGUI implements MittelGUI {
                             continue;
                         }
 
-                        final int finalSlot = i * c - 1;
+                        final int finalSlot = i * 9 + c;
+                        if (finalSlot >= this.inv.getSize()) {
+                            continue;
+                        }
 
                         this.inv.setItem(finalSlot, item.getItem());
                         this.items.put(finalSlot, item);
@@ -125,7 +128,7 @@ public final class ChestGUI implements MittelGUI {
     }
 
     public static class Builder implements ChestBuilder {
-        private Component title;
+        private Component title = Component.empty();
         private int size;
 
         private String[] structure;
@@ -177,6 +180,10 @@ public final class ChestGUI implements MittelGUI {
 
         @Override
         public ChestGUI build() {
+            if (this.size == 0 || this.size % 9 != 0) {
+                this.size = this.structure.length * 9;
+            }
+
             return new ChestGUI(this);
         }
     }

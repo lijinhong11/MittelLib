@@ -9,7 +9,7 @@ import com.vanniktech.maven.publish.SourcesJar
 plugins {
     java
     signing
-    id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("xyz.jpenilla.run-paper") version "3.0.2"
     id("com.vanniktech.maven.publish") version "0.36.0"
     id("com.diffplug.spotless") version "8.3.0"
 }
@@ -104,6 +104,10 @@ tasks.processResources {
     filesMatching("plugin.yml") {
         expand(project.properties)
     }
+}
+
+tasks.runServer {
+    minecraftVersion("1.21.1")
 }
 
 mavenPublishing {

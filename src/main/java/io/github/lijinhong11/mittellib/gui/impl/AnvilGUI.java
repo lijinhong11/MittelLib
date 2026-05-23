@@ -4,7 +4,7 @@ import io.github.lijinhong11.mittellib.gui.MittelGUI;
 import io.github.lijinhong11.mittellib.gui.item.MittelGUIItem;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -22,11 +22,16 @@ import org.jspecify.annotations.NonNull;
 public final class AnvilGUI implements MittelGUI {
     private final Inventory inv;
 
+    @Setter
     private MittelGUIItem firstItem;
+
+    @Setter
     private MittelGUIItem secondItem;
+
+    @Setter
     private MittelGUIItem resultItem;
 
-    private Consumer<AnvilView> prepareListener;
+    private BiConsumer<Player, AnvilView> prepareListener;
 
     private BiConsumer<Player, AnvilGUI> openConsumer;
     private BiConsumer<Player, AnvilGUI> closeConsumer;
@@ -92,7 +97,7 @@ public final class AnvilGUI implements MittelGUI {
 
     public void handlePrepare(AnvilView view) {
         if (prepareListener != null) {
-            prepareListener.accept(view);
+            prepareListener.accept((Player) view.getPlayer(), view);
         }
     }
 
@@ -117,7 +122,7 @@ public final class AnvilGUI implements MittelGUI {
         private MittelGUIItem second;
         private MittelGUIItem result;
 
-        private Consumer<AnvilView> prepareListener;
+        private BiConsumer<Player, AnvilView> prepareListener;
 
         private BiConsumer<Player, AnvilGUI> openConsumer;
         private BiConsumer<Player, AnvilGUI> closeConsumer;
@@ -147,7 +152,7 @@ public final class AnvilGUI implements MittelGUI {
         }
 
         @Override
-        public AnvilBuilder prepareListener(@NotNull Consumer<AnvilView> prepareListener) {
+        public AnvilBuilder prepareListener(@NotNull BiConsumer<Player, AnvilView> prepareListener) {
             this.prepareListener = prepareListener;
             return this;
         }
