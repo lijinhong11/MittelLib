@@ -53,11 +53,11 @@ public final class MittelLib extends JavaPlugin {
 
         Bukkit.getCommandMap().register("mittellib", new Command("mittellib") {
             @Override
-            public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String @NotNull [] args) {
+            public boolean execute(
+                    @NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String @NotNull [] args) {
                 if (sender instanceof Player p) {
                     MittelGUI.chestBuilder()
-                            .structure("XXXXXXXXX",
-                                    "LOLLOL FF")
+                            .structure("XXXXXXXXX", "LOLLOL FF")
                             .bind('X', ButtonItem.unclickable(new ItemStack(Material.BLACK_STAINED_GLASS_PANE)))
                             .bind('L', ButtonItem.clickable(new ItemStack(Material.APPLE), (g, i) -> {
                                 Player player = (Player) i.getWhoClicked();
@@ -69,7 +69,6 @@ public final class MittelLib extends JavaPlugin {
                             })
                             .build()
                             .open(p);
-
                 }
 
                 return true;

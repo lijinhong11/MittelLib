@@ -108,7 +108,7 @@ public class ConfigFileUtils {
             for (String key : keys) {
                 complete0(configuration, configuration2, key);
 
-                if (configuration2.contains(key) & !configuration.contains(key)) {
+                if (configuration2.contains(key) && !configuration.contains(key)) {
                     configuration2.set(key, null);
                 }
             }

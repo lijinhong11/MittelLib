@@ -1,9 +1,7 @@
 package io.github.lijinhong11.mittellib.gui.item;
 
 import io.github.lijinhong11.mittellib.gui.MittelGUI;
-
 import java.util.function.BiFunction;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;

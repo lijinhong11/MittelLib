@@ -2,7 +2,9 @@ package io.github.lijinhong11.mittellib.gui;
 
 import io.github.lijinhong11.mittellib.gui.impl.AnvilGUI;
 import io.github.lijinhong11.mittellib.gui.impl.ChestGUI;
+import io.github.lijinhong11.mittellib.gui.impl.PaginatedChestGUI;
 import io.github.lijinhong11.mittellib.gui.item.MittelGUIItem;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
 import net.kyori.adventure.text.Component;
@@ -33,6 +35,10 @@ public interface MittelGUI extends InventoryHolder {
         return new ChestGUI.Builder();
     }
 
+    static PagedChestBuilder pagedChestBuilder() {
+        return new PaginatedChestGUI.Builder();
+    }
+
     @ApiStatus.Experimental
     static AnvilBuilder anvilBuilder() {
         return new AnvilGUI.Builder();
@@ -47,6 +53,14 @@ public interface MittelGUI extends InventoryHolder {
 
         ChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) List<String> structure);
 
+        default ChestBuilder layout(@NotNull @ArrayLenRange(from = 1, to = 6) String... layout) {
+            return structure(layout);
+        }
+
+        default ChestBuilder layout(@NotNull @ArrayLenRange(from = 1, to = 6) List<String> layout) {
+            return structure(layout);
+        }
+
         ChestBuilder bind(char bind, @NotNull MittelGUIItem item);
 
         ChestBuilder onOpen(@NotNull BiConsumer<Player, ChestGUI> openConsumer);
@@ -54,6 +68,42 @@ public interface MittelGUI extends InventoryHolder {
         ChestBuilder onClose(@NotNull BiConsumer<Player, ChestGUI> closeConsumer);
 
         ChestGUI build();
+    }
+
+    interface PagedChestBuilder {
+        PagedChestBuilder title(@NotNull Component title);
+
+        PagedChestBuilder size(int size);
+
+        PagedChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) String... structure);
+
+        PagedChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) List<String> structure);
+
+        default PagedChestBuilder layout(@NotNull @ArrayLenRange(from = 1, to = 6) String... layout) {
+            return structure(layout);
+        }
+
+        default PagedChestBuilder layout(@NotNull @ArrayLenRange(from = 1, to = 6) List<String> layout) {
+            return structure(layout);
+        }
+
+        PagedChestBuilder bind(char bind, @NotNull MittelGUIItem item);
+
+        PagedChestBuilder content(char bind);
+
+        PagedChestBuilder previousPage(char bind, @NotNull MittelGUIItem item);
+
+        PagedChestBuilder nextPage(char bind, @NotNull MittelGUIItem item);
+
+        PagedChestBuilder items(@NotNull Collection<? extends MittelGUIItem> items);
+
+        PagedChestBuilder addItem(@NotNull MittelGUIItem item);
+
+        PagedChestBuilder onOpen(@NotNull BiConsumer<Player, PaginatedChestGUI> openConsumer);
+
+        PagedChestBuilder onClose(@NotNull BiConsumer<Player, PaginatedChestGUI> closeConsumer);
+
+        PaginatedChestGUI build();
     }
 
     interface AnvilBuilder {

@@ -82,13 +82,15 @@ public final class AnvilGUI implements MittelGUI {
     }
 
     public void handleClick(@Range(from = 0, to = 2) int slot, @NotNull InventoryClickEvent e) {
-        MittelGUIItem item =
-                switch (slot) {
-                    case 0 -> firstItem;
-                    case 1 -> secondItem;
-                    case 2 -> resultItem;
-                    default -> throw new IndexOutOfBoundsException(slot);
-                };
+        MittelGUIItem item;
+        switch (slot) {
+            case 0 -> item = firstItem;
+            case 1 -> item = secondItem;
+            case 2 -> item = resultItem;
+            default -> {
+                return;
+            }
+        }
 
         if (item != null) {
             e.setCancelled(!item.onClick(this, e));

@@ -21,13 +21,14 @@ import org.jspecify.annotations.NonNull;
 
 public final class ChestGUI implements MittelGUI {
     private final Inventory inv;
-    private final Map<Integer, MittelGUIItem> items = new HashMap<>();
+    private final MittelGUIItem[] items;
 
     private BiConsumer<Player, ChestGUI> openConsumer;
     private BiConsumer<Player, ChestGUI> closeConsumer;
 
     private ChestGUI(Builder builder) {
         this.inv = Bukkit.createInventory(this, builder.size, builder.title);
+        this.items = new MittelGUIItem[builder.size];
 
         init(builder);
     }
@@ -42,35 +43,35 @@ public final class ChestGUI implements MittelGUI {
             throw new IllegalArgumentException("the structure array length should be 1 <= length <= 6");
         }
 
-        if (!builder.bindings.isEmpty()) {
-            for (int i = 0; i < len; i++) {
-                String structure = builder.structure[i];
-                if (structure.length() > 9) {
-                    throw new IllegalArgumentException("the structure element length should be length <= 9");
+        for (int i = 0; i < len; i++) {
+            String structure = builder.structure[i];
+            if (structure.length() > 9) {
+                throw new IllegalArgumentException("the structure element length should be length <= 9");
+            }
+
+            if (structure.isEmpty()) {
+                continue;
+            }
+
+            for (int c = 0; c < structure.length(); c++) {
+                char ch = structure.charAt(c);
+
+                if (ch == ' ') {
+                    continue;
                 }
 
-                if (!structure.isEmpty()) {
-                    for (int c = 0; c < structure.length(); c++) {
-                        char ch = structure.charAt(c);
-
-                        if (ch == ' ') {
-                            continue;
-                        }
-
-                        MittelGUIItem item = builder.bindings.get(ch);
-                        if (item == null) {
-                            continue;
-                        }
-
-                        final int finalSlot = i * 9 + c;
-                        if (finalSlot >= this.inv.getSize()) {
-                            continue;
-                        }
-
-                        this.inv.setItem(finalSlot, item.getItem());
-                        this.items.put(finalSlot, item);
-                    }
+                MittelGUIItem item = builder.bindings.get(ch);
+                if (item == null) {
+                    continue;
                 }
+
+                final int finalSlot = i * 9 + c;
+                if (finalSlot >= this.inv.getSize()) {
+                    continue;
+                }
+
+                this.inv.setItem(finalSlot, item.getItem());
+                this.items[finalSlot] = item;
             }
         }
     }
@@ -92,24 +93,22 @@ public final class ChestGUI implements MittelGUI {
     }
 
     public void putItem(@Range(from = 0, to = 53) int slot, @NotNull MittelGUIItem item) {
-        if (this.items.containsKey(slot)) {
-            return;
-        }
-
-        this.items.put(slot, item);
+        this.items[slot] = item;
         this.inv.setItem(slot, item.getItem());
     }
 
     public void removeItem(@Range(from = 0, to = 53) int slot) {
-        this.items.remove(slot);
+        this.items[slot] = null;
         this.inv.setItem(slot, null);
     }
 
     @Override
     public void handleClick(int slot, @NotNull InventoryClickEvent e) {
-        MittelGUIItem item = items.get(slot);
-        if (item != null) {
-            e.setCancelled(!item.onClick(this, e));
+        if (slot >= 0 && slot < items.length) {
+            MittelGUIItem item = items[slot];
+            if (item != null) {
+                e.setCancelled(!item.onClick(this, e));
+            }
         }
     }
 

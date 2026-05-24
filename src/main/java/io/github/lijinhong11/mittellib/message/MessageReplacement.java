@@ -16,7 +16,7 @@ public final class MessageReplacement implements Pair<String, String> {
     }
 
     public String parse(String message) {
-        return message.replaceAll(left(), right());
+        return message.replace(left(), right());
     }
 
     @Override
