@@ -6,15 +6,28 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
 public class ComponentUtils {
-    private static final TagResolver COMBINE_TAG_RESOLVER = TagResolver.resolver(
-            MiniMessage.miniMessage().tags(),
-            MiniPlaceholders.globalPlaceholders(),
-            MiniPlaceholders.audiencePlaceholders());
+    private static final TagResolver COMBINE_TAG_RESOLVER;
+
+    private static final MiniMessage MINI = MiniMessage.miniMessage();
+
+    private static final Component RESET = Component.empty().decoration(TextDecoration.ITALIC, false);
+
+    static {
+        if (Bukkit.getPluginManager().isPluginEnabled("MiniPlaceholders")) {
+            COMBINE_TAG_RESOLVER = TagResolver.resolver(
+                    MiniMessage.miniMessage().tags(),
+                    MiniPlaceholders.globalPlaceholders(),
+                    MiniPlaceholders.audiencePlaceholders());
+        } else {
+            COMBINE_TAG_RESOLVER = MiniMessage.miniMessage().tags();
+        }
+    }
 
     private static String legacyReplacement(char code) {
         return switch (code) {
@@ -44,14 +57,21 @@ public class ComponentUtils {
         };
     }
 
-    private static final MiniMessage MINI = MiniMessage.miniMessage();
-
-    private static final Component RESET = Component.empty().decoration(TextDecoration.ITALIC, false);
-
+    /**
+     * Deserialize a string to {@link Component}
+     * @param input the string
+     * @return a {@link Component}
+     */
     public static Component deserialize(String input) {
         return deserialize(null, input);
     }
 
+    /**
+     * Deserialize a string to {@link Component}
+     * @param cs the sender (used for placeholder parsing)
+     * @param input the string
+     * @return a {@link Component}
+     */
     public static Component deserialize(@Nullable CommandSender cs, String input) {
         if (input == null) {
             return Component.empty();
@@ -63,9 +83,9 @@ public class ComponentUtils {
         input = fromLegacy(input, "§");
 
         if (cs != null) {
-            return MINI.deserialize(input, cs, COMBINE_TAG_RESOLVER);
+            return RESET.append(MINI.deserialize(input, cs, COMBINE_TAG_RESOLVER));
         } else {
-            return MINI.deserialize(input, COMBINE_TAG_RESOLVER);
+            return RESET.append(MINI.deserialize(input, COMBINE_TAG_RESOLVER));
         }
     }
 

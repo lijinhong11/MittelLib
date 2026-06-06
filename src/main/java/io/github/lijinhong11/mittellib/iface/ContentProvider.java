@@ -75,7 +75,7 @@ public interface ContentProvider {
      *
      * @return all blocks in this content provider
      */
-    default List<PackedBlock> getAllBlocks() {
+    default @NotNull List<PackedBlock> getAllBlocks() {
         return getBlockSuggestions().stream().map(this::getBlock).toList();
     }
 }

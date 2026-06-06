@@ -35,7 +35,7 @@ public class MinecraftContentProvider implements ContentProvider {
     @Override
     public @Nullable PackedBlock getBlock(@NotNull String id) {
         Material material = BukkitUtils.getMaterial(id);
-        if (!material.isBlock()) {
+        if (material == null || material.isAir() || !material.isBlock()) {
             return null;
         }
 
@@ -88,7 +88,11 @@ public class MinecraftContentProvider implements ContentProvider {
         }
 
         @Override
-        public @NotNull ItemStack toItem() {
+        public @Nullable ItemStack toItem() {
+            if (!material.isItem()) {
+                return null;
+            }
+
             return new ItemStack(material);
         }
     }

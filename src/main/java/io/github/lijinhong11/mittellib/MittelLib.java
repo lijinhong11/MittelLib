@@ -1,8 +1,6 @@
 package io.github.lijinhong11.mittellib;
 
-import io.github.lijinhong11.mittellib.gui.MittelGUI;
 import io.github.lijinhong11.mittellib.gui.MittelGUIListener;
-import io.github.lijinhong11.mittellib.gui.item.ButtonItem;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.lijinhong11.mittellib.utils.ModrinthUpdateChecker;
@@ -11,14 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 public final class MittelLib extends JavaPlugin {
     private final Map<Plugin, SyncLanguageManager> pluginLanguages = new HashMap<>();
@@ -40,6 +32,9 @@ public final class MittelLib extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Shut up bstats relocation
+        System.setProperty("bstats.relocatecheck", "false");
+
         new ModrinthUpdateChecker(this, "mittellib").check();
 
         languageManager = new SyncLanguageManager(this);
@@ -50,30 +45,6 @@ public final class MittelLib extends JavaPlugin {
 
         getLogger().info("MittelLib is enabled!");
         getLogger().info("Detected MC version: " + MCVersion.getCurrent());
-
-        Bukkit.getCommandMap().register("mittellib", new Command("mittellib") {
-            @Override
-            public boolean execute(
-                    @NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String @NotNull [] args) {
-                if (sender instanceof Player p) {
-                    MittelGUI.chestBuilder()
-                            .structure("XXXXXXXXX", "LOLLOL FF")
-                            .bind('X', ButtonItem.unclickable(new ItemStack(Material.BLACK_STAINED_GLASS_PANE)))
-                            .bind('L', ButtonItem.clickable(new ItemStack(Material.APPLE), (g, i) -> {
-                                Player player = (Player) i.getWhoClicked();
-                                player.sendMessage("This is an apple");
-                                return false;
-                            }))
-                            .onOpen((pl, g) -> {
-                                pl.sendMessage("it opened");
-                            })
-                            .build()
-                            .open(p);
-                }
-
-                return true;
-            }
-        });
     }
 
     @Override
