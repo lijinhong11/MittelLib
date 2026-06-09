@@ -2,6 +2,7 @@ package io.github.lijinhong11.mittellib.configuration;
 
 import io.github.lijinhong11.mittellib.item.MittelItem;
 import io.github.lijinhong11.mittellib.utils.ComponentUtils;
+import io.github.lijinhong11.mittellib.utils.ConfigFileUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
 import java.io.File;
@@ -17,6 +18,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.file.YamlConfigurationOptions;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,6 +58,25 @@ public class MittelConfig {
 
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
         return new MittelConfig(file, config);
+    }
+
+    public static @NotNull MittelConfig load(@NotNull Plugin plugin, @NotNull String resourcePath) {
+        ConfigFileUtils.completeFile(plugin, resourcePath);
+        File file = new File(plugin.getDataFolder(), resourcePath);
+        return load(file, true);
+    }
+
+    public static @NotNull MittelConfig load(
+            @NotNull Plugin plugin, @NotNull String resourcePath, boolean createIfMissing) {
+        ConfigFileUtils.completeFile(plugin, resourcePath);
+        File file = new File(plugin.getDataFolder(), resourcePath);
+        return load(file, createIfMissing);
+    }
+
+    public static @NotNull MittelConfig loadLang(@NotNull Plugin plugin, @NotNull String resourcePath) {
+        ConfigFileUtils.completeLangFile(plugin, resourcePath);
+        File file = new File(plugin.getDataFolder(), resourcePath);
+        return load(file, false);
     }
 
     public void reload() {

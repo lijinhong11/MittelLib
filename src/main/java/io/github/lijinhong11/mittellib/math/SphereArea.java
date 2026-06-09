@@ -52,7 +52,7 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
      * @return packed offset array (x,y,z,x,y,z,...)
      */
     private static int[] computeOffsets(int r) {
-        int r2 = r * r;
+        int r2 = r * r + r;
         List<Integer> offsets = new ArrayList<>();
 
         for (int x = -r; x <= r; x++) {
@@ -96,7 +96,7 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
         int dy = pos.y() - center.y();
         int dz = pos.z() - center.z();
 
-        return dx * dx + dy * dy + dz * dz <= radius * radius;
+        return dx * dx + dy * dy + dz * dz <= radius * radius + radius;
     }
 
     public void forEach(@NotNull Consumer<BlockPos> action) {
