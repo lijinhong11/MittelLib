@@ -2,6 +2,7 @@ package io.github.lijinhong11.mittellib;
 
 import io.github.lijinhong11.mittellib.gui.MittelGUIListener;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
+import io.github.lijinhong11.mittellib.hook.economy.VaultHook;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.lijinhong11.mittellib.utils.ModrinthUpdateChecker;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
@@ -40,6 +41,7 @@ public final class MittelLib extends JavaPlugin {
         languageManager = new SyncLanguageManager(this);
 
         ContentProviders.init();
+        VaultHook.init();
 
         Bukkit.getPluginManager().registerEvents(new MittelGUIListener(), this);
 

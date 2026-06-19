@@ -81,7 +81,7 @@ public class WeightedRandomMap<K> extends Object2DoubleOpenHashMap<K> {
             return 0d;
         }
 
-        double totalWeight = DoubleStream.of(value).sum();
+        double totalWeight = DoubleStream.of(values.toDoubleArray()).sum();
 
         if (totalWeight <= 0) {
             return 0d;
