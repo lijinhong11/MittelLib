@@ -50,7 +50,7 @@ public class ItemComponentSerializer {
 
     @SuppressWarnings("unchecked")
     private static void scanAndRegister() {
-        Reflections reflections = new Reflections("me.mmmjjkx.mittellib.item.components.impl");
+        Reflections reflections = new Reflections("io.github.lijinhong11.mittellib.item.components.impl");
 
         MCVersion current = MCVersion.getCurrent();
 
