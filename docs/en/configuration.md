@@ -1,8 +1,6 @@
 Configuration
 ==
 
-English | [简体中文](Configuration-zh)
-
 MittelLib's configuration helpers reduce the boilerplate around Bukkit's
 `YamlConfiguration`: a richer config wrapper and a small serialization contract.
 
@@ -108,4 +106,4 @@ internally; it logs and returns `null` if the class has no suitable constructor.
 
 > **Item components** are special: they extend `ReadWriteItemComponent`, whose
 > `read(...)` intentionally throws. Build them with each component's static
-> `readFromSection(...)` instead. See [Item Components](Item-Components).
+> `readFromSection(...)` instead. See [Item Components](item-components.md).

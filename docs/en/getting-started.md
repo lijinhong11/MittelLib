@@ -1,8 +1,6 @@
 Getting Started
 ==
 
-English | [简体中文](Getting-Started-zh)
-
 ## 1. Requirements
 
 - **Java 21** or newer.
@@ -81,7 +79,7 @@ public final class MyPlugin extends JavaPlugin {
 
 ### What to read next
 
-- [Items (MittelItem)](Items) — the most commonly used class.
-- [Content Providers](Content-Providers) — pull items from other plugins.
-- [GUIs](GUIs) — build inventories.
-- [Localization](Localization) — send translated messages.
+- [Items (MittelItem)](items.md) — the most commonly used class.
+- [Content Providers](content-providers.md) — pull items from other plugins.
+- [GUIs](guis.md) — build inventories.
+- [Localization](localization.md) — send translated messages.

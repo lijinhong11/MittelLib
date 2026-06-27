@@ -1,8 +1,6 @@
 本地化
 ==
 
-[English](Localization) | 简体中文
-
 MittelLib 内置了围绕
 [`ILanguageManager`](https://github.com/lijinhong11/MittelLib/blob/main/src/main/java/io/github/lijinhong11/mittellib/message/ILanguageManager.java)
 接口构建的本地化框架。它加载各语言的 YAML 文件、为每个玩家选择正确的语言、解析

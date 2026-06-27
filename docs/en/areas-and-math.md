@@ -1,8 +1,6 @@
 Areas & Math
 ==
 
-English | [简体中文](Areas-and-Math-zh)
-
 The `math` package provides an integer block position type and two area shapes
 useful for region selection, region effects, and iteration.
 
@@ -10,7 +8,7 @@ useful for region selection, region effects, and iteration.
 
 [`BlockPos`](https://github.com/lijinhong11/MittelLib/blob/main/src/main/java/io/github/lijinhong11/mittellib/math/BlockPos.java)
 is an immutable-style integer `(x, y, z)` position. It implements `Comparable`
-and [`ReadWriteObject`](Configuration#readwriteobject).
+and [`ReadWriteObject`](configuration.md#readwriteobject).
 
 ```java
 BlockPos pos = new BlockPos(10, 64, -20);

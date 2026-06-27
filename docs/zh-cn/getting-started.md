@@ -1,8 +1,6 @@
 快速开始
 ==
 
-[English](Getting-Started) | 简体中文
-
 ## 1. 环境要求
 
 - **Java 21** 或更高版本。
@@ -78,7 +76,7 @@ public final class MyPlugin extends JavaPlugin {
 
 ### 接下来阅读
 
-- [物品 (MittelItem)](Items-zh) —— 最常用的类。
-- [内容提供者](Content-Providers-zh) —— 获取其他插件的物品。
-- [GUI 界面](GUIs-zh) —— 构建容器界面。
-- [本地化](Localization-zh) —— 发送翻译后的消息。
+- [物品 (MittelItem)](items.md) —— 最常用的类。
+- [内容提供者](content-providers.md) —— 获取其他插件的物品。
+- [GUI 界面](guis.md) —— 构建容器界面。
+- [本地化](localization.md) —— 发送翻译后的消息。

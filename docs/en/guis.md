@@ -1,8 +1,6 @@
 GUIs
 ==
 
-English | [简体中文](GUIs-zh)
-
 MittelLib provides builder-based inventory GUIs through the
 [`MittelGUI`](https://github.com/lijinhong11/MittelLib/blob/main/src/main/java/io/github/lijinhong11/mittellib/gui/MittelGUI.java)
 interface. Click handling is wired up automatically by a global listener that

@@ -1,8 +1,6 @@
 变量 / 占位符
 ==
 
-[English](Placeholders) | 简体中文
-
 MittelLib 让你**只注册一次**占位符，就能同时暴露给
 [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) 和
 [MiniPlaceholders](https://github.com/MiniPlaceholders/MiniPlaceholders)，这通过
@@ -63,7 +61,7 @@ String parse(@Nullable OfflinePlayer viewer, @Nullable OfflinePlayer target, Str
 
 ## 占位符在其他地方如何被解析
 
-[`ComponentUtils.deserialize`](Utilities-zh#componentutils) 与
-[`StringUtils.parsePlaceholders`](Utilities-zh#stringutils) 会在 PlaceholderAPI 与
-MiniPlaceholders 存在时自动解析它们，因此任何经由[本地化](Localization-zh)系统发送的
+[`ComponentUtils.deserialize`](utilities.md#componentutils) 与
+[`StringUtils.parsePlaceholders`](utilities.md#stringutils) 会在 PlaceholderAPI 与
+MiniPlaceholders 存在时自动解析它们，因此任何经由[本地化](localization.md)系统发送的
 消息都开箱即用地支持占位符。

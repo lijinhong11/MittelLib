@@ -1,14 +1,12 @@
 物品组件
 ==
 
-[English](Item-Components) | 简体中文
-
 Minecraft `1.20.5` 用**数据组件（data components）**取代了大多数物品 NBT 数据。
 MittelLib 封装了 Paper 的数据组件 API，使组件既可在代码中创建，也可与配置互相序列化。
 
 所有组件类都继承
 [`ReadWriteItemComponent`](https://github.com/lijinhong11/MittelLib/blob/main/src/main/java/io/github/lijinhong11/mittellib/configuration/ReadWriteItemComponent.java)，
-它在 [`ReadWriteObject`](Configuration-zh#readwriteobject) 约定之上增加了
+它在 [`ReadWriteObject`](configuration.md#readwriteobject) 约定之上增加了
 `applyToItem(ItemStack)` 方法。
 
 > **版本限制：** 每个组件都声明了最低 Minecraft 版本。在低于该版本的服务端上，

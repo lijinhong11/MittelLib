@@ -1,8 +1,6 @@
 Localization
 ==
 
-English | [简体中文](Localization-zh)
-
 MittelLib includes a localization framework built around the
 [`ILanguageManager`](https://github.com/lijinhong11/MittelLib/blob/main/src/main/java/io/github/lijinhong11/mittellib/message/ILanguageManager.java)
 interface. It loads per-language YAML files, picks the right one for each player,

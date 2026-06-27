@@ -1,7 +1,5 @@
-MittelLib Wiki
+MittelLib
 ==
-
-English | [简体中文](Home-zh)
 
 **MittelLib** is a utility library for Paper/Folia Minecraft plugins. It bundles the
 boilerplate that most server plugins re-implement: item (de)serialization, modern
@@ -10,22 +8,22 @@ localization, configuration helpers, area math and a handful of small utilities.
 
 > **Requirements:** Java 21+, a Paper (or Folia) server. Built against the Paper
 > `1.21.x` API; many features automatically degrade on older versions through the
-> [`MCVersion`](Utilities#mcversion) detection.
+> [`MCVersion`](utilities.md#mcversion) detection.
 
 ## Pages
 
 | Page | What it covers |
 | --- | --- |
-| [Getting Started](Getting-Started) | Adding MittelLib as a dependency and the first lines of code |
-| [Items (MittelItem)](Items) | Building, reading and writing items to config |
-| [Item Components](Item-Components) | Modern `1.20.5+` data components (food, tool, profile, …) |
-| [Content Providers](Content-Providers) | Items & blocks from ItemsAdder, Nexo, Oraxen, MMOItems, … |
-| [GUIs](GUIs) | Chest, paginated chest and anvil inventory builders |
-| [Localization](Localization) | Multi-language messages and the language managers |
-| [Configuration](Configuration) | `MittelConfig` and the `ReadWriteObject` contract |
-| [Areas & Math](Areas-and-Math) | `BlockPos`, cuboid and sphere areas |
-| [Utilities](Utilities) | Strings, components, numbers, random, chat input, update checks |
-| [Placeholders](Placeholders) | One expansion for both PlaceholderAPI and MiniPlaceholders |
+| [Getting Started](getting-started.md) | Adding MittelLib as a dependency and the first lines of code |
+| [Items (MittelItem)](items.md) | Building, reading and writing items to config |
+| [Item Components](item-components.md) | Modern `1.20.5+` data components (food, tool, profile, …) |
+| [Content Providers](content-providers.md) | Items & blocks from ItemsAdder, Nexo, Oraxen, MMOItems, … |
+| [GUIs](guis.md) | Chest, paginated chest and anvil inventory builders |
+| [Localization](localization.md) | Multi-language messages and the language managers |
+| [Configuration](configuration.md) | `MittelConfig` and the `ReadWriteObject` contract |
+| [Areas & Math](areas-and-math.md) | `BlockPos`, cuboid and sphere areas |
+| [Utilities](utilities.md) | Strings, components, numbers, random, chat input, update checks |
+| [Placeholders](placeholders.md) | One expansion for both PlaceholderAPI and MiniPlaceholders |
 
 ## Quick example
 

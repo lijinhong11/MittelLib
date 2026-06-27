@@ -1,8 +1,6 @@
 Content Providers
 ==
 
-English | [简体中文](Content-Providers-zh)
-
 A **content provider** is an adapter that exposes items and blocks from another
 plugin behind a single interface. MittelLib ships providers for several popular
 custom-content plugins and a built-in `minecraft` provider for vanilla items.

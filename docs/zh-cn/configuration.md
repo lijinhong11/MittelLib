@@ -1,8 +1,6 @@
 配置文件
 ==
 
-[English](Configuration) | 简体中文
-
 MittelLib 的配置辅助类减少了围绕 Bukkit `YamlConfiguration` 的样板代码：一个更强大的
 配置封装，以及一个小巧的序列化约定。
 
@@ -106,4 +104,4 @@ Home home = cfg.getRWObject("home", Home.class);
 
 > **物品组件** 较为特殊：它们继承 `ReadWriteItemComponent`，其 `read(...)` 会故意抛
 > 异常。请改用每个组件的静态 `readFromSection(...)` 来构建。见
-> [物品组件](Item-Components-zh)。
+> [物品组件](item-components.md)。

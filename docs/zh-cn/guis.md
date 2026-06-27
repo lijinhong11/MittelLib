@@ -1,8 +1,6 @@
 GUI 界面
 ==
 
-[English](GUIs) | 简体中文
-
 MittelLib 通过
 [`MittelGUI`](https://github.com/lijinhong11/MittelLib/blob/main/src/main/java/io/github/lijinhong11/mittellib/gui/MittelGUI.java)
 接口提供基于构建器的容器 GUI。点击处理由 MittelLib 在启用时注册的全局监听器自动完成

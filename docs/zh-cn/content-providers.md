@@ -1,8 +1,6 @@
 内容提供者
 ==
 
-[English](Content-Providers) | 简体中文
-
 **内容提供者（content provider）**是一个适配器，把其他插件的物品和方块通过统一的
 接口暴露出来。MittelLib 为几款流行的自定义内容插件内置了提供者，并为原版物品提供了
 内置的 `minecraft` 提供者。

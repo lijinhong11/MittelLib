@@ -1,8 +1,6 @@
 Item Components
 ==
 
-English | [简体中文](Item-Components-zh)
-
 Minecraft `1.20.5` replaced most NBT item data with **data components**. MittelLib
 wraps the Paper data-component API so that components can be created in code and
 serialized to / from configuration.
@@ -10,7 +8,7 @@ serialized to / from configuration.
 All component classes extend
 [`ReadWriteItemComponent`](https://github.com/lijinhong11/MittelLib/blob/main/src/main/java/io/github/lijinhong11/mittellib/configuration/ReadWriteItemComponent.java),
 which adds an `applyToItem(ItemStack)` method on top of the
-[`ReadWriteObject`](Configuration#readwriteobject) contract.
+[`ReadWriteObject`](configuration.md#readwriteobject) contract.
 
 > **Version gating:** every component declares a minimum Minecraft version. On a
 > server older than that version the component is skipped instead of throwing.

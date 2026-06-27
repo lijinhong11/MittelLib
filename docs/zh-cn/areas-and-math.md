@@ -1,8 +1,6 @@
 区域与数学
 ==
 
-[English](Areas-and-Math) | 简体中文
-
 `math` 包提供了一个整数方块坐标类型，以及两种区域形状，适用于区域选择、区域效果和
 迭代遍历。
 
@@ -10,7 +8,7 @@
 
 [`BlockPos`](https://github.com/lijinhong11/MittelLib/blob/main/src/main/java/io/github/lijinhong11/mittellib/math/BlockPos.java)
 是一个偏不可变风格的整数 `(x, y, z)` 坐标。它实现了 `Comparable` 与
-[`ReadWriteObject`](Configuration-zh#readwriteobject)。
+[`ReadWriteObject`](configuration.md#readwriteobject)。
 
 ```java
 BlockPos pos = new BlockPos(10, 64, -20);

@@ -1,8 +1,6 @@
 Items (MittelItem)
 ==
 
-English | [简体中文](Items-zh)
-
 [`MittelItem`](https://github.com/lijinhong11/MittelLib/blob/main/src/main/java/io/github/lijinhong11/mittellib/item/MittelItem.java)
 is a mutable, serializable wrapper around a Bukkit `ItemStack`. It stores the
 material, amount, meta, enchantments and modern data components, and can read or
@@ -43,7 +41,7 @@ item.getMeta().setLore("<gray>A legendary blade");
 ```
 
 The display name and lore are parsed through
-[`ComponentUtils`](Utilities#componentutils), so MiniMessage tags, legacy `&`/`§`
+[`ComponentUtils`](utilities.md#componentutils), so MiniMessage tags, legacy `&`/`§`
 codes and hex colors all work.
 
 ## Producing an `ItemStack`
@@ -57,7 +55,7 @@ applies the meta, then applies every component. It throws if the amount is `<= 0
 
 ## Reading & writing configuration
 
-`MittelItem` implements [`ReadWriteObject`](Configuration#readwriteobject):
+`MittelItem` implements [`ReadWriteObject`](configuration.md#readwriteobject):
 
 ```java
 // Write
@@ -116,4 +114,4 @@ Each definition is itself a `ReadWriteObject`, so it serializes into a nested
 section under `meta`.
 
 > Custom model data via `MittelItemMeta#customModelData` is **deprecated** for
-> `1.21.4+`; use the [`CustomModelDataComponent`](Item-Components) instead.
+> `1.21.4+`; use the [`CustomModelDataComponent`](item-components.md) instead.

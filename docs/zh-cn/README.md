@@ -1,29 +1,27 @@
-MittelLib 维基
+MittelLib
 ==
-
-[English](Home) | 简体中文
 
 **MittelLib** 是一个面向 Paper/Folia 的 Minecraft 插件工具库。它把大多数服务器插件
 都要重复实现的样板代码封装好了：物品序列化/反序列化、现代数据组件处理、跨插件的
 物品/方块提供者、容器 GUI、本地化、配置辅助、区域数学以及一系列小工具。
 
 > **环境要求：** Java 21+，Paper（或 Folia）服务端。基于 Paper `1.21.x` API 构建；
-> 许多功能会通过 [`MCVersion`](Utilities-zh#mcversion) 版本检测在旧版本上自动降级。
+> 许多功能会通过 [`MCVersion`](utilities.md#mcversion) 版本检测在旧版本上自动降级。
 
 ## 页面索引
 
 | 页面 | 内容 |
 | --- | --- |
-| [快速开始](Getting-Started-zh) | 引入 MittelLib 依赖与第一段代码 |
-| [物品 (MittelItem)](Items-zh) | 构建物品、读写到配置 |
-| [物品组件](Item-Components-zh) | `1.20.5+` 现代数据组件（食物、工具、皮肤等） |
-| [内容提供者](Content-Providers-zh) | 来自 ItemsAdder、Nexo、Oraxen、MMOItems 等的物品/方块 |
-| [GUI 界面](GUIs-zh) | 箱子、分页箱子、铁砧界面构建器 |
-| [本地化](Localization-zh) | 多语言消息与语言管理器 |
-| [配置文件](Configuration-zh) | `MittelConfig` 与 `ReadWriteObject` 约定 |
-| [区域与数学](Areas-and-Math-zh) | `BlockPos`、长方体与球形区域 |
-| [工具类](Utilities-zh) | 字符串、组件、数字、随机、聊天输入、更新检查 |
-| [变量/占位符](Placeholders-zh) | 一次注册，同时支持 PlaceholderAPI 与 MiniPlaceholders |
+| [快速开始](getting-started.md) | 引入 MittelLib 依赖与第一段代码 |
+| [物品 (MittelItem)](items.md) | 构建物品、读写到配置 |
+| [物品组件](item-components.md) | `1.20.5+` 现代数据组件（食物、工具、皮肤等） |
+| [内容提供者](content-providers.md) | 来自 ItemsAdder、Nexo、Oraxen、MMOItems 等的物品/方块 |
+| [GUI 界面](guis.md) | 箱子、分页箱子、铁砧界面构建器 |
+| [本地化](localization.md) | 多语言消息与语言管理器 |
+| [配置文件](configuration.md) | `MittelConfig` 与 `ReadWriteObject` 约定 |
+| [区域与数学](areas-and-math.md) | `BlockPos`、长方体与球形区域 |
+| [工具类](utilities.md) | 字符串、组件、数字、随机、聊天输入、更新检查 |
+| [变量/占位符](placeholders.md) | 一次注册，同时支持 PlaceholderAPI 与 MiniPlaceholders |
 
 ## 快速示例
 

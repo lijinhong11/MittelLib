@@ -1,8 +1,6 @@
 Utilities
 ==
 
-English | [简体中文](Utilities-zh)
-
 The `utils` package collects small, dependency-free helpers used throughout the
 library and handy for plugins too.
 

@@ -1,8 +1,6 @@
 工具类
 ==
 
-[English](Utilities) | 简体中文
-
 `utils` 包收集了一批小巧、无额外依赖的辅助方法，库内部到处都在用，对插件也很方便。
 
 ## ComponentUtils

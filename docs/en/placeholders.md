@@ -1,8 +1,6 @@
 Placeholders
 ==
 
-English | [简体中文](Placeholders-zh)
-
 MittelLib lets you register placeholders **once** and expose them to both
 [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) and
 [MiniPlaceholders](https://github.com/MiniPlaceholders/MiniPlaceholders) at the
@@ -64,7 +62,7 @@ String parse(@Nullable OfflinePlayer viewer, @Nullable OfflinePlayer target, Str
 
 ## How placeholders are parsed elsewhere
 
-[`ComponentUtils.deserialize`](Utilities#componentutils) and
-[`StringUtils.parsePlaceholders`](Utilities#stringutils) automatically resolve
+[`ComponentUtils.deserialize`](utilities.md#componentutils) and
+[`StringUtils.parsePlaceholders`](utilities.md#stringutils) automatically resolve
 PlaceholderAPI and MiniPlaceholders when those plugins are present, so any message
-sent through the [localization](Localization) system supports them out of the box.
+sent through the [localization](localization.md) system supports them out of the box.
