@@ -2,6 +2,7 @@ package io.github.lijinhong11.mittellib.gui;
 
 import io.github.lijinhong11.mittellib.gui.impl.AnvilGUI;
 import io.github.lijinhong11.mittellib.gui.impl.ChestGUI;
+import io.github.lijinhong11.mittellib.gui.impl.CoordinateChestGUI;
 import io.github.lijinhong11.mittellib.gui.impl.PaginatedChestGUI;
 import io.github.lijinhong11.mittellib.gui.item.MittelGUIItem;
 import java.util.Collection;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.view.AnvilView;
 import org.checkerframework.common.value.qual.ArrayLenRange;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface MittelGUI extends InventoryHolder {
     void open(@NotNull Player player);
@@ -37,6 +39,10 @@ public interface MittelGUI extends InventoryHolder {
 
     static PagedChestBuilder pagedChestBuilder() {
         return new PaginatedChestGUI.Builder();
+    }
+
+    static CoordinateBuilder coordinateBuilder() {
+        return new CoordinateChestGUI.Builder();
     }
 
     @ApiStatus.Experimental
@@ -104,6 +110,24 @@ public interface MittelGUI extends InventoryHolder {
         PagedChestBuilder onClose(@NotNull BiConsumer<Player, PaginatedChestGUI> closeConsumer);
 
         PaginatedChestGUI build();
+    }
+
+    interface CoordinateBuilder {
+        CoordinateBuilder title(@NotNull Component title);
+
+        CoordinateBuilder rows(int rows);
+
+        CoordinateBuilder axisX(@Nullable MittelGUIItem item);
+
+        CoordinateBuilder axisY(@Nullable MittelGUIItem item);
+
+        CoordinateBuilder origin(@Nullable MittelGUIItem item);
+
+        CoordinateBuilder onOpen(@NotNull BiConsumer<Player, CoordinateChestGUI> openConsumer);
+
+        CoordinateBuilder onClose(@NotNull BiConsumer<Player, CoordinateChestGUI> closeConsumer);
+
+        CoordinateChestGUI build();
     }
 
     interface AnvilBuilder {

@@ -2,11 +2,7 @@ package io.github.lijinhong11.mittellib.gui.impl;
 
 import io.github.lijinhong11.mittellib.gui.MittelGUI;
 import io.github.lijinhong11.mittellib.gui.item.MittelGUIItem;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -86,7 +82,7 @@ public final class PaginatedChestGUI implements MittelGUI {
     }
 
     private void render() {
-        java.util.Arrays.fill(this.renderedItems, null);
+        Arrays.fill(this.renderedItems, null);
         this.inv.clear();
 
         for (int row = 0; row < this.structure.length; row++) {

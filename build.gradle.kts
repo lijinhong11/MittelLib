@@ -72,11 +72,17 @@ tasks.runServer {
 
 spotless {
     java {
+        cleanthat()
+
         palantirJavaFormat()
+
+        forbidWildcardImports()
         removeUnusedImports()
         importOrder()
-        trimTrailingWhitespace()
         expandWildcardImports()
+        formatAnnotations()
+
+        trimTrailingWhitespace()
     }
 }
 
