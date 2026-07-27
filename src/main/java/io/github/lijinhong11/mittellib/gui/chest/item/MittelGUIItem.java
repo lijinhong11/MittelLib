@@ -1,7 +1,7 @@
-package io.github.lijinhong11.mittellib.gui.item;
+package io.github.lijinhong11.mittellib.gui.chest.item;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import io.github.lijinhong11.mittellib.gui.MittelGUI;
+import io.github.lijinhong11.mittellib.gui.chest.MittelGUI;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 

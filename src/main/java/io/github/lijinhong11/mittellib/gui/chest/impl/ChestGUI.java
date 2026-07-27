@@ -1,7 +1,7 @@
-package io.github.lijinhong11.mittellib.gui.impl;
+package io.github.lijinhong11.mittellib.gui.chest.impl;
 
-import io.github.lijinhong11.mittellib.gui.MittelGUI;
-import io.github.lijinhong11.mittellib.gui.item.MittelGUIItem;
+import io.github.lijinhong11.mittellib.gui.chest.MittelGUI;
+import io.github.lijinhong11.mittellib.gui.chest.item.MittelGUIItem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

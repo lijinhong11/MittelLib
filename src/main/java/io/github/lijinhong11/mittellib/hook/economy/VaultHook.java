@@ -19,11 +19,11 @@ public class VaultHook {
         }
     }
 
-    public double getBalance(OfflinePlayer player) {
+    public static double getBalance(OfflinePlayer player) {
         return economy.getBalance(player);
     }
 
-    public void setBalance(OfflinePlayer player, double amount) {
+    public static void setBalance(OfflinePlayer player, double amount) {
         double delta = economy.getBalance(player) - amount;
         if (delta > 0) {
             economy.withdrawPlayer(player, delta);
@@ -32,23 +32,23 @@ public class VaultHook {
         }
     }
 
-    public void addBalance(OfflinePlayer player, double amount) {
+    public static void addBalance(OfflinePlayer player, double amount) {
         economy.depositPlayer(player, amount);
     }
 
-    public void depositBalance(OfflinePlayer player, double amount) {
+    public static void depositBalance(OfflinePlayer player, double amount) {
         economy.depositPlayer(player, amount);
     }
 
-    public void subtractBalance(OfflinePlayer player, double amount) {
+    public static void subtractBalance(OfflinePlayer player, double amount) {
         economy.withdrawPlayer(player, amount);
     }
 
-    public void withdrawBalance(OfflinePlayer player, double amount) {
+    public static void withdrawBalance(OfflinePlayer player, double amount) {
         economy.withdrawPlayer(player, amount);
     }
 
-    public boolean has(OfflinePlayer player, double amount) {
+    public static boolean has(OfflinePlayer player, double amount) {
         return economy.has(player, amount);
     }
 }

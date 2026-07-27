@@ -1,10 +1,10 @@
-package io.github.lijinhong11.mittellib.gui;
+package io.github.lijinhong11.mittellib.gui.chest;
 
-import io.github.lijinhong11.mittellib.gui.impl.AnvilGUI;
-import io.github.lijinhong11.mittellib.gui.impl.ChestGUI;
-import io.github.lijinhong11.mittellib.gui.impl.CoordinateChestGUI;
-import io.github.lijinhong11.mittellib.gui.impl.PaginatedChestGUI;
-import io.github.lijinhong11.mittellib.gui.item.MittelGUIItem;
+import io.github.lijinhong11.mittellib.gui.chest.impl.AnvilGUI;
+import io.github.lijinhong11.mittellib.gui.chest.impl.ChestGUI;
+import io.github.lijinhong11.mittellib.gui.chest.impl.CoordinateChestGUI;
+import io.github.lijinhong11.mittellib.gui.chest.impl.PaginatedChestGUI;
+import io.github.lijinhong11.mittellib.gui.chest.item.MittelGUIItem;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;

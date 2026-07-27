@@ -21,3 +21,6 @@ softdepend:
 
   - PlaceholderAPI
   - MiniPlaceholders
+
+  - Vault
+  - PlayerPoints

@@ -29,6 +29,7 @@ repositories {
     maven("https://api.modrinth.com/maven/")
     maven("https://repo.auxilor.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/releases/")
+    maven("https://repo.rosewooddev.io/repository/public/")
     maven("https://jitpack.io")
 }
 
@@ -57,9 +58,11 @@ dependencies {
     compileOnly("com.willfp:EcoItems:5.66.0")
     compileOnly("com.willfp:libreforge:4.79.0:all")
 
+    //other hooks
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
         exclude("org.bukkit")
     }
+    compileOnly("org.black_ixx:playerpoints:3.3.5")
 
     // lombok
     compileOnly("org.projectlombok:lombok:1.18.42")
