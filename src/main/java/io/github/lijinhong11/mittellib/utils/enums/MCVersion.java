@@ -55,8 +55,7 @@ public enum MCVersion {
      *   <li>Latest known version (fallback)</li>
      * </ol>
      */
-    @NotNull
-    public static MCVersion getCurrent() {
+    @NotNull public static MCVersion getCurrent() {
         if (current != null) return current;
 
         int protocol = Bukkit.getUnsafe().getProtocolVersion();

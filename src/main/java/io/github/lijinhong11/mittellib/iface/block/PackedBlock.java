@@ -25,6 +25,5 @@ public interface PackedBlock {
      * Gets the item of the block
      * @return the item of the block
      */
-    @Nullable
-    ItemStack toItem();
+    @Nullable ItemStack toItem();
 }

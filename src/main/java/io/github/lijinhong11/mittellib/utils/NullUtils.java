@@ -8,8 +8,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class NullUtils {
     @SafeVarargs
-    @Nullable
-    public static <U extends T, T> T findAnyNonNull(U... objects) {
+    @Nullable public static <U extends T, T> T findAnyNonNull(U... objects) {
         for (U u : objects) {
             if (u != null) {
                 return u;
@@ -19,8 +18,7 @@ public class NullUtils {
         return null;
     }
 
-    @Nullable
-    public static <U extends T, T> T findAnyNonNull(Iterable<U> objects) {
+    @Nullable public static <U extends T, T> T findAnyNonNull(Iterable<U> objects) {
         for (U u : objects) {
             if (u != null) {
                 return u;
@@ -31,8 +29,7 @@ public class NullUtils {
     }
 
     @SafeVarargs
-    @Nullable
-    public static <U extends T, T> List<T> findAllNonNull(U... objects) {
+    @Nullable public static <U extends T, T> List<T> findAllNonNull(U... objects) {
         List<T> list = new ArrayList<>();
 
         for (U u : objects) {
@@ -44,8 +41,7 @@ public class NullUtils {
         return list.isEmpty() ? null : list;
     }
 
-    @Nullable
-    public static <U extends T, T> List<T> findAllNonNull(Iterable<U> objects) {
+    @Nullable public static <U extends T, T> List<T> findAllNonNull(Iterable<U> objects) {
         List<T> list = new ArrayList<>();
 
         for (U u : objects) {

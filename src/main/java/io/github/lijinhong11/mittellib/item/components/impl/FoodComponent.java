@@ -33,8 +33,7 @@ public class FoodComponent extends ReadWriteItemComponent {
         return DataComponentTypes.FOOD;
     }
 
-    @Nullable
-    public static FoodComponent readFromSection(ConfigurationSection cs) {
+    @Nullable public static FoodComponent readFromSection(ConfigurationSection cs) {
         if (!cs.contains("nutrition")) {
             MittelLib.getInstance().getLogger().severe("Failed to define food component: 'nutrition' is not set");
             return null;

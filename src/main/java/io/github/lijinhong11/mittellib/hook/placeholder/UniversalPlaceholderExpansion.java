@@ -1,6 +1,6 @@
 package io.github.lijinhong11.mittellib.hook.placeholder;
 
-import io.github.lijinhong11.mittellib.utils.ComponentUtils;
+import io.github.lijinhong11.mittellib.utils.components.ComponentUtils;
 import io.github.miniplaceholders.api.Expansion;
 import java.util.ArrayList;
 import java.util.Arrays;

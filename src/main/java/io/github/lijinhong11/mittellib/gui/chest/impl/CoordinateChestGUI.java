@@ -2,6 +2,8 @@ package io.github.lijinhong11.mittellib.gui.chest.impl;
 
 import io.github.lijinhong11.mittellib.gui.chest.MittelGUI;
 import io.github.lijinhong11.mittellib.gui.chest.item.MittelGUIItem;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +24,14 @@ public final class CoordinateChestGUI implements MittelGUI {
     private final Inventory inv;
     private final MittelGUIItem[] items;
     private final int rows;
-    @Nullable
-    private final MittelGUIItem axisX, axisY, origin;
+    @Nullable private final MittelGUIItem axisX, axisY, origin;
+
+    @Nullable private final String[] structure;
+
+    @Nullable private final Character viewBind;
+
+    private final Map<Character, MittelGUIItem> bindings;
+    private final List<ViewSlot> viewSlots;
 
     private final Map<String, MittelGUIItem> placed = new HashMap<>();
     private int ox, oy;
@@ -36,23 +44,75 @@ public final class CoordinateChestGUI implements MittelGUI {
         this.axisX = b.axisX;
         this.axisY = b.axisY;
         this.origin = b.origin;
+        this.structure = b.structure == null ? null : b.structure.clone();
+        this.viewBind = b.viewBind;
+        this.bindings = new HashMap<>(b.bindings);
+        this.viewSlots = collectViewSlots(b.viewBind);
         this.onOpen = b.onOpen;
         this.onClose = b.onClose;
         render();
     }
 
+    private List<ViewSlot> collectViewSlots(@Nullable Character viewBind) {
+        if (structure == null) return legacyViewSlots();
+        if (viewBind == null) {
+            throw new IllegalStateException("coordinate chest gui requires a view bind when using a structure");
+        }
+
+        List<ViewSlot> slots = new ArrayList<>();
+        int minRow = rows;
+        int minColumn = 9;
+        for (int row = 0; row < structure.length; row++) {
+            String line = structure[row];
+            for (int column = 0; column < line.length(); column++) {
+                if (line.charAt(column) == viewBind) {
+                    slots.add(new ViewSlot(row * 9 + column, column, row));
+                    minRow = Math.min(minRow, row);
+                    minColumn = Math.min(minColumn, column);
+                }
+            }
+        }
+        if (slots.isEmpty()) throw new IllegalArgumentException("coordinate chest gui requires at least one view slot");
+
+        List<ViewSlot> normalized = new ArrayList<>(slots.size());
+        for (ViewSlot slot : slots) {
+            normalized.add(new ViewSlot(slot.inventorySlot(), slot.x() - minColumn, slot.y() - minRow));
+        }
+        return normalized;
+    }
+
+    private List<ViewSlot> legacyViewSlots() {
+        List<ViewSlot> slots = new ArrayList<>((rows - 1) * 8);
+        for (int i = 0; i < (rows - 1) * 8; i++) {
+            slots.add(new ViewSlot((i / 8 + 1) * 9 + (i % 8 + 1), i % 8, i / 8));
+        }
+        return slots;
+    }
+
     private void render() {
-        java.util.Arrays.fill(items, null);
+        Arrays.fill(items, null);
         inv.clear();
 
-        if (origin != null) set(0, origin);
-        for (int c = 1; c < 9; c++) if (axisX != null) set(c, axisX);
-        for (int r = 1; r < rows; r++) if (axisY != null) set(r * 9, axisY);
+        if (structure == null) {
+            if (origin != null) set(0, origin);
+            for (int c = 1; c < 9; c++) if (axisX != null) set(c, axisX);
+            for (int r = 1; r < rows; r++) if (axisY != null) set(r * 9, axisY);
+        } else {
+            for (int row = 0; row < structure.length; row++) {
+                String line = structure[row];
+                for (int column = 0; column < line.length(); column++) {
+                    char bind = line.charAt(column);
+                    if (bind == ' ') continue;
+                    if (viewBind != null && bind == viewBind) continue;
+                    MittelGUIItem item = bindings.get(bind);
+                    if (item != null) set(row * 9 + column, item);
+                }
+            }
+        }
 
-        for (int i = 0; i < (rows - 1) * 8; i++) {
-            int slot = (i / 8 + 1) * 9 + (i % 8 + 1);
-            MittelGUIItem item = placed.get(key(ox + i % 8, oy + i / 8));
-            if (item != null) set(slot, item);
+        for (ViewSlot slot : viewSlots) {
+            MittelGUIItem item = placed.get(key(ox + slot.x(), oy + slot.y()));
+            if (item != null) set(slot.inventorySlot(), item);
         }
     }
 
@@ -72,8 +132,10 @@ public final class CoordinateChestGUI implements MittelGUI {
     }
 
     public void openCentered(@NotNull Player p, int x, int y) {
-        ox = x - 4;
-        oy = y - (rows - 1) / 2;
+        int maxX = viewSlots.stream().mapToInt(ViewSlot::x).max().orElse(0);
+        int maxY = viewSlots.stream().mapToInt(ViewSlot::y).max().orElse(0);
+        ox = x - maxX / 2;
+        oy = y - maxY / 2;
         render();
         p.closeInventory();
         p.openInventory(inv);
@@ -145,10 +207,15 @@ public final class CoordinateChestGUI implements MittelGUI {
         if (e.getPlayer() instanceof Player p && onClose != null) onClose.accept(p, this);
     }
 
+    private record ViewSlot(int inventorySlot, int x, int y) {}
+
     public static final class Builder implements CoordinateBuilder {
         private Component title = Component.empty();
         private int rows;
         private MittelGUIItem axisX, axisY, origin;
+        private String[] structure;
+        private Character viewBind;
+        private final Map<Character, MittelGUIItem> bindings = new HashMap<>();
         private BiConsumer<Player, CoordinateChestGUI> onOpen, onClose;
 
         @Override
@@ -161,6 +228,59 @@ public final class CoordinateChestGUI implements MittelGUI {
         public CoordinateBuilder rows(int r) {
             this.rows = r;
             return this;
+        }
+
+        @Override
+        public CoordinateBuilder structure(@NotNull String... structure) {
+            this.structure = structure.clone();
+            return this;
+        }
+
+        @Override
+        public CoordinateBuilder bind(char bind, @NotNull MittelGUIItem item) {
+            this.bindings.put(bind, item);
+            return this;
+        }
+
+        @Override
+        public CoordinateBuilder view(char bind) {
+            this.viewBind = bind;
+            return this;
+        }
+
+        @Override
+        public CoordinateBuilder moveUp(char bind, @NotNull MittelGUIItem item) {
+            return bind(bind, navigationItem(item, CoordinateChestGUI::moveUp));
+        }
+
+        @Override
+        public CoordinateBuilder moveDown(char bind, @NotNull MittelGUIItem item) {
+            return bind(bind, navigationItem(item, CoordinateChestGUI::moveDown));
+        }
+
+        @Override
+        public CoordinateBuilder moveLeft(char bind, @NotNull MittelGUIItem item) {
+            return bind(bind, navigationItem(item, CoordinateChestGUI::moveLeft));
+        }
+
+        @Override
+        public CoordinateBuilder moveRight(char bind, @NotNull MittelGUIItem item) {
+            return bind(bind, navigationItem(item, CoordinateChestGUI::moveRight));
+        }
+
+        private static MittelGUIItem navigationItem(MittelGUIItem item, NavigationAction action) {
+            return new MittelGUIItem() {
+                @Override
+                public org.bukkit.inventory.ItemStack getItem() {
+                    return item.getItem();
+                }
+
+                @Override
+                public boolean onClick(MittelGUI gui, InventoryClickEvent event) {
+                    if (gui instanceof CoordinateChestGUI coordinate) action.accept(coordinate);
+                    return false;
+                }
+            };
         }
 
         @Override
@@ -195,8 +315,24 @@ public final class CoordinateChestGUI implements MittelGUI {
 
         @Override
         public CoordinateChestGUI build() {
+            if (structure != null) {
+                if (structure.length < 1 || structure.length > 6) {
+                    throw new IllegalStateException("structure must contain between 1 and 6 rows");
+                }
+                for (String line : structure) {
+                    if (line.length() > 9)
+                        throw new IllegalStateException("structure rows must contain at most 9 columns");
+                }
+                if (rows == 0) rows = structure.length;
+                if (rows != structure.length) throw new IllegalStateException("rows must match structure length");
+            }
             if (rows < 2) throw new IllegalStateException("rows must be at least 2");
             return new CoordinateChestGUI(this);
         }
+    }
+
+    @FunctionalInterface
+    private interface NavigationAction {
+        void accept(CoordinateChestGUI gui);
     }
 }

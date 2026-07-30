@@ -1,6 +1,6 @@
 package io.github.lijinhong11.mittellib.utils.chat;
 
-import io.github.lijinhong11.mittellib.utils.ComponentUtils;
+import io.github.lijinhong11.mittellib.utils.components.ComponentUtils;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.HashMap;
 import java.util.HashSet;

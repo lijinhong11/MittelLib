@@ -40,8 +40,7 @@ public class BannerDefinition implements ReadWriteObject {
         read(cs);
     }
 
-    @NotNull
-    public Pattern getPattern(int index) {
+    @NotNull public Pattern getPattern(int index) {
         return bannerPatterns.get(index);
     }
 

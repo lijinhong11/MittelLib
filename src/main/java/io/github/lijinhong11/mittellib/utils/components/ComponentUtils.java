@@ -1,5 +1,6 @@
-package io.github.lijinhong11.mittellib.utils;
+package io.github.lijinhong11.mittellib.utils.components;
 
+import io.github.lijinhong11.mittellib.utils.StringUtils;
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;

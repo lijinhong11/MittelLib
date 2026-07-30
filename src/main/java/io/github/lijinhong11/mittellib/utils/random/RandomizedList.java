@@ -10,8 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> the type
  */
 public interface RandomizedList<T> extends List<T> {
-    @Nullable
-    default T randomOne() {
+    @Nullable default T randomOne() {
         if (isEmpty()) {
             return null;
         }
@@ -21,13 +20,11 @@ public interface RandomizedList<T> extends List<T> {
         return get(index);
     }
 
-    @Nullable
-    default List<T> randomMulti(int size) {
+    @Nullable default List<T> randomMulti(int size) {
         return randomMulti(size, false);
     }
 
-    @Nullable
-    default List<T> randomMulti(int size, boolean distinct) {
+    @Nullable default List<T> randomMulti(int size, boolean distinct) {
         if (size > size()) {
             throw new IllegalArgumentException("size is bigger than the list's size");
         }

@@ -30,8 +30,7 @@ public class InstrumentComponent extends ReadWriteItemComponent {
         return DataComponentTypes.INSTRUMENT;
     }
 
-    @Nullable
-    public static InstrumentComponent readFromSection(ConfigurationSection cs) {
+    @Nullable public static InstrumentComponent readFromSection(ConfigurationSection cs) {
         String keyStr = cs.getString("instrument", "null");
         NamespacedKey key = BukkitUtils.getNamespacedKey(keyStr);
         if (key == null) {

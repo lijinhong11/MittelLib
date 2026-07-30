@@ -6,10 +6,12 @@ import io.github.lijinhong11.mittellib.hook.economy.VaultHook;
 import io.github.lijinhong11.mittellib.hook.point.PlayerPointsHook;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.lijinhong11.mittellib.utils.ModrinthUpdateChecker;
+import io.github.lijinhong11.mittellib.utils.components.MittelLibTranslator;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,6 +42,7 @@ public final class MittelLib extends JavaPlugin {
         new ModrinthUpdateChecker(this, "mittellib").check();
 
         languageManager = new SyncLanguageManager(this);
+        GlobalTranslator.translator().addSource(new MittelLibTranslator(languageManager));
 
         ContentProviders.init();
         VaultHook.init();
@@ -69,6 +72,9 @@ public final class MittelLib extends JavaPlugin {
         return pluginLanguages.computeIfAbsent(plugin, pl -> {
             SyncLanguageManager manager = new SyncLanguageManager(pl);
             manager.setFallback(languageManager);
+
+            GlobalTranslator.translator().addSource(new MittelLibTranslator(manager));
+
             return manager;
         });
     }

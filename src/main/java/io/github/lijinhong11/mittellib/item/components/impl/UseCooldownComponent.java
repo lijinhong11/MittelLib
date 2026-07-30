@@ -34,8 +34,7 @@ public class UseCooldownComponent extends ReadWriteItemComponent {
         return DataComponentTypes.USE_COOLDOWN;
     }
 
-    @Nullable
-    public static UseCooldownComponent readFromSection(ConfigurationSection cs) {
+    @Nullable public static UseCooldownComponent readFromSection(ConfigurationSection cs) {
         float sec = NumberUtils.asUnsigned((float) cs.getDouble("seconds"));
 
         if (sec <= 0) {

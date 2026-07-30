@@ -24,8 +24,7 @@ import org.jetbrains.annotations.Nullable;
 public interface MittelGUI extends InventoryHolder {
     void open(@NotNull Player player);
 
-    @NotNull
-    List<HumanEntity> viewers();
+    @NotNull List<HumanEntity> viewers();
 
     void handleClick(int slot, @NotNull InventoryClickEvent e);
 
@@ -116,6 +115,20 @@ public interface MittelGUI extends InventoryHolder {
         CoordinateBuilder title(@NotNull Component title);
 
         CoordinateBuilder rows(int rows);
+
+        CoordinateBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) String... structure);
+
+        CoordinateBuilder bind(char bind, @NotNull MittelGUIItem item);
+
+        CoordinateBuilder view(char bind);
+
+        CoordinateBuilder moveUp(char bind, @NotNull MittelGUIItem item);
+
+        CoordinateBuilder moveDown(char bind, @NotNull MittelGUIItem item);
+
+        CoordinateBuilder moveLeft(char bind, @NotNull MittelGUIItem item);
+
+        CoordinateBuilder moveRight(char bind, @NotNull MittelGUIItem item);
 
         CoordinateBuilder axisX(@Nullable MittelGUIItem item);
 

@@ -35,8 +35,7 @@ public class CustomModelDataComponent extends ReadWriteItemComponent {
         return DataComponentTypes.CUSTOM_MODEL_DATA;
     }
 
-    @NotNull
-    public static CustomModelDataComponent readFromSection(ConfigurationSection cs) {
+    @NotNull public static CustomModelDataComponent readFromSection(ConfigurationSection cs) {
         List<Float> floats = cs.getFloatList("floats");
         List<Boolean> flags = cs.getBooleanList("flags");
         List<String> strings = cs.getStringList("strings");

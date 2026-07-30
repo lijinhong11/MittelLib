@@ -11,8 +11,7 @@ public interface ContentProvider {
     /**
      * Get the content provider's id
      */
-    @NotNull
-    String getId();
+    @NotNull String getId();
 
     /**
      * Get an item by its id
@@ -20,8 +19,7 @@ public interface ContentProvider {
      * @param id the item's id
      * @return the item, null if not found
      */
-    @Nullable
-    ItemStack getItem(@NotNull String id);
+    @Nullable ItemStack getItem(@NotNull String id);
 
     /**
      * Get item's id
@@ -29,8 +27,7 @@ public interface ContentProvider {
      * @param item the item
      * @return the item's id in content provider, null if not found
      */
-    @Nullable
-    String getIdFromItem(@NotNull ItemStack item);
+    @Nullable String getIdFromItem(@NotNull ItemStack item);
 
     /**
      * Get a block by its id
@@ -38,8 +35,7 @@ public interface ContentProvider {
      * @param id the block's id
      * @return the block, null if not found
      */
-    @Nullable
-    PackedBlock getBlock(@NotNull String id);
+    @Nullable PackedBlock getBlock(@NotNull String id);
 
     /**
      * Destroy a block
@@ -67,8 +63,7 @@ public interface ContentProvider {
      *
      * @return a packed block
      */
-    @Nullable
-    PackedBlock getBlockByLocation(Location loc);
+    @Nullable PackedBlock getBlockByLocation(Location loc);
 
     /**
      * Get all blocks

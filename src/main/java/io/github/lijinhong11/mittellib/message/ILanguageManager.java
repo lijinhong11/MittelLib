@@ -43,25 +43,21 @@ public interface ILanguageManager {
 
     List<String> getMsgListByLanguage(@Nullable String lang, String key, MessageReplacement... args);
 
-    @NotNull
-    ItemStack getMessagedItem(
+    @NotNull ItemStack getMessagedItem(
             @NotNull Material material,
             @NotNull String sectionKey,
             @Nullable Player player,
             MessageReplacement... args);
 
-    @NotNull
-    String getParsedLocation(@Nullable CommandSender cs, @NotNull Location loc);
+    @NotNull String getParsedLocation(@Nullable CommandSender cs, @NotNull Location loc);
 
-    @NotNull
-    String getParsedBlockLocation(@Nullable CommandSender cs, @NotNull Location loc);
+    @NotNull String getParsedBlockLocation(@Nullable CommandSender cs, @NotNull Location loc);
 
     String getParsedLocation(@Nullable CommandSender cs, double x, double y, double z);
 
     void reload();
 
-    @NotNull
-    Set<String> getTranslationKeys();
+    @NotNull Set<String> getTranslationKeys();
 
     @NoArgsConstructor
     @AllArgsConstructor

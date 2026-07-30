@@ -1,10 +1,10 @@
 package io.github.lijinhong11.mittellib.configuration;
 
 import io.github.lijinhong11.mittellib.item.MittelItem;
-import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.ConfigFileUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
+import io.github.lijinhong11.mittellib.utils.components.ComponentUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;

@@ -7,12 +7,12 @@ import org.bukkit.OfflinePlayer;
 
 public class PlayerPointsHook {
     private static PlayerPointsAPI pointsAPI;
-    
+
     public static void init() {
         if (!Bukkit.getPluginManager().isPluginEnabled("PlayerPoints")) {
             return;
         }
-        
+
         pointsAPI = PlayerPoints.getInstance().getAPI();
     }
 

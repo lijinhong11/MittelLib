@@ -1,8 +1,8 @@
 package io.github.lijinhong11.mittellib.message;
 
 import io.github.lijinhong11.mittellib.MittelLib;
-import io.github.lijinhong11.mittellib.utils.ComponentUtils;
 import io.github.lijinhong11.mittellib.utils.StringUtils;
+import io.github.lijinhong11.mittellib.utils.components.ComponentUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

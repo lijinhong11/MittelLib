@@ -79,10 +79,8 @@ spotless {
 
         palantirJavaFormat()
 
-        forbidWildcardImports()
         removeUnusedImports()
         importOrder()
-        expandWildcardImports()
         formatAnnotations()
 
         trimTrailingWhitespace()
