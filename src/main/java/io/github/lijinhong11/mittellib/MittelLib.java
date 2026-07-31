@@ -1,6 +1,7 @@
 package io.github.lijinhong11.mittellib;
 
-import io.github.lijinhong11.mittellib.gui.chest.MittelGUIListener;
+import io.github.lijinhong11.mittellib.TESTS.ItemSerializationTEST;
+import io.github.lijinhong11.mittellib.gui.inventory.MittelGUIListener;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.hook.economy.VaultHook;
 import io.github.lijinhong11.mittellib.hook.point.PlayerPointsHook;
@@ -47,6 +48,8 @@ public final class MittelLib extends JavaPlugin {
         ContentProviders.init();
         VaultHook.init();
         PlayerPointsHook.init();
+
+        getServer().getPluginManager().registerEvents(new ItemSerializationTEST(), this);
 
         Bukkit.getPluginManager().registerEvents(new MittelGUIListener(), this);
 

@@ -1,6 +1,10 @@
 package io.github.lijinhong11.mittellib.gui.dialog;
 
 import io.papermc.paper.registry.data.dialog.DialogBase;
+import io.papermc.paper.registry.data.dialog.body.DialogBody;
+import io.papermc.paper.registry.data.dialog.input.DialogInput;
+import io.papermc.paper.registry.data.dialog.type.DialogType;
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -15,9 +19,15 @@ public interface MittelDialog {
         return DialogBase.DialogAfterAction.CLOSE;
     }
 
-    @NotNull Component getTitle(Player player);
+    @NotNull Component getTitle();
 
-    @Nullable Component externalTitle(Player player);
+    @Nullable Component externalTitle();
+
+    @NotNull DialogType getDialogType();
+
+    @NotNull List<? extends DialogBody> getBody();
+
+    @NotNull List<? extends DialogInput> getInputs();
 
     void show(Player player);
 }

@@ -4,7 +4,6 @@ import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.FoodProperties;
@@ -15,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Nullable;
 
-@ItemComponentSpec(key = "food", requiredVersion = MCVersion.V1_20_5)
+@ItemComponentSpec(key = "food")
 @AllArgsConstructor
 @NoArgsConstructor
 public class FoodComponent extends ReadWriteItemComponent {

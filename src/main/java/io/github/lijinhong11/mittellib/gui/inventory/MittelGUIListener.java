@@ -1,6 +1,6 @@
-package io.github.lijinhong11.mittellib.gui.chest;
+package io.github.lijinhong11.mittellib.gui.inventory;
 
-import io.github.lijinhong11.mittellib.gui.chest.impl.AnvilGUI;
+import io.github.lijinhong11.mittellib.gui.inventory.impl.AnvilGUI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

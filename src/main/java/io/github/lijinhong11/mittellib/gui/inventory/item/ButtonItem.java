@@ -1,6 +1,6 @@
-package io.github.lijinhong11.mittellib.gui.chest.item;
+package io.github.lijinhong11.mittellib.gui.inventory.item;
 
-import io.github.lijinhong11.mittellib.gui.chest.MittelGUI;
+import io.github.lijinhong11.mittellib.gui.inventory.MittelGUI;
 import java.util.function.BiFunction;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

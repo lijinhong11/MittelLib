@@ -55,7 +55,6 @@ public class ItemComponentSerializer {
         MCVersion current = MCVersion.getCurrent();
 
         for (Class<?> raw : reflections.getTypesAnnotatedWith(ItemComponentSpec.class)) {
-
             if (!ReadWriteItemComponent.class.isAssignableFrom(raw)) {
                 continue;
             }
@@ -112,69 +111,63 @@ public class ItemComponentSerializer {
 
     private static void registerSimples() {
         MCVersion current = MCVersion.getCurrent();
-        if (current.isAtLeast(MCVersion.V1_20_5)) {
-            registerSimple(
-                    "damage",
-                    Integer.class,
-                    DataComponentTypes.DAMAGE,
-                    (i, e) -> i.setData(DataComponentTypes.DAMAGE, e));
-            registerSimple(
-                    "maxDamage",
-                    Integer.class,
-                    DataComponentTypes.MAX_DAMAGE,
-                    (i, e) -> i.setData(DataComponentTypes.MAX_DAMAGE, e));
-            registerSimple(
-                    "maxStackSize",
-                    Integer.class,
-                    DataComponentTypes.MAX_STACK_SIZE,
-                    (i, e) -> i.setData(DataComponentTypes.MAX_STACK_SIZE, e));
-            registerSimple(
-                    "enchantable",
-                    Integer.class,
-                    DataComponentTypes.ENCHANTABLE,
-                    (i, e) -> i.setData(DataComponentTypes.ENCHANTABLE, Enchantable.enchantable(e)));
 
-            registerSimple("baseColor", String.class, DataComponentTypes.BASE_COLOR, (i, e) -> {
-                DyeColor dyeColor = EnumUtils.readEnum(DyeColor.class, e);
-                if (dyeColor == null) {
-                    MittelLib.getInstance().getLogger().severe("Failed to find a dye color with name " + e);
+        registerSimple(
+                "damage", Integer.class, DataComponentTypes.DAMAGE, (i, e) -> i.setData(DataComponentTypes.DAMAGE, e));
+        registerSimple(
+                "maxDamage",
+                Integer.class,
+                DataComponentTypes.MAX_DAMAGE,
+                (i, e) -> i.setData(DataComponentTypes.MAX_DAMAGE, e));
+        registerSimple(
+                "maxStackSize",
+                Integer.class,
+                DataComponentTypes.MAX_STACK_SIZE,
+                (i, e) -> i.setData(DataComponentTypes.MAX_STACK_SIZE, e));
+        registerSimple(
+                "enchantable",
+                Integer.class,
+                DataComponentTypes.ENCHANTABLE,
+                (i, e) -> i.setData(DataComponentTypes.ENCHANTABLE, Enchantable.enchantable(e)));
+
+        registerSimple("baseColor", String.class, DataComponentTypes.BASE_COLOR, (i, e) -> {
+            DyeColor dyeColor = EnumUtils.readEnum(DyeColor.class, e);
+            if (dyeColor == null) {
+                MittelLib.getInstance().getLogger().severe("Failed to find a dye color with name " + e);
+                return;
+            }
+
+            i.setData(DataComponentTypes.BASE_COLOR, dyeColor);
+        });
+
+        registerSimple("rarity", String.class, DataComponentTypes.RARITY, (i, e) -> {
+            ItemRarity rarity = EnumUtils.readEnum(ItemRarity.class, e);
+            if (rarity == null) {
+                MittelLib.getInstance().getLogger().severe("Failed to find a item rarity with name " + e);
+                return;
+            }
+
+            i.setData(DataComponentTypes.RARITY, rarity);
+        });
+
+        registerSimple("jukeboxPlayable", String.class, DataComponentTypes.JUKEBOX_PLAYABLE, (i, e) -> {
+            NamespacedKey key = BukkitUtils.getNamespacedKey(e);
+            if (key != null) {
+                JukeboxSong song = RegistryAccess.registryAccess()
+                        .getRegistry(RegistryKey.JUKEBOX_SONG)
+                        .get(key);
+                if (song == null) {
+                    MittelLib.getInstance()
+                            .getLogger()
+                            .severe("Failed to find a jukebox song with key " + key.asString());
                     return;
                 }
 
-                i.setData(DataComponentTypes.BASE_COLOR, dyeColor);
-            });
-
-            registerSimple("rarity", String.class, DataComponentTypes.RARITY, (i, e) -> {
-                ItemRarity rarity = EnumUtils.readEnum(ItemRarity.class, e);
-                if (rarity == null) {
-                    MittelLib.getInstance().getLogger().severe("Failed to find a item rarity with name " + e);
-                    return;
-                }
-
-                i.setData(DataComponentTypes.RARITY, rarity);
-            });
-        }
-
-        if (current.isAtLeast(MCVersion.V1_21_1)) {
-            registerSimple("jukeboxPlayable", String.class, DataComponentTypes.JUKEBOX_PLAYABLE, (i, e) -> {
-                NamespacedKey key = BukkitUtils.getNamespacedKey(e);
-                if (key != null) {
-                    JukeboxSong song = RegistryAccess.registryAccess()
-                            .getRegistry(RegistryKey.JUKEBOX_SONG)
-                            .get(key);
-                    if (song == null) {
-                        MittelLib.getInstance()
-                                .getLogger()
-                                .severe("Failed to find a jukebox song with key " + key.asString());
-                        return;
-                    }
-
-                    i.setData(
-                            DataComponentTypes.JUKEBOX_PLAYABLE,
-                            JukeboxPlayable.jukeboxPlayable(song).build());
-                }
-            });
-        }
+                i.setData(
+                        DataComponentTypes.JUKEBOX_PLAYABLE,
+                        JukeboxPlayable.jukeboxPlayable(song).build());
+            }
+        });
 
         if (current.isAtLeast(MCVersion.V1_21_2)) {
             registerSimple("glider", Boolean.class, DataComponentTypes.GLIDER, (i, e) -> {
@@ -232,7 +225,16 @@ public class ItemComponentSerializer {
                     (i, e) -> i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e));
         }
 
-        if (current.isAtLeast(MCVersion.V26_1_X)) {}
+        if (current.isAtLeast(MCVersion.V26_1_X)) {
+            registerSimple("dye", String.class, DataComponentTypes.DYE, (i, s) -> {
+                try {
+                    DyeColor dyeColor = DyeColor.valueOf(s.toUpperCase());
+                    i.setData(DataComponentTypes.DYE, dyeColor);
+                } catch (IllegalArgumentException e) {
+                    MittelLib.getInstance().getLogger().severe("Failed to find a dye color with name " + s);
+                }
+            });
+        }
     }
 
     public static List<ReadWriteItemComponent> readComponentsFromSection(ConfigurationSection cs) {

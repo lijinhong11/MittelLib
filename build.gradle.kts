@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-20260109.190012-50")
+    compileOnly("io.papermc.paper:paper-api:[26.2.+, 26.3)")
 
     // libraries
     implementation("org.reflections:reflections:0.10.2")
@@ -87,7 +87,7 @@ spotless {
     }
 }
 
-val targetJavaVersion = 21
+val targetJavaVersion = 25
 
 java {
     val javaVersion = JavaVersion.toVersion(targetJavaVersion)

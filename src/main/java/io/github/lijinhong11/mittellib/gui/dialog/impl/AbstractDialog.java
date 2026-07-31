@@ -8,18 +8,18 @@ import org.bukkit.entity.Player;
 public abstract class AbstractDialog implements MittelDialog {
     private Dialog dialog = null;
 
-    private void build(Player player) {
-        DialogBase base = DialogBase.builder(getTitle(player))
+    private void build() {
+        DialogBase base = DialogBase.builder(getTitle())
                 .canCloseWithEscape(canCloseWithEsc())
                 .build();
 
-        dialog = Dialog.create(b -> b.empty().base(base));
+        dialog = Dialog.create(b -> b.empty().base(base).type());
     }
 
     @Override
     public void show(Player player) {
         if (dialog == null) {
-            build(player);
+            build();
         }
 
         player.showDialog(dialog);

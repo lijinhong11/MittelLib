@@ -16,6 +16,10 @@ public class PlayerPointsHook {
         pointsAPI = PlayerPoints.getInstance().getAPI();
     }
 
+    public static boolean isEnabled() {
+        return pointsAPI != null;
+    }
+
     public static int getPoints(OfflinePlayer player) {
         return pointsAPI.look(player.getUniqueId());
     }

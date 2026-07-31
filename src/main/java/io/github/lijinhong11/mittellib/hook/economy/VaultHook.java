@@ -19,6 +19,10 @@ public class VaultHook {
         }
     }
 
+    public static boolean isEnabled() {
+        return economy != null;
+    }
+
     public static double getBalance(OfflinePlayer player) {
         return economy.getBalance(player);
     }

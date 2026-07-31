@@ -6,7 +6,6 @@ import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
@@ -23,7 +22,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.profile.PlayerTextures;
 
-@ItemComponentSpec(key = "profile", requiredVersion = MCVersion.V1_20_5)
+@ItemComponentSpec(key = "profile")
 @SuppressWarnings("unchecked")
 @RequiredArgsConstructor
 @AllArgsConstructor

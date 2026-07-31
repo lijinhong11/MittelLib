@@ -9,7 +9,6 @@ import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSerializer;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
@@ -112,10 +111,7 @@ public class MittelItem implements ReadWriteObject {
         this.amount = itemStack.getAmount();
         this.meta = MittelItemMeta.fromItemStack(itemStack);
         this.enchantments = itemStack.getEnchantments();
-
-        if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5)) {
-            this.components = ItemComponentSerializer.readComponentsFromItem(itemStack);
-        }
+        this.components = ItemComponentSerializer.readComponentsFromItem(itemStack);
 
         return this;
     }
@@ -140,9 +136,7 @@ public class MittelItem implements ReadWriteObject {
 
         meta.write(cs.createSection("meta"));
 
-        if (components != null
-                && !components.isEmpty()
-                && MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5)) {
+        if (components != null && !components.isEmpty()) {
             ConfigurationSection componentsSection = cs.createSection("components");
             ItemComponentSerializer.writeComponentsToConfiguration(components, componentsSection);
         }
@@ -191,7 +185,7 @@ public class MittelItem implements ReadWriteObject {
         }
 
         ConfigurationSection components = cs.getConfigurationSection("components");
-        if (components != null && MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5)) {
+        if (components != null) {
             this.components = ItemComponentSerializer.readComponentsFromSection(components);
         }
 
@@ -248,7 +242,7 @@ public class MittelItem implements ReadWriteObject {
 
         meta.applyToItemStack(newOne);
 
-        if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5) && components != null) {
+        if (components != null) {
             for (ReadWriteItemComponent component : components) {
                 component.applyToItem(newOne);
             }
@@ -259,13 +253,11 @@ public class MittelItem implements ReadWriteObject {
 
     @CanIgnoreReturnValue
     public MittelItem component(@NotNull ReadWriteItemComponent component) {
-        if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5)) {
-            if (components == null) {
-                components = new ArrayList<>();
-            }
-
-            components.add(component);
+        if (components == null) {
+            components = new ArrayList<>();
         }
+
+        components.add(component);
 
         return this;
     }
@@ -280,18 +272,12 @@ public class MittelItem implements ReadWriteObject {
      * or <code>dataComponentType</code> is not a {@link DataComponentType}
      */
     @CanIgnoreReturnValue
-    public MittelItem component(@NotNull Object dataComponentType, @Nullable Object dataComponentContext) {
-        if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_20_5)) {
-            if (components == null) {
-                components = new ArrayList<>();
-            }
-
-            if (!(dataComponentType instanceof DataComponentType dct)) {
-                throw new IllegalArgumentException("dataComponentType must be a Paper's data component type");
-            }
-
-            components.add(ItemComponentSerializer.getFromMinecraftComponent(dct, dataComponentContext));
+    public MittelItem component(@NotNull DataComponentType dataComponentType, @Nullable Object dataComponentContext) {
+        if (components == null) {
+            components = new ArrayList<>();
         }
+
+        components.add(ItemComponentSerializer.getFromMinecraftComponent(dataComponentType, dataComponentContext));
 
         return this;
     }

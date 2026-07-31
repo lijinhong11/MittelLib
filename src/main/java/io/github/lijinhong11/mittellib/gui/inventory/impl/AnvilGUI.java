@@ -1,7 +1,7 @@
-package io.github.lijinhong11.mittellib.gui.chest.impl;
+package io.github.lijinhong11.mittellib.gui.inventory.impl;
 
-import io.github.lijinhong11.mittellib.gui.chest.MittelGUI;
-import io.github.lijinhong11.mittellib.gui.chest.item.MittelGUIItem;
+import io.github.lijinhong11.mittellib.gui.inventory.MittelGUI;
+import io.github.lijinhong11.mittellib.gui.inventory.item.MittelGUIItem;
 import java.util.List;
 import java.util.function.BiConsumer;
 import lombok.Setter;
