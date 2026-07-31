@@ -5,7 +5,6 @@ import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.KineticWeapon;
@@ -20,7 +19,7 @@ import org.checkerframework.checker.index.qual.Positive;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@ItemComponentSpec(key = "kineticWeapon", requiredVersion = MCVersion.V1_21_11)
+@ItemComponentSpec(key = "kineticWeapon")
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class KineticWeaponComponent extends ReadWriteItemComponent {

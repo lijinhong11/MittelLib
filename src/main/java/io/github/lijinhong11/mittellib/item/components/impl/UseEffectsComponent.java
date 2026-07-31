@@ -3,7 +3,6 @@ package io.github.lijinhong11.mittellib.item.components.impl;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.UseEffects;
@@ -14,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Range;
 
-@ItemComponentSpec(key = "useEffects", requiredVersion = MCVersion.V1_21_11)
+@ItemComponentSpec(key = "useEffects")
 @NoArgsConstructor
 @AllArgsConstructor
 public class UseEffectsComponent extends ReadWriteItemComponent {

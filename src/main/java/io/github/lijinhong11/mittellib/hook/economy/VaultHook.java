@@ -13,9 +13,12 @@ public class VaultHook {
             return;
         }
 
-        RegisteredServiceProvider<Economy> service = Bukkit.getServicesManager().getRegistration(Economy.class);
-        if (service != null) {
-            economy = service.getProvider();
+        if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+            RegisteredServiceProvider<Economy> service =
+                    Bukkit.getServicesManager().getRegistration(Economy.class);
+            if (service != null) {
+                economy = service.getProvider();
+            }
         }
     }
 

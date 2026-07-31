@@ -3,7 +3,6 @@ package io.github.lijinhong11.mittellib.item.components.impl;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Weapon;
@@ -13,7 +12,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.index.qual.NonNegative;
 
-@ItemComponentSpec(key = "weapon", requiredVersion = MCVersion.V1_21_5)
+@ItemComponentSpec(key = "weapon")
 @NoArgsConstructor
 @AllArgsConstructor
 public class WeaponComponent extends ReadWriteItemComponent {

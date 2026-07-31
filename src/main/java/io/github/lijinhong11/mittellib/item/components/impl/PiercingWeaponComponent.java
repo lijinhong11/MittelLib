@@ -3,7 +3,6 @@ package io.github.lijinhong11.mittellib.item.components.impl;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.PiercingWeapon;
@@ -15,7 +14,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@ItemComponentSpec(key = "piercingWeapon", requiredVersion = MCVersion.V1_21_11)
+@ItemComponentSpec(key = "piercingWeapon")
 @AllArgsConstructor
 @NoArgsConstructor
 public class PiercingWeaponComponent extends ReadWriteItemComponent {

@@ -2,7 +2,6 @@ package io.github.lijinhong11.mittellib.item.components.impl;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DeathProtection;
@@ -12,7 +11,7 @@ import lombok.AllArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
-@ItemComponentSpec(key = "deathProtection", requiredVersion = MCVersion.V1_21_2)
+@ItemComponentSpec(key = "deathProtection")
 @AllArgsConstructor
 public class DeathProtectionComponent extends ReadWriteItemComponent {
     private final List<ConsumeEffect> effects;

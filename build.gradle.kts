@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:[26.2.+, 26.3)")
+    compileOnly("io.papermc.paper:paper-api:[26.1.+, 26.2)")
 
     // libraries
     implementation("org.reflections:reflections:0.10.2")
@@ -70,7 +70,7 @@ dependencies {
 }
 
 tasks.runServer {
-    minecraftVersion("1.21.1")
+    minecraftVersion("1.21.4")
 }
 
 spotless {
@@ -112,10 +112,6 @@ tasks.processResources {
     filesMatching("plugin.yml") {
         expand(project.properties)
     }
-}
-
-tasks.runServer {
-    minecraftVersion("1.21.1")
 }
 
 mavenPublishing {

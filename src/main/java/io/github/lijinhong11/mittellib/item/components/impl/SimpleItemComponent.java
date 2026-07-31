@@ -1,6 +1,8 @@
 package io.github.lijinhong11.mittellib.item.components.impl;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
+import io.papermc.paper.datacomponent.item.Enchantable;
+import io.papermc.paper.datacomponent.item.JukeboxPlayable;
 import java.util.function.BiConsumer;
 import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.Getter;
@@ -46,10 +48,12 @@ public final class SimpleItemComponent<T> extends ReadWriteItemComponent {
 
     @Override
     public void write(ConfigurationSection cs) {
-        if (value instanceof Key k) {
-            cs.set(key, k.asString());
-        } else {
-            cs.set(key, value);
+        switch (value) {
+            case Key k -> cs.set(key, k.asString());
+            case Enum<?> enumValue -> cs.set(key, enumValue.name());
+            case Enchantable en -> cs.set(key, en.value());
+            case JukeboxPlayable jp -> cs.set(key, jp.jukeboxSong().key().asString());
+            default -> cs.set(key, value);
         }
     }
 

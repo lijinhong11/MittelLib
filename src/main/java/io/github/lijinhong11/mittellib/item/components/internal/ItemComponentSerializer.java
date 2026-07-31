@@ -46,6 +46,8 @@ public class ItemComponentSerializer {
     static {
         scanAndRegister();
         registerSimples();
+
+        FutureComponentRegistry.register();
     }
 
     @SuppressWarnings("unchecked")
@@ -97,13 +99,26 @@ public class ItemComponentSerializer {
         }
     }
 
-    private static <T> void registerSimple(
+    static <T> void registerSimple(
             String key, Class<T> type, DataComponentType dataType, BiConsumer<ItemStack, T> applier) {
         READERS.put(
                 key,
                 new ReadMethod(
                         cs -> SimpleItemComponent.readFromSection(key, cs, type, applier),
                         obj -> SimpleItemComponent.pack(key, obj, type, applier),
+                        true));
+
+        TYPE_KEYS.put(dataType, key);
+    }
+
+    private static void registerNonValued(String key, DataComponentType.NonValued dataType) {
+        READERS.put(
+                key,
+                new ReadMethod(
+                        cs -> cs.getBoolean(key)
+                                ? new SimpleItemComponent<>(key, true, (item, ignored) -> item.setData(dataType))
+                                : null,
+                        ignored -> new SimpleItemComponent<>(key, true, (item, value) -> item.setData(dataType)),
                         true));
 
         TYPE_KEYS.put(dataType, key);
@@ -169,72 +184,54 @@ public class ItemComponentSerializer {
             }
         });
 
-        if (current.isAtLeast(MCVersion.V1_21_2)) {
-            registerSimple("glider", Boolean.class, DataComponentTypes.GLIDER, (i, e) -> {
-                e = e == null || e;
-                if (e) {
-                    i.setData(DataComponentTypes.GLIDER);
-                }
-            });
+        registerNonValued("glider", DataComponentTypes.GLIDER);
 
-            registerSimple("itemModel", String.class, DataComponentTypes.ITEM_MODEL, (i, e) -> {
-                NamespacedKey key = BukkitUtils.getNamespacedKey(e);
-                if (key != null) {
-                    i.setData(DataComponentTypes.ITEM_MODEL, key);
-                }
-            });
+        registerSimple("itemModel", String.class, DataComponentTypes.ITEM_MODEL, (i, e) -> {
+            NamespacedKey key = BukkitUtils.getNamespacedKey(e);
+            if (key != null) {
+                i.setData(DataComponentTypes.ITEM_MODEL, key);
+            }
+        });
 
-            registerSimple("tooltipStyle", String.class, DataComponentTypes.TOOLTIP_STYLE, (i, e) -> {
-                NamespacedKey key = BukkitUtils.getNamespacedKey(e);
-                if (key != null) {
-                    i.setData(DataComponentTypes.TOOLTIP_STYLE, key);
-                }
-            });
-        }
+        registerSimple("tooltipStyle", String.class, DataComponentTypes.TOOLTIP_STYLE, (i, e) -> {
+            NamespacedKey key = BukkitUtils.getNamespacedKey(e);
+            if (key != null) {
+                i.setData(DataComponentTypes.TOOLTIP_STYLE, key);
+            }
+        });
 
-        if (current.isAtLeast(MCVersion.V1_21_11)) {
-            registerSimple("damageType", String.class, DataComponentTypes.DAMAGE_TYPE, (i, e) -> {
-                Registry<DamageType> reg = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE);
-                NamespacedKey key = BukkitUtils.getNamespacedKey(e);
-                if (key == null) {
-                    return;
-                }
+        registerSimple("damageType", String.class, DataComponentTypes.DAMAGE_TYPE, (i, e) -> {
+            Registry<DamageType> reg = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE);
+            NamespacedKey key = BukkitUtils.getNamespacedKey(e);
+            if (key == null) {
+                return;
+            }
 
-                DamageType dt = reg.get(key);
-                if (dt == null) {
-                    MittelLib.getInstance()
-                            .getLogger()
-                            .severe("Failed to find a damage type with key " + key.asString());
-                    return;
-                }
+            DamageType dt = reg.get(key);
+            if (dt == null) {
+                MittelLib.getInstance().getLogger().severe("Failed to find a damage type with key " + key.asString());
+                return;
+            }
 
-                i.setData(DataComponentTypes.DAMAGE_TYPE, dt);
-            });
+            i.setData(DataComponentTypes.DAMAGE_TYPE, dt);
+        });
 
-            registerSimple("intangibleProjectile", Boolean.class, DataComponentTypes.INTANGIBLE_PROJECTILE, (i, e) -> {
-                e = e == null || e;
-                if (e) {
-                    i.setData(DataComponentTypes.INTANGIBLE_PROJECTILE);
-                }
-            });
+        registerNonValued("intangibleProjectile", DataComponentTypes.INTANGIBLE_PROJECTILE);
 
-            registerSimple(
-                    "minimumAttackCharge",
-                    float.class,
-                    DataComponentTypes.INTANGIBLE_PROJECTILE,
-                    (i, e) -> i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e));
-        }
+        registerSimple(
+                "minimumAttackCharge",
+                float.class,
+                DataComponentTypes.INTANGIBLE_PROJECTILE,
+                (i, e) -> i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e));
 
-        if (current.isAtLeast(MCVersion.V26_1_X)) {
-            registerSimple("dye", String.class, DataComponentTypes.DYE, (i, s) -> {
-                try {
-                    DyeColor dyeColor = DyeColor.valueOf(s.toUpperCase());
-                    i.setData(DataComponentTypes.DYE, dyeColor);
-                } catch (IllegalArgumentException e) {
-                    MittelLib.getInstance().getLogger().severe("Failed to find a dye color with name " + s);
-                }
-            });
-        }
+        registerSimple("dye", String.class, DataComponentTypes.DYE, (i, s) -> {
+            try {
+                DyeColor dyeColor = DyeColor.valueOf(s.toUpperCase());
+                i.setData(DataComponentTypes.DYE, dyeColor);
+            } catch (IllegalArgumentException e) {
+                MittelLib.getInstance().getLogger().severe("Failed to find a dye color with name " + s);
+            }
+        });
     }
 
     public static List<ReadWriteItemComponent> readComponentsFromSection(ConfigurationSection cs) {

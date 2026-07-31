@@ -13,9 +13,6 @@ import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.set.RegistryKeySet;
 import io.papermc.paper.registry.set.RegistrySet;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -28,102 +25,24 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@ItemComponentSpec(key = "equippable", requiredVersion = MCVersion.V1_21_2)
+@ItemComponentSpec(key = "equippable")
 @RequiredArgsConstructor
 @AllArgsConstructor
 @SuppressWarnings("UnstableApiUsage")
 public class EquippableComponent extends ReadWriteItemComponent {
-    private static MethodHandle ASSET_SET;
-
-    static {
-        MethodType mt = MethodType.methodType(Equippable.Builder.class, Key.class);
-        try {
-            ASSET_SET = MethodHandles.publicLookup().findVirtual(Equippable.Builder.class, "assetId", mt);
-        } catch (NoSuchMethodException | IllegalAccessException e) {
-            try {
-                ASSET_SET = MethodHandles.publicLookup().findVirtual(Equippable.Builder.class, "model", mt);
-            } catch (NoSuchMethodException | IllegalAccessException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-    }
-
     private final @NotNull EquipmentSlot slot;
     private @Nullable Key equipSound;
     private @Nullable Key assetId;
     private @Nullable RegistryKeySet<EntityType> allowedEntities;
     private boolean dispensable = true;
-
-    // 1.21.2
     private boolean swappable = true;
     private boolean damageOnHurt = true;
     private @Nullable Key cameraOverlay;
-
-    // 1.21.5
     private boolean equipOnInteract = false;
-
-    // 1.21.6
     private boolean canBeSheared = false;
     private @Nullable Key shearSound;
 
-    // for 1.21.2 lower
-    public EquippableComponent(
-            @NotNull EquipmentSlot slot,
-            @Nullable Key equipSound,
-            @Nullable Key assetId,
-            @Nullable RegistryKeySet<EntityType> allowedEntities,
-            boolean dispensable) {
-        this(slot, equipSound, assetId, allowedEntities, dispensable, true, true, null, false, false, null);
-    }
-
-    // for 1.21.2 - 1.21.4
-    public EquippableComponent(
-            @NotNull EquipmentSlot slot,
-            @Nullable Key equipSound,
-            @Nullable Key assetId,
-            @Nullable Key cameraOverlay,
-            @Nullable RegistryKeySet<EntityType> allowedEntities,
-            boolean dispensable,
-            boolean swappable,
-            boolean damageOnHurt) {
-        this(
-                slot,
-                equipSound,
-                assetId,
-                allowedEntities,
-                dispensable,
-                swappable,
-                damageOnHurt,
-                cameraOverlay,
-                false,
-                false,
-                null);
-    }
-
     public static EquippableComponent fromMinecraftComponent(Equippable equippable) {
-        MCVersion current = MCVersion.getCurrent();
-
-        if (current.isLowerThan(MCVersion.V1_21_2)) {
-            return new EquippableComponent(
-                    equippable.slot(),
-                    equippable.equipSound(),
-                    equippable.assetId(),
-                    equippable.allowedEntities(),
-                    equippable.dispensable());
-        }
-
-        if (current.isAtLeast(MCVersion.V1_21_2) && current.isLowerThan(MCVersion.V1_21_5)) {
-            return new EquippableComponent(
-                    equippable.slot(),
-                    equippable.equipSound(),
-                    equippable.assetId(),
-                    equippable.cameraOverlay(),
-                    equippable.allowedEntities(),
-                    equippable.dispensable(),
-                    equippable.swappable(),
-                    equippable.damageOnHurt());
-        }
-
         return new EquippableComponent(
                 equippable.slot(),
                 equippable.equipSound(),
@@ -223,23 +142,10 @@ public class EquippableComponent extends ReadWriteItemComponent {
         Equippable.Builder builder =
                 Equippable.equippable(slot).equipSound(equipSound).dispensable(dispensable);
 
-        try {
-            ASSET_SET.invoke(assetId);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-
-        if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_21_2)) {
-            builder.cameraOverlay(cameraOverlay).swappable(swappable).damageOnHurt(damageOnHurt);
-        }
-
-        if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_21_5)) {
-            builder.equipOnInteract(equipOnInteract);
-        }
-
-        if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_21_6)) {
-            builder.canBeSheared(canBeSheared).shearSound(shearSound);
-        }
+        builder.assetId(assetId);
+        builder.cameraOverlay(cameraOverlay).swappable(swappable).damageOnHurt(damageOnHurt);
+        builder.equipOnInteract(equipOnInteract);
+        builder.canBeSheared(canBeSheared).shearSound(shearSound);
 
         if (allowedEntities != null) {
             builder.allowedEntities(allowedEntities);

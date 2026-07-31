@@ -103,7 +103,7 @@ public class MittelItem implements ReadWriteObject {
     @Contract(value = "_ -> this", mutates = "this")
     @CanIgnoreReturnValue
     public MittelItem applyFromItemStack(ItemStack itemStack) {
-        if (!itemStack.hasItemMeta()) {
+        if (!itemStack.getType().isItem()) {
             throw new IllegalArgumentException("Only allow items which have item meta");
         }
 

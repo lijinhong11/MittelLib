@@ -14,9 +14,6 @@ import org.jetbrains.annotations.NotNull;
  */
 @Getter
 public enum MCVersion {
-    V1_21_1(767, "1.21.1"),
-    V1_21_2(768, "1.21.2"),
-    V1_21_3(768, "1.21.3"),
     V1_21_4(769, "1.21.4"),
     V1_21_5(770, "1.21.5"),
     V1_21_6(771, "1.21.6"),

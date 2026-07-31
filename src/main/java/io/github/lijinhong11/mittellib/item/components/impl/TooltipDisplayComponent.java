@@ -3,7 +3,6 @@ package io.github.lijinhong11.mittellib.item.components.impl;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.TooltipDisplay;
@@ -16,7 +15,7 @@ import org.bukkit.Registry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
-@ItemComponentSpec(key = "tooltipDisplay", requiredVersion = MCVersion.V1_21_2)
+@ItemComponentSpec(key = "tooltipDisplay")
 @NoArgsConstructor
 @AllArgsConstructor
 public class TooltipDisplayComponent extends ReadWriteItemComponent {

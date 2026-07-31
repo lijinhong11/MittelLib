@@ -5,7 +5,6 @@ import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.UseCooldown;
@@ -18,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.index.qual.Positive;
 import org.jetbrains.annotations.Nullable;
 
-@ItemComponentSpec(key = "useCooldown", requiredVersion = MCVersion.V1_21_2)
+@ItemComponentSpec(key = "useCooldown")
 @SuppressWarnings("UnstableApiUsage")
 @RequiredArgsConstructor
 @AllArgsConstructor

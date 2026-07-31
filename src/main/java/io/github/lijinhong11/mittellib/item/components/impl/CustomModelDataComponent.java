@@ -3,7 +3,6 @@ package io.github.lijinhong11.mittellib.item.components.impl;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.CustomModelData;
@@ -17,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-@ItemComponentSpec(key = "modelData", requiredVersion = MCVersion.V1_21_4)
+@ItemComponentSpec(key = "modelData")
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class CustomModelDataComponent extends ReadWriteItemComponent {

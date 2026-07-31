@@ -4,7 +4,6 @@ import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.registry.RegistryAccess;
@@ -17,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@ItemComponentSpec(key = "instrument", requiredVersion = MCVersion.V1_21_2)
+@ItemComponentSpec(key = "instrument")
 @AllArgsConstructor
 public class InstrumentComponent extends ReadWriteItemComponent {
     private final @NotNull MusicInstrument instrument;

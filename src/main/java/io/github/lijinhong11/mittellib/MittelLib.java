@@ -1,6 +1,5 @@
 package io.github.lijinhong11.mittellib;
 
-import io.github.lijinhong11.mittellib.TESTS.ItemSerializationTEST;
 import io.github.lijinhong11.mittellib.gui.inventory.MittelGUIListener;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.hook.economy.VaultHook;
@@ -43,13 +42,11 @@ public final class MittelLib extends JavaPlugin {
         new ModrinthUpdateChecker(this, "mittellib").check();
 
         languageManager = new SyncLanguageManager(this);
-        GlobalTranslator.translator().addSource(new MittelLibTranslator(languageManager));
+        GlobalTranslator.translator().addSource(new MittelLibTranslator(this, languageManager));
 
         ContentProviders.init();
         VaultHook.init();
         PlayerPointsHook.init();
-
-        getServer().getPluginManager().registerEvents(new ItemSerializationTEST(), this);
 
         Bukkit.getPluginManager().registerEvents(new MittelGUIListener(), this);
 
@@ -76,7 +73,7 @@ public final class MittelLib extends JavaPlugin {
             SyncLanguageManager manager = new SyncLanguageManager(pl);
             manager.setFallback(languageManager);
 
-            GlobalTranslator.translator().addSource(new MittelLibTranslator(manager));
+            GlobalTranslator.translator().addSource(new MittelLibTranslator(pl, manager));
 
             return manager;
         });

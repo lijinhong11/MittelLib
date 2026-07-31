@@ -6,7 +6,6 @@ import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpe
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
 import io.github.lijinhong11.mittellib.utils.NumberUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Consumable;
@@ -23,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.NotNull;
 
-@ItemComponentSpec(key = "consumable", requiredVersion = MCVersion.V1_21_2)
+@ItemComponentSpec(key = "consumable")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConsumableComponent extends ReadWriteItemComponent {

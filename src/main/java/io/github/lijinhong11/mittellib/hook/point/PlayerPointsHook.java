@@ -9,6 +9,10 @@ public class PlayerPointsHook {
     private static PlayerPointsAPI pointsAPI;
 
     public static void init() {
+        if (pointsAPI != null) {
+            return;
+        }
+
         if (!Bukkit.getPluginManager().isPluginEnabled("PlayerPoints")) {
             return;
         }
