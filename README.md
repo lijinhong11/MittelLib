@@ -2,7 +2,7 @@ MittelLib
 =
 A library contains useful things.  
 This is not fully finished, you help us develop more things by make pull requests!  
-**NOTE: JDK21 is required**
+**NOTE: JDK25 is required**
 
 ## Features
 1. Item Serialization/Deserialization
