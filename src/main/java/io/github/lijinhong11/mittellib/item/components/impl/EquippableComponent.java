@@ -5,7 +5,6 @@ import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.github.lijinhong11.mittellib.utils.EnumUtils;
-import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Equippable;
@@ -181,13 +180,10 @@ public class EquippableComponent extends ReadWriteItemComponent {
         cs.set("swappable", swappable);
         cs.set("damageOnHurt", damageOnHurt);
         cs.set("equipOnInteract", equipOnInteract);
+        cs.set("canBeSheared", canBeSheared);
 
-        if (MCVersion.getCurrent().isAtLeast(MCVersion.V1_21_6)) {
-            cs.set("canBeSheared", canBeSheared);
-
-            if (shearSound != null) {
-                cs.set("shearSound", shearSound.asString());
-            }
+        if (shearSound != null) {
+            cs.set("shearSound", shearSound.asString());
         }
     }
 }

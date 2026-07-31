@@ -13,5 +13,5 @@ import org.jetbrains.annotations.ApiStatus;
 public @interface ItemComponentSpec {
     String key();
 
-    MCVersion requiredVersion() default MCVersion.V1_21_4;
+    MCVersion requiredVersion() default MCVersion.V26_1_X;
 }

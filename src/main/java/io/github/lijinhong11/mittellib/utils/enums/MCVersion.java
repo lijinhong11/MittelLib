@@ -8,20 +8,12 @@ import org.jetbrains.annotations.NotNull;
  * An enum which contains Minecraft versions to identify current Minecraft version.
  * <p>
  * Versions are identified by their <b>protocol version</b> first, then disambiguated
- * by the <b>version string</b> (e.g. "1.21.4") for minor releases that share the same
+ * by the <b>version string</b> (e.g. "26.1.2") for minor releases that share the same
  * protocol version. If neither matches exactly, the nearest known lower version is used.
  * As a last resort, the latest known version is returned.
  */
 @Getter
 public enum MCVersion {
-    V1_21_4(769, "1.21.4"),
-    V1_21_5(770, "1.21.5"),
-    V1_21_6(771, "1.21.6"),
-    V1_21_7(772, "1.21.7"),
-    V1_21_8(772, "1.21.8"),
-    V1_21_9(773, "1.21.9"),
-    V1_21_10(773, "1.21.10"),
-    V1_21_11(774, "1.21.11"),
     V26_1_X(775, "26.1"),
     V26_2_X(776, "26.2"),
     ;
