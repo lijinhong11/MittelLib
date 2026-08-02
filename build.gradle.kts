@@ -84,6 +84,8 @@ spotless {
         formatAnnotations()
 
         trimTrailingWhitespace()
+
+        licenseHeaderFile(file("header.txt"))
     }
 }
 
