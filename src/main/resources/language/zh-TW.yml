@@ -10,3 +10,6 @@ common:
   no-permission: "&c你沒有權限這麼做！"
   enabled: "&a已啟用"
   disabled: "&c已停用"
+  search: "&b搜尋"
+  previous-page: "&e上一頁"
+  next-page: "&e下一頁"

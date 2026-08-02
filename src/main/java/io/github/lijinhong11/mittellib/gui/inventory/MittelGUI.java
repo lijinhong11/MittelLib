@@ -8,6 +8,7 @@ import io.github.lijinhong11.mittellib.gui.inventory.item.MittelGUIItem;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -99,6 +100,13 @@ public interface MittelGUI extends InventoryHolder {
         PagedChestBuilder previousPage(char bind, @NotNull MittelGUIItem item);
 
         PagedChestBuilder nextPage(char bind, @NotNull MittelGUIItem item);
+
+        PagedChestBuilder bindSearch(char bind, @NotNull MittelGUIItem item);
+
+        /**
+         * @param searchCallback Sets the callback used to decide whether an item matches a search query.
+         */
+        PagedChestBuilder onSearch(@NotNull BiPredicate<String, MittelGUIItem> searchCallback);
 
         PagedChestBuilder items(@NotNull Collection<? extends MittelGUIItem> items);
 

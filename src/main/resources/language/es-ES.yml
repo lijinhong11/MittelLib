@@ -10,3 +10,6 @@ common:
   no-permission: "&c¡No tienes permiso para hacer esto!"
   enabled: "&aActivado"
   disabled: "&cDesactivado"
+  search: "&bSerĉi"
+  previous-page: "&ePágina anterior"
+  next-page: "&ePágina siguiente"

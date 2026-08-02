@@ -5,13 +5,17 @@ import org.gradle.external.javadoc.StandardJavadocDocletOptions
 import com.vanniktech.maven.publish.DeploymentValidation
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.SourcesJar
+import io.github.lijinhong11.nexusmcpublisher.VersionTag
+import java.nio.charset.StandardCharsets
 
 plugins {
     java
     signing
     id("xyz.jpenilla.run-paper") version "3.0.2"
     id("com.vanniktech.maven.publish") version "0.36.0"
-    id("com.diffplug.spotless") version "8.3.0"
+    id("com.diffplug.spotless") version "8.9.0"
+    id("io.freefair.lombok") version "9.5.0"
+    id("io.github.lijinhong11.nexusmcpublisher") version "1.0.3"
 }
 
 group = "io.github.lijinhong11"
@@ -63,14 +67,10 @@ dependencies {
         exclude("org.bukkit")
     }
     compileOnly("org.black_ixx:playerpoints:3.3.5")
-
-    // lombok
-    compileOnly("org.projectlombok:lombok:1.18.42")
-    annotationProcessor("org.projectlombok:lombok:1.18.42")
 }
 
 tasks.runServer {
-    minecraftVersion("1.21.4")
+    minecraftVersion("26.1.2")
 }
 
 spotless {
@@ -112,6 +112,15 @@ tasks.processResources {
     filesMatching("plugin.yml") {
         expand(project.properties)
     }
+}
+
+nexusMCPublisher {
+    resourceId.set("17efc48a-7609-482c-abce-70ae684542bb")
+    versionTag.set(VersionTag.RELEASE)
+    versionTitle = project.property("version") as String
+    changelog.set(file("changelog.txt").readLines(StandardCharsets.UTF_8).joinToString("\n"))
+    mcVersions.set(listOf("26.1", "26.1.1", "26.1.2", "26.2"))
+    token = System.getenv("NEXUSMC_API_TOKEN")
 }
 
 mavenPublishing {

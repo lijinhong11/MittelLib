@@ -3,6 +3,7 @@ package io.github.lijinhong11.mittellib.utils;
 import io.github.lijinhong11.mittellib.MittelLib;
 import lombok.experimental.UtilityClass;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
@@ -31,7 +32,7 @@ public class NumberUtils {
         return obj instanceof Number n ? n : null;
     }
 
-    public static String formatSeconds(CommandSender cs, int totalSeconds) {
+    public static @NotNull String formatSeconds(@Nullable CommandSender cs, int totalSeconds) {
         String secondText = MittelLib.getInstance().getLanguageManager().getMsg(cs, "time.second");
         String secondsText = MittelLib.getInstance().getLanguageManager().getMsg(cs, "time.seconds");
         String minuteText = MittelLib.getInstance().getLanguageManager().getMsg(cs, "time.minute");

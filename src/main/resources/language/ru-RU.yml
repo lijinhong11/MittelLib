@@ -10,3 +10,6 @@ common:
   no-permission: "&cУ вас нет прав для этого!"
   enabled: "&aВключено"
   disabled: "&cВыключено"
+  search: "&bПоиск"
+  previous-page: "&eПред. страница"
+  next-page: "&eСлед. страница"

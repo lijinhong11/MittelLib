@@ -35,7 +35,7 @@ public final class CoordinateChestGUI implements MittelGUI {
 
     private final Map<String, MittelGUIItem> placed = new HashMap<>();
     private int ox, oy;
-    private BiConsumer<Player, CoordinateChestGUI> onOpen, onClose;
+    private final BiConsumer<Player, CoordinateChestGUI> onOpen, onClose;
 
     private CoordinateChestGUI(Builder b) {
         this.rows = b.rows;

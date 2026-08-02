@@ -13,7 +13,7 @@ public abstract class AbstractDialog implements MittelDialog {
                 .canCloseWithEscape(canCloseWithEsc())
                 .build();
 
-        dialog = Dialog.create(b -> b.empty().base(base).type());
+        dialog = Dialog.create(b -> b.empty().base(base).type(getDialogType()));
     }
 
     @Override

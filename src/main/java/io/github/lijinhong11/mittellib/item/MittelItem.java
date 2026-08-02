@@ -12,12 +12,11 @@ import io.github.lijinhong11.mittellib.utils.BukkitUtils;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -33,11 +32,14 @@ public class MittelItem implements ReadWriteObject {
     private @Nullable ContentProvider itemProvider = null;
     private @Nullable String itemIdByProvider = null;
     private @NotNull Material material = Material.BARRIER;
-    private @NotNull MittelItemMeta meta = MittelItemMeta.empty();
+    private @Nullable MittelItemMeta meta;
     private int amount = 1;
 
     private @Nullable Map<Enchantment, Integer> enchantments = new HashMap<>();
     private @Nullable List<ReadWriteItemComponent> components = new ArrayList<>();
+
+    private @Nullable Component displayName;
+    private @Nullable List<Component> lore;
 
     private MittelItem() {}
 
@@ -289,6 +291,20 @@ public class MittelItem implements ReadWriteObject {
         }
 
         enchantments.put(enchantment, lvl);
+
+        return this;
+    }
+
+    public MittelItemMeta getMeta() {
+        if (meta == null) {
+            meta = MittelItemMeta.empty();
+        }
+
+        return meta;
+    }
+
+    public MittelItem editMeta(Consumer<MittelItemMeta> consumer) {
+        consumer.accept(getMeta());
 
         return this;
     }

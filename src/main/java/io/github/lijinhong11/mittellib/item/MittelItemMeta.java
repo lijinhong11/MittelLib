@@ -1,7 +1,6 @@
 package io.github.lijinhong11.mittellib.item;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteObject;
-import io.github.lijinhong11.mittellib.item.components.impl.CustomModelDataComponent;
 import io.github.lijinhong11.mittellib.item.meta.BannerDefinition;
 import io.github.lijinhong11.mittellib.item.meta.FireworkDefinition;
 import io.github.lijinhong11.mittellib.item.meta.MapDefinition;
@@ -30,6 +29,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.jetbrains.annotations.Nullable;
 
 @EqualsAndHashCode(callSuper = false)
@@ -38,12 +38,8 @@ public class MittelItemMeta implements ReadWriteObject {
     private @Nullable Component displayName;
     private @Nullable List<Component> lore;
     private @Nullable Set<ItemFlag> itemFlags;
+    private @Nullable CustomModelDataComponent customModelDataComponent;
     private boolean unbreakable = false;
-    /**
-     * For 1.21.4 and higher, use {@link CustomModelDataComponent}
-     */
-    @Deprecated
-    private Integer customModelData;
 
     private @Nullable BannerDefinition banner;
     private @Nullable SkullDefinition skull;
@@ -54,7 +50,7 @@ public class MittelItemMeta implements ReadWriteObject {
 
     private MittelItemMeta() {}
 
-    public static MittelItemMeta empty() {
+    static MittelItemMeta empty() {
         return new MittelItemMeta();
     }
 
@@ -70,10 +66,8 @@ public class MittelItemMeta implements ReadWriteObject {
         newOne.lore = meta.hasLore() ? meta.lore() : null;
         newOne.itemFlags = meta.getItemFlags().isEmpty() ? null : new HashSet<>(meta.getItemFlags());
         newOne.unbreakable = meta.isUnbreakable();
-
-        if (meta.hasCustomModelData()) {
-            newOne.customModelData = meta.getCustomModelData();
-        }
+        newOne.customModelDataComponent =
+                meta.hasCustomModelDataComponent() ? meta.getCustomModelDataComponent() : null;
 
         if (meta instanceof BannerMeta bannerMeta) {
             newOne.banner = BannerDefinition.fromBannerMeta(bannerMeta);
@@ -121,8 +115,8 @@ public class MittelItemMeta implements ReadWriteObject {
             meta.addItemFlags(itemFlags.toArray(new ItemFlag[0]));
         }
 
-        if (customModelData != null) {
-            meta.setCustomModelData(customModelData);
+        if (customModelDataComponent != null) {
+            meta.setCustomModelDataComponent(customModelDataComponent);
         }
 
         if (meta instanceof BannerMeta bm && banner != null) {
@@ -241,6 +235,10 @@ public class MittelItemMeta implements ReadWriteObject {
 
     public void setDisplayName(String displayName) {
         this.displayName = ComponentUtils.deserialize(displayName);
+    }
+
+    public void setDisplayName(Component displayName) {
+        this.displayName = displayName;
     }
 
     public void setLore(Component... lore) {

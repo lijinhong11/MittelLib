@@ -10,3 +10,6 @@ common:
   no-permission: "&cVous n'avez pas la permission de faire cela !"
   enabled: "&aActivé"
   disabled: "&cDésactivé"
+  search: "&bRechercher"
+  previous-page: "&ePage précédente"
+  next-page: "&ePage suivante"

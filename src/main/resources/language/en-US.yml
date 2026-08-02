@@ -10,3 +10,6 @@ common:
   no-permission: "&cYou don't have permission to do that!"
   enabled: "&aEnabled"
   disabled: "&cDisabled"
+  search: "&bSearch"
+  previous-age: "&ePrevious Page"
+  next-page: "&eNext Page"

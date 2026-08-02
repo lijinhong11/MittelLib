@@ -68,7 +68,7 @@ public class ModrinthUpdateChecker {
                 }
 
                 versions.sort(Comparator.comparing(v -> v.datePublished));
-                ModrinthVersion latest = versions.get(versions.size() - 1);
+                ModrinthVersion latest = versions.getLast();
 
                 if (isNewer(latest.versionNumber, currentVersion)) {
                     runSync(() -> {

@@ -48,7 +48,7 @@ public abstract class AbstractInputDialog extends AbstractDialog {
         return DialogType.confirmation(
                 ActionButton.builder(YES)
                         .action(DialogAction.customClick(
-                                (res, a) -> callback.accept(res.getText("input")),
+                                (res, a) -> callback.accept(res.getText(INPUT_KEY)),
                                 ClickCallback.Options.builder().build()))
                         .build(),
                 ActionButton.builder(CANCEL)

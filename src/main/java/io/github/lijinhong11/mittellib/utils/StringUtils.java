@@ -71,22 +71,23 @@ public class StringUtils {
 
         byte[] data = input.getBytes(StandardCharsets.UTF_8);
 
-        Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION);
-        deflater.setInput(data);
-        deflater.finish();
+        try (Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION)) {
+            deflater.setInput(data);
+            deflater.finish();
 
-        byte[] buffer = new byte[1024];
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            while (!deflater.finished()) {
-                int count = deflater.deflate(buffer);
-                baos.write(buffer, 0, count);
+            byte[] buffer = new byte[1024];
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                while (!deflater.finished()) {
+                    int count = deflater.deflate(buffer);
+                    baos.write(buffer, 0, count);
+                }
+
+                deflater.end();
+                return Base64.getEncoder().encodeToString(baos.toByteArray());
+            } catch (Exception e) {
+                deflater.end();
+                throw new RuntimeException("Failed to compress string", e);
             }
-
-            deflater.end();
-            return Base64.getEncoder().encodeToString(baos.toByteArray());
-        } catch (Exception e) {
-            deflater.end();
-            throw new RuntimeException("Failed to compress string", e);
         }
     }
 
@@ -96,21 +97,23 @@ public class StringUtils {
         }
 
         byte[] data = Base64.getDecoder().decode(compressed);
-        Inflater inflater = new Inflater();
-        inflater.setInput(data);
 
-        byte[] buffer = new byte[1024];
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            while (!inflater.finished()) {
-                int count = inflater.inflate(buffer);
-                baos.write(buffer, 0, count);
+        try (Inflater inflater = new Inflater()) {
+            inflater.setInput(data);
+
+            byte[] buffer = new byte[1024];
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                while (!inflater.finished()) {
+                    int count = inflater.inflate(buffer);
+                    baos.write(buffer, 0, count);
+                }
+
+                inflater.end();
+                return baos.toString(StandardCharsets.UTF_8);
+            } catch (Exception e) {
+                inflater.end();
+                throw new RuntimeException("Failed to decompress string", e);
             }
-
-            inflater.end();
-            return baos.toString(StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            inflater.end();
-            throw new RuntimeException("Failed to decompress string", e);
         }
     }
 }
