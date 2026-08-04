@@ -33,7 +33,6 @@ import java.util.*;
 import java.util.function.Consumer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -54,9 +53,6 @@ public class MittelItem implements ReadWriteObject {
 
     private @Nullable Map<Enchantment, Integer> enchantments = new HashMap<>();
     private @Nullable List<ReadWriteItemComponent> components = new ArrayList<>();
-
-    private @Nullable Component displayName;
-    private @Nullable List<Component> lore;
 
     private MittelItem() {}
 
