@@ -17,6 +17,7 @@
 */
 package io.github.lijinhong11.mittellib.gui.dialog.impl.input;
 
+import io.papermc.paper.dialog.DialogResponseView;
 import io.papermc.paper.registry.data.dialog.input.DialogInput;
 import java.util.List;
 import java.util.function.Consumer;
@@ -26,10 +27,12 @@ import org.jetbrains.annotations.NotNull;
 public final class TextInputDialog extends AbstractInputDialog {
     private final int maxLength;
     private final String initial;
+    private final Consumer<String> callback;
 
     TextInputDialog(Component title, Consumer<String> callback, int maxLength, String initial) {
-        super(title, callback);
+        super(title);
 
+        this.callback = callback;
         this.maxLength = maxLength;
         this.initial = initial;
     }
@@ -52,5 +55,10 @@ public final class TextInputDialog extends AbstractInputDialog {
                 .maxLength(maxLength)
                 .initial(initial)
                 .build());
+    }
+
+    @Override
+    void executeCallback(DialogResponseView drv) {
+        callback.accept(drv.getText(INPUT_KEY));
     }
 }

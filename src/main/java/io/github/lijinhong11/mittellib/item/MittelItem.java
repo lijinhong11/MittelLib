@@ -153,7 +153,9 @@ public class MittelItem implements ReadWriteObject {
             }
         }
 
-        meta.write(cs.createSection("meta"));
+        if (meta != null) {
+            meta.write(cs.createSection("meta"));
+        }
 
         if (components != null && !components.isEmpty()) {
             ConfigurationSection componentsSection = cs.createSection("components");
@@ -210,6 +212,10 @@ public class MittelItem implements ReadWriteObject {
 
         ConfigurationSection metaSection = cs.getConfigurationSection("meta");
         if (metaSection != null) {
+            if (this.meta == null) {
+                this.meta = MittelItemMeta.empty();
+            }
+
             this.meta.read(metaSection);
         }
 
@@ -259,7 +265,9 @@ public class MittelItem implements ReadWriteObject {
             newOne = new ItemStack(material, amount);
         }
 
-        meta.applyToItemStack(newOne);
+        if (meta != null) {
+            meta.applyToItemStack(newOne);
+        }
 
         if (components != null) {
             for (ReadWriteItemComponent component : components) {
@@ -286,9 +294,6 @@ public class MittelItem implements ReadWriteObject {
      * @param dataComponentType the paper data component type. See {@link io.papermc.paper.datacomponent.DataComponentTypes}
      * @param dataComponentContext the paper data component context
      * @return the item itself
-     *
-     * @throws IllegalArgumentException if the component context's type mismatch to the {@link DataComponentType}<br>
-     * or <code>dataComponentType</code> is not a {@link DataComponentType}
      */
     @CanIgnoreReturnValue
     public MittelItem component(@NotNull DataComponentType dataComponentType, @Nullable Object dataComponentContext) {

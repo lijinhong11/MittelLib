@@ -18,12 +18,12 @@
 package io.github.lijinhong11.mittellib.gui.dialog.impl.input;
 
 import io.github.lijinhong11.mittellib.gui.dialog.impl.AbstractDialog;
+import io.papermc.paper.dialog.DialogResponseView;
 import io.papermc.paper.registry.data.dialog.ActionButton;
 import io.papermc.paper.registry.data.dialog.action.DialogAction;
 import io.papermc.paper.registry.data.dialog.body.DialogBody;
 import io.papermc.paper.registry.data.dialog.type.DialogType;
 import java.util.List;
-import java.util.function.Consumer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
@@ -38,11 +38,9 @@ public abstract class AbstractInputDialog extends AbstractDialog {
     private static final Component CANCEL = Component.translatable("gui.cancel");
 
     private final Component title;
-    protected final Consumer<String> callback;
 
-    AbstractInputDialog(Component title, Consumer<String> callback) {
+    AbstractInputDialog(Component title) {
         this.title = title;
-        this.callback = callback;
     }
 
     @Override
@@ -65,11 +63,13 @@ public abstract class AbstractInputDialog extends AbstractDialog {
         return DialogType.confirmation(
                 ActionButton.builder(YES)
                         .action(DialogAction.customClick(
-                                (res, a) -> callback.accept(res.getText(INPUT_KEY)),
+                                (res, a) -> executeCallback(res),
                                 ClickCallback.Options.builder().build()))
                         .build(),
                 ActionButton.builder(CANCEL)
                         .action(DialogAction.staticAction(ClickEvent.callback(Audience::closeDialog)))
                         .build());
     }
+
+    abstract void executeCallback(DialogResponseView drv);
 }

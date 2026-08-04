@@ -46,10 +46,6 @@ public class MittelConfig {
     @Getter
     private File file;
 
-    public MittelConfig() {
-        this.backend = new YamlConfiguration();
-    }
-
     public MittelConfig(YamlConfiguration configuration) {
         this.backend = configuration;
     }

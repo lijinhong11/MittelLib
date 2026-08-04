@@ -23,6 +23,7 @@ import io.github.lijinhong11.mittellib.gui.inventory.impl.PaginatedChestGUI;
 import io.github.lijinhong11.mittellib.gui.inventory.item.ButtonItem;
 import io.github.lijinhong11.mittellib.gui.inventory.item.MittelGUIItem;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
+import io.github.lijinhong11.mittellib.hook.content.MinecraftContentProvider;
 import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -37,7 +38,46 @@ public class MaterialChooser {
     }
 
     public static void openUsableBlockChooser(Player p, Consumer<PackedBlock> blockConsumer) {
-        PaginatedChestGUI gui = MittelGUI.pagedChestBuilder()
+        PaginatedChestGUI gui = buildGUI(p);
+
+        List<PackedBlock> usableBlocks = ContentProviders.getAllUsableBlocks();
+        usableBlocks = usableBlocks.stream()
+                .filter(u -> u.toItem() != null && !u.toItem().getType().isAir())
+                .toList();
+
+        gui.setPageItems(usableBlocks.stream()
+                .map(b -> ButtonItem.clickable(b.toItem(), (g, e) -> {
+                    blockConsumer.accept(b);
+                    p.closeInventory();
+                    return false;
+                }))
+                .toList());
+
+        gui.open(p);
+    }
+
+    public static void openVanillaChooser(Player p, Consumer<PackedBlock> blockConsumer) {
+        PaginatedChestGUI gui = buildGUI(p);
+
+        List<PackedBlock> usableBlocks = ContentProviders.getAllUsableBlocks();
+        usableBlocks = usableBlocks.stream()
+                .filter(u -> u.toItem() != null && !u.toItem().getType().isAir())
+                .filter(b -> b instanceof MinecraftContentProvider.PackedMinecraftBlock)
+                .toList();
+
+        gui.setPageItems(usableBlocks.stream()
+                .map(b -> ButtonItem.clickable(b.toItem(), (g, e) -> {
+                    blockConsumer.accept(b);
+                    p.closeInventory();
+                    return false;
+                }))
+                .toList());
+
+        gui.open(p);
+    }
+
+    private static PaginatedChestGUI buildGUI(Player p) {
+        return MittelGUI.pagedChestBuilder()
                 .structure("BBBBBBBSB", "BMMMMMMMB", "BMMMMMMMB", "BMMMMMMMB", "BMMMMMMMB", "BBPBBBNBB")
                 .bind('B', ButtonItem.BACKGROUND)
                 .bindSearch(
@@ -56,20 +96,5 @@ public class MaterialChooser {
                         ButtonItem.getPageButton(
                                 MittelLib.getInstance().getLanguageManager().getMsgComponent(p, "common.next-page")))
                 .build();
-
-        List<PackedBlock> usableBlocks = ContentProviders.getAllUsableBlocks();
-        usableBlocks = usableBlocks.stream()
-                .filter(u -> u.toItem() != null && !u.toItem().getType().isAir())
-                .toList();
-
-        gui.setPageItems(usableBlocks.stream()
-                .map(b -> ButtonItem.clickable(b.toItem(), (g, e) -> {
-                    blockConsumer.accept(b);
-                    p.closeInventory();
-                    return false;
-                }))
-                .toList());
-
-        gui.open(p);
     }
 }

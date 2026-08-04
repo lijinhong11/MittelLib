@@ -48,7 +48,7 @@ class ChatInputListener implements Listener {
     }
 
     void addCallback(UUID uuid, ChatInputHandler input) {
-        Set<ChatInputHandler> callbacks = handlers.computeIfAbsent(uuid, id -> new HashSet<>());
+        Set<ChatInputHandler> callbacks = handlers.computeIfAbsent(uuid, _ -> new HashSet<>());
         callbacks.add(input);
     }
 

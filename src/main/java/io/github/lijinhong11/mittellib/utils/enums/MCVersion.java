@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 public enum MCVersion {
     V26_1_X(775, "26.1"),
     V26_2_X(776, "26.2"),
-    ;
+    V26_3_X(777, "26.3");
 
     private static MCVersion current;
     private final int protocolVersion;
