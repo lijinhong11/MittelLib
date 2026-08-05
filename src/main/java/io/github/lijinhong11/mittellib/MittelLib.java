@@ -18,7 +18,6 @@
 package io.github.lijinhong11.mittellib;
 
 import io.github.lijinhong11.mittellib.gui.inventory.MittelGUIListener;
-import io.github.lijinhong11.mittellib.gui.inventory.choosers.MaterialChooser;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.hook.economy.VaultHook;
 import io.github.lijinhong11.mittellib.hook.point.PlayerPointsHook;
@@ -31,13 +30,10 @@ import java.util.Map;
 import lombok.Getter;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class MittelLib extends JavaPlugin implements Listener {
+public final class MittelLib extends JavaPlugin {
     private final Map<Plugin, SyncLanguageManager> pluginLanguages = new HashMap<>();
 
     @Getter
@@ -70,7 +66,6 @@ public final class MittelLib extends JavaPlugin implements Listener {
         PlayerPointsHook.init();
 
         Bukkit.getPluginManager().registerEvents(new MittelGUIListener(), this);
-        getServer().getPluginManager().registerEvents(this, this);
 
         getLogger().info("MittelLib is enabled!");
         getLogger().info("Detected MC version: " + MCVersion.getCurrent());
@@ -99,10 +94,5 @@ public final class MittelLib extends JavaPlugin implements Listener {
 
             return manager;
         });
-    }
-
-    @EventHandler
-    public void a(PlayerJoinEvent e) {
-        MaterialChooser.openUsableBlockChooser(e.getPlayer(), b -> {});
     }
 }
