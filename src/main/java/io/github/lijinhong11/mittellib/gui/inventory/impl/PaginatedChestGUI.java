@@ -40,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.jspecify.annotations.NonNull;
 
-public class PaginatedChestGUI implements MittelGUI {
+public final class PaginatedChestGUI implements MittelGUI {
     private final Inventory inv;
     private final MittelGUIItem[] renderedItems;
     private final Map<Character, MittelGUIItem> bindings;

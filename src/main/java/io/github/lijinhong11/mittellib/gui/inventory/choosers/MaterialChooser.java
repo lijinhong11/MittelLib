@@ -30,7 +30,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import org.bukkit.entity.Player;
 
-public class MaterialChooser {
+public final class MaterialChooser {
     private static final BiPredicate<String, MittelGUIItem> LOOKUP;
 
     static {

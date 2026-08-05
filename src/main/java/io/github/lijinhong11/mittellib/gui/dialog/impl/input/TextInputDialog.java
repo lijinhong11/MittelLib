@@ -29,24 +29,31 @@ public final class TextInputDialog extends AbstractInputDialog {
     private final String initial;
     private final Consumer<String> callback;
 
-    TextInputDialog(Component title, Consumer<String> callback, int maxLength, String initial) {
-        super(title);
+    TextInputDialog(Component title, Component label, Consumer<String> callback, int maxLength, String initial) {
+        super(title, label);
 
         this.callback = callback;
         this.maxLength = maxLength;
         this.initial = initial;
     }
 
-    public static TextInputDialog create(Component title, Consumer<String> callback) {
-        return new TextInputDialog(title, callback, 512, "");
+    public static TextInputDialog create(
+            @NotNull Component title, @NotNull Component label, @NotNull Consumer<String> callback) {
+        return new TextInputDialog(title, label, callback, 512, "");
     }
 
-    public static TextInputDialog create(Component title, Consumer<String> callback, int maxLength) {
-        return new TextInputDialog(title, callback, maxLength, "");
+    public static TextInputDialog create(
+            @NotNull Component title, @NotNull Component label, @NotNull Consumer<String> callback, int maxLength) {
+        return new TextInputDialog(title, label, callback, maxLength, "");
     }
 
-    public static TextInputDialog create(Component title, Consumer<String> callback, int maxLength, String initial) {
-        return new TextInputDialog(title, callback, maxLength, initial);
+    public static TextInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            @NotNull Consumer<String> callback,
+            int maxLength,
+            @NotNull String initial) {
+        return new TextInputDialog(title, label, callback, maxLength, initial);
     }
 
     @Override

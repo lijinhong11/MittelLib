@@ -38,9 +38,11 @@ public abstract class AbstractInputDialog extends AbstractDialog {
     private static final Component CANCEL = Component.translatable("gui.cancel");
 
     private final Component title;
+    protected Component label;
 
-    AbstractInputDialog(Component title) {
+    AbstractInputDialog(Component title, Component label) {
         this.title = title;
+        this.label = label;
     }
 
     @Override

@@ -31,8 +31,14 @@ public final class BooleanInputDialog extends AbstractInputDialog {
     private final String onFalse;
     private final BooleanConsumer callback;
 
-    BooleanInputDialog(Component title, BooleanConsumer callback, boolean initial, String onTrue, String onFalse) {
-        super(title);
+    BooleanInputDialog(
+            Component title,
+            Component label,
+            BooleanConsumer callback,
+            boolean initial,
+            String onTrue,
+            String onFalse) {
+        super(title, label);
 
         this.callback = callback;
         this.initial = initial;
@@ -40,8 +46,8 @@ public final class BooleanInputDialog extends AbstractInputDialog {
         this.onFalse = onFalse;
     }
 
-    BooleanInputDialog(Component title, BooleanConsumer callback, boolean initial) {
-        super(title);
+    BooleanInputDialog(Component title, Component label, BooleanConsumer callback, boolean initial) {
+        super(title, label);
 
         this.callback = callback;
         this.initial = initial;
@@ -49,18 +55,24 @@ public final class BooleanInputDialog extends AbstractInputDialog {
         this.onFalse = MittelLib.getInstance().getLanguageManager().getMsg(null, "common.disabled");
     }
 
-    public static BooleanInputDialog create(Component title, BooleanConsumer callback, boolean initial) {
-        return new BooleanInputDialog(title, callback, initial);
+    public static BooleanInputDialog create(
+            @NotNull Component title, @NotNull Component label, @NotNull BooleanConsumer callback, boolean initial) {
+        return new BooleanInputDialog(title, label, callback, initial);
     }
 
     public static BooleanInputDialog create(
-            Component title, BooleanConsumer callback, boolean initial, String onTrue, String onFalse) {
-        return new BooleanInputDialog(title, callback, initial, onTrue, onFalse);
+            @NotNull Component title,
+            @NotNull Component label,
+            @NotNull BooleanConsumer callback,
+            boolean initial,
+            @NotNull String onTrue,
+            @NotNull String onFalse) {
+        return new BooleanInputDialog(title, label, callback, initial, onTrue, onFalse);
     }
 
     @Override
     public @NotNull List<? extends DialogInput> getInputs() {
-        return List.of(DialogInput.bool(INPUT_KEY, getTitle(), initial, onTrue, onFalse));
+        return List.of(DialogInput.bool(INPUT_KEY, label, initial, onTrue, onFalse));
     }
 
     @Override
