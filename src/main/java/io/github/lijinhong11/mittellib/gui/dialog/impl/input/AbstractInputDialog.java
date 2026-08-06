@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractInputDialog extends AbstractDialog {
     static final String INPUT_KEY = "input";
 
-    private static final Component YES = Component.translatable("gui.yes");
+    private static final Component DONE = Component.translatable("gui.done");
     private static final Component CANCEL = Component.translatable("gui.cancel");
 
     private final Component title;
@@ -51,7 +51,7 @@ public abstract class AbstractInputDialog extends AbstractDialog {
     }
 
     @Override
-    public @Nullable Component externalTitle() {
+    public @Nullable Component getExternalTitle() {
         return null;
     }
 
@@ -63,7 +63,7 @@ public abstract class AbstractInputDialog extends AbstractDialog {
     @Override
     public @NotNull DialogType getDialogType() {
         return DialogType.confirmation(
-                ActionButton.builder(YES)
+                ActionButton.builder(DONE)
                         .action(DialogAction.customClick(
                                 (res, a) -> executeCallback(res),
                                 ClickCallback.Options.builder().build()))

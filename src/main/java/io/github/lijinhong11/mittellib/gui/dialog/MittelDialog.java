@@ -38,7 +38,7 @@ public interface MittelDialog {
 
     @NotNull Component getTitle();
 
-    @Nullable Component externalTitle();
+    @Nullable Component getExternalTitle();
 
     @NotNull DialogType getDialogType();
 

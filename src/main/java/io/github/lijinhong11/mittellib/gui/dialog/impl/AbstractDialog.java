@@ -28,6 +28,10 @@ public abstract class AbstractDialog implements MittelDialog {
     private void build() {
         DialogBase base = DialogBase.builder(getTitle())
                 .canCloseWithEscape(canCloseWithEsc())
+                .inputs(getInputs())
+                .afterAction(getAfterAction())
+                .body(getBody())
+                .externalTitle(getExternalTitle())
                 .build();
 
         dialog = Dialog.create(b -> b.empty().base(base).type(getDialogType()));
