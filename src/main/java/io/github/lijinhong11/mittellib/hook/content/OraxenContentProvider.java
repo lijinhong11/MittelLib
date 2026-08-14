@@ -69,22 +69,22 @@ public class OraxenContentProvider implements ContentProvider {
     }
 
     @Override
-    public void destroyBlock(Location loc) {
+    public void destroyBlock(@NotNull Location loc) {
         OraxenBlocks.remove(loc, null);
     }
 
     @Override
-    public List<String> getItemSuggestions() {
+    public @NotNull List<String> getItemSuggestions() {
         return Arrays.stream(OraxenItems.getItemNames()).map(i -> "oraxen:" + i).toList();
     }
 
     @Override
-    public List<String> getBlockSuggestions() {
+    public @NotNull List<String> getBlockSuggestions() {
         return OraxenBlocks.getBlockIDs().stream().map(b -> "oraxen:" + b).toList();
     }
 
     @Override
-    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+    public @Nullable PackedBlock getBlockByLocation(@NotNull Location loc) {
         Mechanic mechanic = OraxenBlocks.getOraxenBlock(loc);
         if (mechanic == null) {
             return null;
@@ -100,7 +100,7 @@ public class OraxenContentProvider implements ContentProvider {
         }
 
         @Override
-        public String getId() {
+        public @NotNull String getId() {
             return mechanic.getItemID();
         }
 

@@ -60,14 +60,14 @@ public class MinecraftContentProvider implements ContentProvider {
     }
 
     @Override
-    public void destroyBlock(Location loc) {
+    public void destroyBlock(@NotNull Location loc) {
         Block block = loc.getBlock();
         block.setType(Material.AIR);
         block.setBlockData(Material.AIR.createBlockData());
     }
 
     @Override
-    public List<String> getItemSuggestions() {
+    public @NotNull List<String> getItemSuggestions() {
         return Arrays.stream(Material.values())
                 .filter(m -> !m.isAir() && m.isItem())
                 .map(m -> "minecraft:" + m.toString().toLowerCase())
@@ -75,7 +75,7 @@ public class MinecraftContentProvider implements ContentProvider {
     }
 
     @Override
-    public List<String> getBlockSuggestions() {
+    public @NotNull List<String> getBlockSuggestions() {
         return Arrays.stream(Material.values())
                 .filter(m -> !m.isAir() && m.isBlock())
                 .map(m -> "minecraft:" + m.toString().toLowerCase())
@@ -83,7 +83,7 @@ public class MinecraftContentProvider implements ContentProvider {
     }
 
     @Override
-    public @NotNull PackedBlock getBlockByLocation(Location loc) {
+    public @NotNull PackedBlock getBlockByLocation(@NotNull Location loc) {
         return new PackedMinecraftBlock(loc.getBlock().getType());
     }
 
@@ -100,7 +100,7 @@ public class MinecraftContentProvider implements ContentProvider {
         }
 
         @Override
-        public String getId() {
+        public @NotNull String getId() {
             return "minecraft:" + material.toString().toLowerCase();
         }
 

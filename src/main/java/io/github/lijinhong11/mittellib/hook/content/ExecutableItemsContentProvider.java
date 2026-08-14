@@ -57,22 +57,22 @@ public class ExecutableItemsContentProvider implements ContentProvider {
     }
 
     @Override
-    public void destroyBlock(Location loc) {}
+    public void destroyBlock(@NotNull Location loc) {}
 
     @Override
-    public List<String> getItemSuggestions() {
+    public @NotNull List<String> getItemSuggestions() {
         return ExecutableItemsAPI.getExecutableItemsManager().getExecutableItemIdsList().stream()
                 .map(s -> "executableitems:" + s)
                 .toList();
     }
 
     @Override
-    public List<String> getBlockSuggestions() {
+    public @NotNull List<String> getBlockSuggestions() {
         return List.of();
     }
 
     @Override
-    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+    public @Nullable PackedBlock getBlockByLocation(@NotNull Location loc) {
         return null;
     }
 }

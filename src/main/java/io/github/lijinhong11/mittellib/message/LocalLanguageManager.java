@@ -26,6 +26,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -35,11 +36,11 @@ public final class LocalLanguageManager extends AbstractLanguageManager {
     @Setter
     private Options options;
 
-    public LocalLanguageManager(Plugin plugin) {
+    public LocalLanguageManager(@NotNull Plugin plugin) {
         this(plugin, new Options());
     }
 
-    public LocalLanguageManager(Plugin plugin, Options options) {
+    public LocalLanguageManager(@NotNull Plugin plugin, @NotNull Options options) {
         super(plugin, options.getDefaultLanguage());
         this.options = options;
         this.detectPlayerLocale = options.isDetectPlayerLocale();
@@ -65,7 +66,7 @@ public final class LocalLanguageManager extends AbstractLanguageManager {
     }
 
     @Override
-    protected Configuration getConfiguration(CommandSender p) {
+    protected @NotNull Configuration getConfiguration(@Nullable CommandSender p) {
         if (!detectPlayerLocale || !(p instanceof Player pl)) {
             String lang = plugin.getConfig().getString(options.getLanguageSetterKey(), defaultLanguage);
             return configurations.getOrDefault(lang, defaultConfiguration);
@@ -75,7 +76,7 @@ public final class LocalLanguageManager extends AbstractLanguageManager {
     }
 
     @Override
-    protected Configuration getConfiguration(@Nullable String lang) {
+    protected @NotNull Configuration getConfiguration(@Nullable String lang) {
         return configurations.getOrDefault(Objects.requireNonNullElse(lang, defaultLanguage), defaultConfiguration);
     }
 }

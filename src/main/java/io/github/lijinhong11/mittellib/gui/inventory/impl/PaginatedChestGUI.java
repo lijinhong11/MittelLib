@@ -167,7 +167,7 @@ public final class PaginatedChestGUI implements MittelGUI {
     }
 
     @Override
-    public void open(@NonNull Player player) {
+    public void open(@NotNull Player player) {
         player.closeInventory();
         player.openInventory(this.inv);
     }
@@ -369,13 +369,13 @@ public final class PaginatedChestGUI implements MittelGUI {
         private BiConsumer<Player, PaginatedChestGUI> closeConsumer;
 
         @Override
-        public PagedChestBuilder title(@NonNull Component title) {
+        public @NotNull PagedChestBuilder title(@NotNull Component title) {
             this.title = title;
             return this;
         }
 
         @Override
-        public PagedChestBuilder size(int size) {
+        public @NonNull PagedChestBuilder size(int size) {
             this.size = size;
             return this;
         }
@@ -456,7 +456,7 @@ public final class PaginatedChestGUI implements MittelGUI {
         }
 
         @Override
-        public PaginatedChestGUI build() {
+        public @NotNull PaginatedChestGUI build() {
             if (this.structure == null) {
                 throw new IllegalStateException("paged chest gui requires a structure");
             }

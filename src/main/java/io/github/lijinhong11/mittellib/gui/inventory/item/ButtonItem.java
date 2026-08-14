@@ -27,6 +27,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ButtonItem implements MittelGUIItem {
@@ -42,40 +43,41 @@ public class ButtonItem implements MittelGUIItem {
 
     private final BiFunction<MittelGUI, InventoryClickEvent, Boolean> onClick;
 
-    public static ButtonItem clickable(ItemStack item, BiFunction<MittelGUI, InventoryClickEvent, Boolean> onClick) {
+    public static @NotNull ButtonItem clickable(
+            @NotNull ItemStack item, @NotNull BiFunction<MittelGUI, InventoryClickEvent, Boolean> onClick) {
         return new ButtonItem(item, onClick);
     }
 
-    public static ButtonItem openGUI(ItemStack item, MittelGUI gui) {
+    public static @NotNull ButtonItem openGUI(@NotNull ItemStack item, @NotNull MittelGUI gui) {
         return new ButtonItem(item, (_, i) -> {
             gui.open((Player) i.getWhoClicked());
             return false;
         });
     }
 
-    public static ButtonItem unclickable(ItemStack item) {
+    public static @NotNull ButtonItem unclickable(@NotNull ItemStack item) {
         return new ButtonItem(item, (_, _) -> false);
     }
 
-    public static ButtonItem getSearchButton(Component name) {
+    public static @NotNull ButtonItem getSearchButton(@NotNull Component name) {
         MittelItem back = new MittelItem(Material.COMPASS);
         back.getMeta().setDisplayName(name);
         return ButtonItem.unclickable(back.get());
     }
 
-    public static ButtonItem getPageButton(Component name) {
+    public static @NotNull ButtonItem getPageButton(@NotNull Component name) {
         MittelItem prev = new MittelItem(Material.ARROW);
         prev.getMeta().setDisplayName(name);
         return ButtonItem.unclickable(prev.get());
     }
 
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return item;
     }
 
     @Override
-    public boolean onClick(MittelGUI gui, InventoryClickEvent event) {
+    public boolean onClick(@NotNull MittelGUI gui, @NotNull InventoryClickEvent event) {
         if (onClick != null) {
             return onClick.apply(gui, event);
         }

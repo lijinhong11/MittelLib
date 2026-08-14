@@ -60,22 +60,22 @@ public class NexoContentProvider implements ContentProvider {
     }
 
     @Override
-    public void destroyBlock(Location loc) {
+    public void destroyBlock(@NotNull Location loc) {
         NexoBlocks.remove(loc);
     }
 
     @Override
-    public List<String> getItemSuggestions() {
+    public @NotNull List<String> getItemSuggestions() {
         return NexoItems.itemNames().stream().map(i -> "nexo:" + i).toList();
     }
 
     @Override
-    public List<String> getBlockSuggestions() {
+    public @NotNull List<String> getBlockSuggestions() {
         return Arrays.stream(NexoBlocks.blockIDs()).map(b -> "nexo:" + b).toList();
     }
 
     @Override
-    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+    public @Nullable PackedBlock getBlockByLocation(@NotNull Location loc) {
         CustomBlockMechanic mechanic = NexoBlocks.customBlockMechanic(loc);
         if (mechanic == null) {
             return null;
@@ -91,7 +91,7 @@ public class NexoContentProvider implements ContentProvider {
         }
 
         @Override
-        public String getId() {
+        public @NotNull String getId() {
             return mechanic.getItemID();
         }
 

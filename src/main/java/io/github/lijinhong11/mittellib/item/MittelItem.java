@@ -109,7 +109,7 @@ public class MittelItem implements ReadWriteObject {
      * @return a mittel item
      * @throws IllegalArgumentException if the material doesn't support item metas
      */
-    public static MittelItem readFromSection(ConfigurationSection cs) {
+    public static @NotNull MittelItem readFromSection(@NotNull ConfigurationSection cs) {
         MittelItem item = new MittelItem();
         item.read(cs);
         return item;
@@ -117,7 +117,7 @@ public class MittelItem implements ReadWriteObject {
 
     @Contract(value = "_ -> this", mutates = "this")
     @CanIgnoreReturnValue
-    public MittelItem applyFromItemStack(ItemStack itemStack) {
+    public @NotNull MittelItem applyFromItemStack(@NotNull ItemStack itemStack) {
         if (!itemStack.getType().isItem()) {
             throw new IllegalArgumentException("Only allow items which have item meta");
         }
@@ -132,7 +132,7 @@ public class MittelItem implements ReadWriteObject {
     }
 
     @Override
-    public void write(ConfigurationSection cs) {
+    public void write(@NotNull ConfigurationSection cs) {
         if (itemProvider != null && itemIdByProvider != null) {
             cs.set("provider", itemProvider.getId().toLowerCase());
             cs.set("material", itemIdByProvider);
@@ -160,7 +160,7 @@ public class MittelItem implements ReadWriteObject {
     }
 
     @Override
-    public void read(ConfigurationSection cs) {
+    public void read(@NotNull ConfigurationSection cs) {
         Material material = Material.BARRIER;
 
         if (cs.contains("provider")) {
@@ -247,7 +247,7 @@ public class MittelItem implements ReadWriteObject {
         this.amount = amount;
     }
 
-    public ItemStack get() {
+    public @NotNull ItemStack get() {
         if (amount <= 0) {
             throw new RuntimeException(new IllegalArgumentException("amount must greater than 0"));
         }
@@ -275,7 +275,7 @@ public class MittelItem implements ReadWriteObject {
     }
 
     @CanIgnoreReturnValue
-    public MittelItem component(@NotNull ReadWriteItemComponent component) {
+    public @NotNull MittelItem component(@NotNull ReadWriteItemComponent component) {
         if (components == null) {
             components = new ArrayList<>();
         }
@@ -292,7 +292,8 @@ public class MittelItem implements ReadWriteObject {
      * @return the item itself
      */
     @CanIgnoreReturnValue
-    public MittelItem component(@NotNull DataComponentType dataComponentType, @Nullable Object dataComponentContext) {
+    public @NotNull MittelItem component(
+            @NotNull DataComponentType dataComponentType, @Nullable Object dataComponentContext) {
         if (components == null) {
             components = new ArrayList<>();
         }
@@ -303,7 +304,7 @@ public class MittelItem implements ReadWriteObject {
     }
 
     @CanIgnoreReturnValue
-    public MittelItem enchant(@NotNull Enchantment enchantment, int lvl) {
+    public @NotNull MittelItem enchant(@NotNull Enchantment enchantment, int lvl) {
         if (enchantments == null) {
             enchantments = new HashMap<>();
         }
@@ -313,7 +314,7 @@ public class MittelItem implements ReadWriteObject {
         return this;
     }
 
-    public MittelItemMeta getMeta() {
+    public @NotNull MittelItemMeta getMeta() {
         if (meta == null) {
             meta = MittelItemMeta.empty();
         }
@@ -321,7 +322,7 @@ public class MittelItem implements ReadWriteObject {
         return meta;
     }
 
-    public MittelItem editMeta(Consumer<MittelItemMeta> consumer) {
+    public @NotNull MittelItem editMeta(@NotNull Consumer<MittelItemMeta> consumer) {
         consumer.accept(getMeta());
 
         return this;

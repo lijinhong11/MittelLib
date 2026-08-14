@@ -34,7 +34,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.view.AnvilView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
-import org.jspecify.annotations.NonNull;
 
 public final class AnvilGUI implements MittelGUI {
     private final Inventory inv;
@@ -147,7 +146,7 @@ public final class AnvilGUI implements MittelGUI {
         private BiConsumer<Player, AnvilGUI> closeConsumer;
 
         @Override
-        public AnvilBuilder title(@NonNull Component title) {
+        public @NotNull AnvilBuilder title(@NotNull Component title) {
             this.title = title;
             return this;
         }
@@ -189,7 +188,7 @@ public final class AnvilGUI implements MittelGUI {
         }
 
         @Override
-        public AnvilGUI build() {
+        public @NotNull AnvilGUI build() {
             return new AnvilGUI(this);
         }
     }

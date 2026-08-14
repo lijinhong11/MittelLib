@@ -35,6 +35,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -46,15 +47,15 @@ public final class SyncLanguageManager extends AbstractLanguageManager {
     @Setter
     private boolean autoComplete;
 
-    public SyncLanguageManager(Plugin plugin) {
+    public SyncLanguageManager(@NotNull Plugin plugin) {
         this(plugin, "en-US");
     }
 
-    public SyncLanguageManager(Plugin plugin, String defaultLanguage) {
+    public SyncLanguageManager(@NotNull Plugin plugin, @NotNull String defaultLanguage) {
         this(plugin, defaultLanguage, true);
     }
 
-    public SyncLanguageManager(Plugin plugin, String defaultLanguage, boolean autoComplete) {
+    public SyncLanguageManager(@NotNull Plugin plugin, @NotNull String defaultLanguage, boolean autoComplete) {
         super(plugin, defaultLanguage);
         this.autoComplete = autoComplete;
         loadLanguages();
@@ -110,7 +111,7 @@ public final class SyncLanguageManager extends AbstractLanguageManager {
     }
 
     @Override
-    protected Configuration getConfiguration(CommandSender p) {
+    protected @NotNull Configuration getConfiguration(@Nullable CommandSender p) {
         if (!detectPlayerLocale || !(p instanceof Player pl)) {
             String lang = plugin.getConfig().getString("language", defaultLanguage);
             return configurations.getOrDefault(lang, defaultConfiguration);
@@ -120,7 +121,7 @@ public final class SyncLanguageManager extends AbstractLanguageManager {
     }
 
     @Override
-    protected Configuration getConfiguration(@Nullable String lang) {
+    protected @NotNull Configuration getConfiguration(@Nullable String lang) {
         return configurations.getOrDefault(Objects.requireNonNullElse(lang, defaultLanguage), defaultConfiguration);
     }
 }

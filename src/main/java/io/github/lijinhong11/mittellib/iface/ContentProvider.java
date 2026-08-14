@@ -59,28 +59,28 @@ public interface ContentProvider {
      *
      * @param loc the location of the block
      */
-    void destroyBlock(Location loc);
+    void destroyBlock(@NotNull Location loc);
 
     /**
      * Get all item suggestions (including blocks) for tab complete
      *
      * @return a list of item suggestion
      */
-    List<String> getItemSuggestions();
+    @NotNull List<String> getItemSuggestions();
 
     /**
      * Get all block suggestions for tab complete
      *
      * @return a list of block suggestion
      */
-    List<String> getBlockSuggestions();
+    @NotNull List<String> getBlockSuggestions();
 
     /**
      * Get the packed block by its location
      *
      * @return a packed block
      */
-    @Nullable PackedBlock getBlockByLocation(Location loc);
+    @Nullable PackedBlock getBlockByLocation(@NotNull Location loc);
 
     /**
      * Get all blocks
@@ -88,6 +88,9 @@ public interface ContentProvider {
      * @return all blocks in this content provider
      */
     default @NotNull List<PackedBlock> getAllBlocks() {
-        return getBlockSuggestions().stream().map(this::getBlock).toList();
+        return getBlockSuggestions().stream()
+                .map(this::getBlock)
+                .filter(java.util.Objects::nonNull)
+                .toList();
     }
 }

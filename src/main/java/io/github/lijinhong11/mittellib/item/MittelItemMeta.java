@@ -47,6 +47,7 @@ import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @EqualsAndHashCode(callSuper = false)
@@ -67,11 +68,11 @@ public class MittelItemMeta implements ReadWriteObject {
 
     private MittelItemMeta() {}
 
-    static MittelItemMeta empty() {
+    static @NotNull MittelItemMeta empty() {
         return new MittelItemMeta();
     }
 
-    public static MittelItemMeta fromItemStack(ItemStack itemStack) {
+    public static @NotNull MittelItemMeta fromItemStack(@NotNull ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) {
             return empty();
@@ -113,7 +114,7 @@ public class MittelItemMeta implements ReadWriteObject {
         return newOne;
     }
 
-    public void applyToItemStack(ItemStack item) {
+    public void applyToItemStack(@NotNull ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
             return;
@@ -160,7 +161,7 @@ public class MittelItemMeta implements ReadWriteObject {
     }
 
     @Override
-    public void write(ConfigurationSection cs) {
+    public void write(@NotNull ConfigurationSection cs) {
         if (itemFlags != null && !itemFlags.isEmpty()) {
             cs.set("itemFlags", itemFlags.stream().map(Enum::toString).toList());
         }
@@ -200,7 +201,7 @@ public class MittelItemMeta implements ReadWriteObject {
     }
 
     @Override
-    public void read(ConfigurationSection cs) {
+    public void read(@NotNull ConfigurationSection cs) {
         if (cs.contains("displayName")) {
             String displayName = cs.getString("displayName", "");
             this.displayName = ComponentUtils.deserialize(displayName);
@@ -250,23 +251,23 @@ public class MittelItemMeta implements ReadWriteObject {
         }
     }
 
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(@NotNull String displayName) {
         this.displayName = ComponentUtils.deserialize(displayName);
     }
 
-    public void setDisplayName(Component displayName) {
+    public void setDisplayName(@NotNull Component displayName) {
         this.displayName = displayName;
     }
 
-    public void setLore(Component... lore) {
+    public void setLore(@NotNull Component @NotNull ... lore) {
         this.lore = Arrays.asList(lore);
     }
 
-    public void setLore(String... lore) {
+    public void setLore(@NotNull String @NotNull ... lore) {
         setLore(Arrays.asList(lore));
     }
 
-    public void setLore(Iterable<String> lore) {
+    public void setLore(@NotNull Iterable<String> lore) {
         this.lore = new ArrayList<>();
 
         for (String loreLine : lore) {

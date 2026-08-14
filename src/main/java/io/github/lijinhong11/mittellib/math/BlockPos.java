@@ -36,7 +36,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
     private @Range(from = Integer.MIN_VALUE + 1, to = Integer.MAX_VALUE - 1) int y = 0;
     private @Range(from = Integer.MIN_VALUE + 1, to = Integer.MAX_VALUE - 1) int z = 0;
 
-    public BlockPos(final ConfigurationSection cs) {
+    public BlockPos(final @NotNull ConfigurationSection cs) {
         read(cs);
     }
 
@@ -70,7 +70,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
      * @param location the location to convert
      * @return a new BlockPos with the location's block coordinates
      */
-    public static BlockPos fromLocation(final Location location) {
+    public static @NotNull BlockPos fromLocation(final @NotNull Location location) {
         if (!location.getWorld().getWorldBorder().isInside(location)) {
             throw new IllegalArgumentException("The location must in the world boarder");
         }
@@ -84,7 +84,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
      * @param world the world for the location
      * @return a new Location at this block position
      */
-    public Location toLocation(final World world) {
+    public @NotNull Location toLocation(final @NotNull World world) {
         Location loc = new Location(world, x, y, z);
 
         if (!world.getWorldBorder().isInside(loc)) {
@@ -102,7 +102,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
      * @param z the Z offset
      * @return a new BlockPos with the added coordinates
      */
-    public BlockPos plus(final int x, final int y, final int z) {
+    public @NotNull BlockPos plus(final int x, final int y, final int z) {
         return new BlockPos(this.x + x, this.y + y, this.z + z);
     }
 
@@ -112,7 +112,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
      * @param pos the position to add
      * @return a new BlockPos with the added coordinates
      */
-    public BlockPos plus(final BlockPos pos) {
+    public @NotNull BlockPos plus(final @NotNull BlockPos pos) {
         return new BlockPos(this.x + pos.x, this.y + pos.y, this.z + pos.z);
     }
 
@@ -124,7 +124,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
      * @param z the Z offset
      * @return a new BlockPos with the subtracted coordinates
      */
-    public BlockPos minus(final int x, final int y, final int z) {
+    public @NotNull BlockPos minus(final int x, final int y, final int z) {
         return new BlockPos(this.x - x, this.y - y, this.z - z);
     }
 
@@ -134,7 +134,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
      * @param pos the position to subtract
      * @return a new BlockPos with the subtracted coordinates
      */
-    public BlockPos minus(final BlockPos pos) {
+    public @NotNull BlockPos minus(final @NotNull BlockPos pos) {
         return new BlockPos(this.x - pos.x, this.y - pos.y, this.z - pos.z);
     }
 
@@ -144,7 +144,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
      * @param other the other position
      * @return the squared distance
      */
-    public int distanceSquared(final BlockPos other) {
+    public int distanceSquared(final @NotNull BlockPos other) {
         int dx = this.x - other.x;
         int dy = this.y - other.y;
         int dz = this.z - other.z;
@@ -158,7 +158,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
      * @param other the other position
      * @return the Manhattan distance
      */
-    public int distanceManhattan(final BlockPos other) {
+    public int distanceManhattan(final @NotNull BlockPos other) {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y) + Math.abs(this.z - other.z);
     }
 
@@ -168,7 +168,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
      * @param other the other position
      * @return a new BlockPos with minimum coordinates
      */
-    public BlockPos min(final BlockPos other) {
+    public @NotNull BlockPos min(final @NotNull BlockPos other) {
         return new BlockPos(Math.min(this.x, other.x), Math.min(this.y, other.y), Math.min(this.z, other.z));
     }
 
@@ -178,7 +178,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
      * @param other the other position
      * @return a new BlockPos with maximum coordinates
      */
-    public BlockPos max(final BlockPos other) {
+    public @NotNull BlockPos max(final @NotNull BlockPos other) {
         return new BlockPos(Math.max(this.x, other.x), Math.max(this.y, other.y), Math.max(this.z, other.z));
     }
 
@@ -192,7 +192,7 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
     }
 
     @Override
-    public int compareTo(BlockPos other) {
+    public int compareTo(@NotNull BlockPos other) {
         int cmpX = Integer.compare(this.x, other.x);
         if (cmpX != 0) return cmpX;
 
@@ -208,14 +208,14 @@ public final class BlockPos implements Comparable<BlockPos>, ReadWriteObject {
     }
 
     @Override
-    public void write(ConfigurationSection cs) {
+    public void write(@NotNull ConfigurationSection cs) {
         cs.set("x", x);
         cs.set("y", y);
         cs.set("z", z);
     }
 
     @Override
-    public void read(ConfigurationSection cs) {
+    public void read(@NotNull ConfigurationSection cs) {
         x = cs.getInt("x");
         y = cs.getInt("y");
         z = cs.getInt("z");

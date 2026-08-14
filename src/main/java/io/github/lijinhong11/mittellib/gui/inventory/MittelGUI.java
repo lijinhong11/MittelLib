@@ -50,53 +50,53 @@ public interface MittelGUI extends InventoryHolder {
 
     void handleClose(@NotNull InventoryCloseEvent e);
 
-    static ChestBuilder chestBuilder() {
+    static @NotNull ChestBuilder chestBuilder() {
         return new ChestGUI.Builder();
     }
 
-    static PagedChestBuilder pagedChestBuilder() {
+    static @NotNull PagedChestBuilder pagedChestBuilder() {
         return new PaginatedChestGUI.Builder();
     }
 
-    static CoordinateBuilder coordinateBuilder() {
+    static @NotNull CoordinateBuilder coordinateBuilder() {
         return new CoordinateChestGUI.Builder();
     }
 
     @ApiStatus.Experimental
-    static AnvilBuilder anvilBuilder() {
+    static @NotNull AnvilBuilder anvilBuilder() {
         return new AnvilGUI.Builder();
     }
 
     interface ChestBuilder {
-        ChestBuilder title(@NotNull Component title);
+        @NotNull ChestBuilder title(@NotNull Component title);
 
-        ChestBuilder size(int size);
+        @NotNull ChestBuilder size(int size);
 
-        ChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) String... structure);
+        @NotNull ChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) String... structure);
 
-        ChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) List<String> structure);
+        @NotNull ChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) List<String> structure);
 
-        default ChestBuilder layout(@NotNull @ArrayLenRange(from = 1, to = 6) String... layout) {
+        default @NotNull ChestBuilder layout(@NotNull @ArrayLenRange(from = 1, to = 6) String... layout) {
             return structure(layout);
         }
 
-        default ChestBuilder layout(@NotNull @ArrayLenRange(from = 1, to = 6) List<String> layout) {
+        default @NotNull ChestBuilder layout(@NotNull @ArrayLenRange(from = 1, to = 6) List<String> layout) {
             return structure(layout);
         }
 
-        ChestBuilder bind(char bind, @NotNull MittelGUIItem item);
+        @NotNull ChestBuilder bind(char bind, @NotNull MittelGUIItem item);
 
-        ChestBuilder onOpen(@NotNull BiConsumer<Player, ChestGUI> openConsumer);
+        @NotNull ChestBuilder onOpen(@NotNull BiConsumer<Player, ChestGUI> openConsumer);
 
-        ChestBuilder onClose(@NotNull BiConsumer<Player, ChestGUI> closeConsumer);
+        @NotNull ChestBuilder onClose(@NotNull BiConsumer<Player, ChestGUI> closeConsumer);
 
-        ChestGUI build();
+        @NotNull ChestGUI build();
     }
 
     interface PagedChestBuilder {
-        PagedChestBuilder title(@NotNull Component title);
+        @NotNull PagedChestBuilder title(@NotNull Component title);
 
-        PagedChestBuilder size(int size);
+        @NotNull PagedChestBuilder size(int size);
 
         PagedChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) String... structure);
 
@@ -133,11 +133,11 @@ public interface MittelGUI extends InventoryHolder {
 
         PagedChestBuilder onClose(@NotNull BiConsumer<Player, PaginatedChestGUI> closeConsumer);
 
-        PaginatedChestGUI build();
+        @NotNull PaginatedChestGUI build();
     }
 
     interface CoordinateBuilder {
-        CoordinateBuilder title(@NotNull Component title);
+        @NotNull CoordinateBuilder title(@NotNull Component title);
 
         CoordinateBuilder rows(int rows);
 
@@ -165,11 +165,11 @@ public interface MittelGUI extends InventoryHolder {
 
         CoordinateBuilder onClose(@NotNull BiConsumer<Player, CoordinateChestGUI> closeConsumer);
 
-        CoordinateChestGUI build();
+        @NotNull CoordinateChestGUI build();
     }
 
     interface AnvilBuilder {
-        AnvilBuilder title(@NotNull Component title);
+        @NotNull AnvilBuilder title(@NotNull Component title);
 
         AnvilBuilder firstItem(@NotNull MittelGUIItem item);
 
@@ -183,6 +183,6 @@ public interface MittelGUI extends InventoryHolder {
 
         AnvilBuilder onClose(@NotNull BiConsumer<Player, AnvilGUI> closeConsumer);
 
-        AnvilGUI build();
+        @NotNull AnvilGUI build();
     }
 }

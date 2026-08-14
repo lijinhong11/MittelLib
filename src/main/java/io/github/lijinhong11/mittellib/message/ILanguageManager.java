@@ -37,40 +37,51 @@ import org.jetbrains.annotations.Nullable;
  * The language manager interface
  */
 public interface ILanguageManager {
-    void sendMessage(@NotNull CommandSender commandSender, String key, MessageReplacement... args);
+    void sendMessage(
+            @NotNull CommandSender commandSender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args);
 
     void sendMessage(
-            @NotNull CommandSender commandSender, String key, ClickEvent clickEvent, MessageReplacement... args);
+            @NotNull CommandSender commandSender,
+            @NotNull String key,
+            @NotNull ClickEvent clickEvent,
+            @NotNull MessageReplacement @NotNull ... args);
 
-    void sendMessages(@NotNull CommandSender commandSender, String key, MessageReplacement... args);
+    void sendMessages(
+            @NotNull CommandSender commandSender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args);
 
-    Component getMsgComponent(@Nullable CommandSender commandSender, String key, MessageReplacement... args);
+    @NotNull Component getMsgComponent(
+            @Nullable CommandSender commandSender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args);
 
-    Component getMsgComponentByLanguage(@Nullable String lang, String key, MessageReplacement... args);
+    @NotNull Component getMsgComponentByLanguage(
+            @Nullable String lang, @NotNull String key, @NotNull MessageReplacement @NotNull ... args);
 
-    List<Component> getMsgComponentList(@Nullable CommandSender commandSender, String key, MessageReplacement... args);
+    @NotNull List<Component> getMsgComponentList(
+            @Nullable CommandSender commandSender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args);
 
-    List<Component> getMsgComponentListByLanguage(@Nullable String lang, String key, MessageReplacement... args);
+    @NotNull List<Component> getMsgComponentListByLanguage(
+            @Nullable String lang, @NotNull String key, @NotNull MessageReplacement @NotNull ... args);
 
-    String getMsg(@Nullable CommandSender sender, String key, MessageReplacement... args);
+    @NotNull String getMsg(@Nullable CommandSender sender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args);
 
-    List<String> getMsgList(@Nullable CommandSender commandSender, String key, MessageReplacement... args);
+    @NotNull List<String> getMsgList(
+            @Nullable CommandSender commandSender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args);
 
-    String getMsgByLanguage(@Nullable String lang, String key, MessageReplacement... args);
+    @NotNull String getMsgByLanguage(@Nullable String lang, @NotNull String key, @NotNull MessageReplacement @NotNull ... args);
 
-    List<String> getMsgListByLanguage(@Nullable String lang, String key, MessageReplacement... args);
+    @NotNull List<String> getMsgListByLanguage(
+            @Nullable String lang, @NotNull String key, @NotNull MessageReplacement @NotNull ... args);
 
     @NotNull ItemStack getMessagedItem(
             @NotNull Material material,
             @NotNull String sectionKey,
             @Nullable Player player,
-            MessageReplacement... args);
+            @NotNull MessageReplacement @NotNull ... args);
 
     @NotNull String getParsedLocation(@Nullable CommandSender cs, @NotNull Location loc);
 
     @NotNull String getParsedBlockLocation(@Nullable CommandSender cs, @NotNull Location loc);
 
-    String getParsedLocation(@Nullable CommandSender cs, double x, double y, double z);
+    @NotNull String getParsedLocation(@Nullable CommandSender cs, double x, double y, double z);
 
     void reload();
 
@@ -82,7 +93,7 @@ public interface ILanguageManager {
     @Setter
     class Options {
         private boolean detectPlayerLocale = true;
-        private String defaultLanguage = "en-US";
-        private String languageSetterKey = "language";
+        private @NotNull String defaultLanguage = "en-US";
+        private @NotNull String languageSetterKey = "language";
     }
 }

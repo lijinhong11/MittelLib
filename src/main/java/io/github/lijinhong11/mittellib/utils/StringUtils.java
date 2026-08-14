@@ -40,16 +40,16 @@ import org.jetbrains.annotations.Nullable;
 public class StringUtils {
     private static final PlainTextComponentSerializer COMPONENT_PLAIN = PlainTextComponentSerializer.plainText();
 
-    public static String toBooleanStatus(@Nullable CommandSender cs, boolean b) {
+    public static @NotNull String toBooleanStatus(@Nullable CommandSender cs, boolean b) {
         SyncLanguageManager lm = MittelLib.getInstance().getLanguageManager();
         return b ? lm.getMsg(cs, "common.enabled") : lm.getMsg(cs, "common.disabled");
     }
 
-    public static String parsePlaceholders(@NotNull String text) {
+    public static @NotNull String parsePlaceholders(@NotNull String text) {
         return parsePlaceholders(null, text);
     }
 
-    public static String parsePlaceholders(@Nullable CommandSender cs, @NotNull String text) {
+    public static @NotNull String parsePlaceholders(@Nullable CommandSender cs, @NotNull String text) {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             text = PlaceholderAPI.setPlaceholders(cs instanceof Player p ? p : null, text);
         }
@@ -70,7 +70,7 @@ public class StringUtils {
         return text;
     }
 
-    public static String convertToRightLangCode(String lang) {
+    public static @NotNull String convertToRightLangCode(@Nullable String lang) {
         if (lang == null || lang.isBlank()) return "en-US";
         String[] split = lang.split("-");
         if (split.length == 1) {
@@ -81,7 +81,7 @@ public class StringUtils {
         return lang.replace(split[1], split[1].toUpperCase());
     }
 
-    public static String compress(@NotNull String input) {
+    public static @NotNull String compress(@NotNull String input) {
         if (input.isEmpty()) {
             return "";
         }
@@ -108,7 +108,7 @@ public class StringUtils {
         }
     }
 
-    public static String decompress(@NotNull String compressed) {
+    public static @NotNull String decompress(@NotNull String compressed) {
         if (compressed.isEmpty()) {
             return "";
         }

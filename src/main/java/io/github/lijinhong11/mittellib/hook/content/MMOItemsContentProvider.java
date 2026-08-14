@@ -78,24 +78,24 @@ public class MMOItemsContentProvider implements ContentProvider {
     }
 
     @Override
-    public void destroyBlock(Location loc) {
+    public void destroyBlock(@NotNull Location loc) {
         // its custom blocks are very limited
     }
 
     @Override
-    public List<String> getItemSuggestions() {
+    public @NotNull List<String> getItemSuggestions() {
         return MMOItems.plugin.getTemplates().collectTemplates().stream()
                 .map(t -> "mmoitems:" + t.getType().toString() + ":" + t.getId())
                 .toList();
     }
 
     @Override
-    public List<String> getBlockSuggestions() {
+    public @NotNull List<String> getBlockSuggestions() {
         return List.of(); // its custom blocks are very limited
     }
 
     @Override
-    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+    public @Nullable PackedBlock getBlockByLocation(@NotNull Location loc) {
         return null; // its custom blocks are very limited
     }
 }

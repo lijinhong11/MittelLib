@@ -36,7 +36,7 @@ public interface PackedBlock {
      * Get the id of the block
      * @return id of the block
      */
-    String getId();
+    @NotNull String getId();
 
     /**
      * Gets the item of the block

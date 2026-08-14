@@ -17,8 +17,6 @@
 */
 package io.github.lijinhong11.mittellib.gui.inventory.choosers;
 
-import io.github.lijinhong11.mittellib.MittelLib;
-import io.github.lijinhong11.mittellib.gui.inventory.MittelGUI;
 import io.github.lijinhong11.mittellib.gui.inventory.impl.PaginatedChestGUI;
 import io.github.lijinhong11.mittellib.gui.inventory.item.ButtonItem;
 import io.github.lijinhong11.mittellib.gui.inventory.item.MittelGUIItem;
@@ -29,6 +27,7 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public final class MaterialChooser {
     private static final BiPredicate<String, MittelGUIItem> LOOKUP;
@@ -37,8 +36,8 @@ public final class MaterialChooser {
         LOOKUP = (s, i) -> i.getItem().getType().toString().contains(s.toUpperCase());
     }
 
-    public static void openUsableBlockChooser(Player p, Consumer<PackedBlock> blockConsumer) {
-        PaginatedChestGUI gui = buildGUI(p);
+    public static void openUsableBlockChooser(@NotNull Player p, @NotNull Consumer<PackedBlock> blockConsumer) {
+        PaginatedChestGUI gui = ChooserCommons.buildGUI(p, LOOKUP);
 
         List<PackedBlock> usableBlocks = ContentProviders.getAllUsableBlocks();
         usableBlocks = usableBlocks.stream()
@@ -56,8 +55,8 @@ public final class MaterialChooser {
         gui.open(p);
     }
 
-    public static void openVanillaChooser(Player p, Consumer<PackedBlock> blockConsumer) {
-        PaginatedChestGUI gui = buildGUI(p);
+    public static void openVanillaChooser(@NotNull Player p, @NotNull Consumer<PackedBlock> blockConsumer) {
+        PaginatedChestGUI gui = ChooserCommons.buildGUI(p, LOOKUP);
 
         List<PackedBlock> usableBlocks = ContentProviders.getAllUsableBlocks();
         usableBlocks = usableBlocks.stream()
@@ -74,27 +73,5 @@ public final class MaterialChooser {
                 .toList());
 
         gui.open(p);
-    }
-
-    private static PaginatedChestGUI buildGUI(Player p) {
-        return MittelGUI.pagedChestBuilder()
-                .structure("BBBBBBBSB", "BMMMMMMMB", "BMMMMMMMB", "BMMMMMMMB", "BMMMMMMMB", "BBPBBBNBB")
-                .bind('B', ButtonItem.BACKGROUND)
-                .bindSearch(
-                        'S',
-                        ButtonItem.getSearchButton(
-                                MittelLib.getInstance().getLanguageManager().getMsgComponent(p, "common.search")))
-                .content('M')
-                .onSearch(LOOKUP)
-                .previousPage(
-                        'P',
-                        ButtonItem.getPageButton(MittelLib.getInstance()
-                                .getLanguageManager()
-                                .getMsgComponent(p, "common.previous-page")))
-                .nextPage(
-                        'N',
-                        ButtonItem.getPageButton(
-                                MittelLib.getInstance().getLanguageManager().getMsgComponent(p, "common.next-page")))
-                .build();
     }
 }

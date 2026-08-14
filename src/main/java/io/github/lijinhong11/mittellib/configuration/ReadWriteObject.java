@@ -41,7 +41,7 @@ public interface ReadWriteObject {
         return null;
     }
 
-    void write(ConfigurationSection cs);
+    void write(@NotNull ConfigurationSection cs);
 
-    void read(ConfigurationSection cs);
+    void read(@NotNull ConfigurationSection cs);
 }

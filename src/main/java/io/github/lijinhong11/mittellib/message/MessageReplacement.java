@@ -37,24 +37,24 @@ public final class MessageReplacement
     private final String placeholder;
     private final String replacement;
 
-    private MessageReplacement(String placeholder, String replacement) {
+    private MessageReplacement(@NotNull String placeholder, @NotNull String replacement) {
         this.placeholder = placeholder;
         this.replacement = replacement;
     }
 
-    public static MessageReplacement replace(String placeholder, String replacement) {
+    public static @NotNull MessageReplacement replace(@NotNull String placeholder, @NotNull String replacement) {
         return new MessageReplacement(placeholder, replacement);
     }
 
-    public String parse(String message) {
+    public @NotNull String parse(@NotNull String message) {
         return message.replace(left(), right());
     }
 
-    public String left() {
+    public @NotNull String left() {
         return placeholder;
     }
 
-    public String right() {
+    public @NotNull String right() {
         return replacement;
     }
 

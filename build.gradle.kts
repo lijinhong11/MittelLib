@@ -44,6 +44,7 @@ dependencies {
     implementation("org.reflections:reflections:0.10.2")
     implementation("org.bstats:bstats-bukkit:3.2.1")
     implementation("io.github.lijinhong11:MDatabase:1.2.0")
+    implementation("com.ezylang:EvalEx:3.7.0")
 
     // placeholders
     compileOnly("me.clip:placeholderapi:2.12.2")

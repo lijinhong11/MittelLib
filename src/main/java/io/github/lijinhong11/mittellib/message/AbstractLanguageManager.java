@@ -56,66 +56,75 @@ abstract class AbstractLanguageManager implements ILanguageManager {
     @Setter
     private ILanguageManager fallback;
 
-    protected AbstractLanguageManager(Plugin plugin, String defaultLanguage) {
+    protected AbstractLanguageManager(@NotNull Plugin plugin, @NotNull String defaultLanguage) {
         this.plugin = plugin;
         this.defaultLanguage = defaultLanguage;
     }
 
-    private static Component parseToComponent(@Nullable CommandSender sender, String msg) {
+    private static @NotNull Component parseToComponent(@Nullable CommandSender sender, @NotNull String msg) {
         return ComponentUtils.deserialize(sender, msg);
     }
 
-    private static List<Component> parseToComponentList(List<String> msgList) {
+    private static @NotNull List<Component> parseToComponentList(@NotNull List<String> msgList) {
         return msgList.stream().map(ComponentUtils::deserialize).toList();
     }
 
-    private static List<Component> parseToComponentList(@Nullable CommandSender sender, List<String> msgList) {
+    private static @NotNull List<Component> parseToComponentList(
+            @Nullable CommandSender sender, @NotNull List<String> msgList) {
         return msgList.stream().map(msg -> parseToComponent(sender, msg)).toList();
     }
 
     @Override
-    public void sendMessage(@NonNull CommandSender commandSender, String key, MessageReplacement... args) {
+    public void sendMessage(
+            @NonNull CommandSender commandSender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args) {
         commandSender.sendMessage(parseToComponent(commandSender, getMsg(commandSender, key, args)));
     }
 
     @Override
     public void sendMessage(
-            @NotNull CommandSender commandSender, String key, ClickEvent clickEvent, MessageReplacement... args) {
+            @NotNull CommandSender commandSender,
+            @NotNull String key,
+            @NotNull ClickEvent clickEvent,
+            @NotNull MessageReplacement @NotNull ... args) {
         commandSender.sendMessage(parseToComponent(commandSender, getMsg(commandSender, key, args))
                 .clickEvent(clickEvent));
     }
 
     @Override
-    public void sendMessages(@NotNull CommandSender commandSender, String key, MessageReplacement... args) {
+    public void sendMessages(
+            @NotNull CommandSender commandSender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args) {
         for (String msg : getMsgList(commandSender, key, args)) {
             commandSender.sendMessage(parseToComponent(commandSender, msg));
         }
     }
 
     @Override
-    public Component getMsgComponent(@Nullable CommandSender commandSender, String key, MessageReplacement... args) {
+    public @NotNull Component getMsgComponent(
+            @Nullable CommandSender commandSender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args) {
         return parseToComponent(commandSender, getMsg(commandSender, key, args));
     }
 
     @Override
-    public Component getMsgComponentByLanguage(@Nullable String lang, String key, MessageReplacement... args) {
+    public @NotNull Component getMsgComponentByLanguage(
+            @Nullable String lang, @NotNull String key, @NotNull MessageReplacement @NotNull ... args) {
         return ComponentUtils.deserialize(getMsgByLanguage(lang, key, args));
     }
 
     @Override
-    public List<Component> getMsgComponentList(
-            @Nullable CommandSender commandSender, String key, MessageReplacement... args) {
+    public @NotNull List<Component> getMsgComponentList(
+            @Nullable CommandSender commandSender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args) {
         return parseToComponentList(commandSender, getMsgList(commandSender, key, args));
     }
 
     @Override
-    public List<Component> getMsgComponentListByLanguage(
-            @Nullable String lang, String key, MessageReplacement... args) {
+    public @NotNull List<Component> getMsgComponentListByLanguage(
+            @Nullable String lang, @NotNull String key, @NotNull MessageReplacement @NotNull ... args) {
         return parseToComponentList(getMsgListByLanguage(lang, key, args));
     }
 
     @Override
-    public String getMsg(@Nullable CommandSender sender, String key, MessageReplacement... args) {
+    public @NotNull String getMsg(
+            @Nullable CommandSender sender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args) {
         String msg = getConfiguration(sender).getString(key);
 
         if (msg == null) {
@@ -136,7 +145,8 @@ abstract class AbstractLanguageManager implements ILanguageManager {
     }
 
     @Override
-    public List<String> getMsgList(@Nullable CommandSender commandSender, String key, MessageReplacement... args) {
+    public @NotNull List<String> getMsgList(
+            @Nullable CommandSender commandSender, @NotNull String key, @NotNull MessageReplacement @NotNull ... args) {
         List<String> msgList = getConfiguration(commandSender).getStringList(key);
         for (MessageReplacement arg : args) {
             msgList.replaceAll(arg::parse);
@@ -146,7 +156,8 @@ abstract class AbstractLanguageManager implements ILanguageManager {
     }
 
     @Override
-    public String getMsgByLanguage(@Nullable String lang, String key, MessageReplacement... args) {
+    public @NotNull String getMsgByLanguage(
+            @Nullable String lang, @NotNull String key, @NotNull MessageReplacement @NotNull ... args) {
         String msg = getConfiguration(lang).getString(key);
         if (msg == null) {
             return key;
@@ -160,7 +171,8 @@ abstract class AbstractLanguageManager implements ILanguageManager {
     }
 
     @Override
-    public List<String> getMsgListByLanguage(@Nullable String lang, String key, MessageReplacement... args) {
+    public @NotNull List<String> getMsgListByLanguage(
+            @Nullable String lang, @NotNull String key, @NotNull MessageReplacement @NotNull ... args) {
         List<String> msgList = getConfiguration(lang).getStringList(key);
         for (MessageReplacement arg : args) {
             msgList.replaceAll(arg::parse);
@@ -174,7 +186,7 @@ abstract class AbstractLanguageManager implements ILanguageManager {
             @NotNull Material material,
             @NotNull String sectionKey,
             @Nullable Player player,
-            MessageReplacement... args) {
+            @NotNull MessageReplacement @NotNull ... args) {
         ItemStack is = new ItemStack(material);
         ItemMeta meta = is.getItemMeta();
         meta.displayName(getMsgComponent(player, sectionKey + ".name", args));
@@ -194,7 +206,7 @@ abstract class AbstractLanguageManager implements ILanguageManager {
     }
 
     @Override
-    public String getParsedLocation(@Nullable CommandSender cs, double x, double y, double z) {
+    public @NotNull String getParsedLocation(@Nullable CommandSender cs, double x, double y, double z) {
         MessageReplacement xm = MessageReplacement.replace("%x%", String.valueOf(x));
         MessageReplacement ym = MessageReplacement.replace("%y%", String.valueOf(y));
         MessageReplacement zm = MessageReplacement.replace("%z%", String.valueOf(z));
@@ -213,9 +225,9 @@ abstract class AbstractLanguageManager implements ILanguageManager {
         return defaultConfiguration.getKeys(true);
     }
 
-    protected abstract Configuration getConfiguration(CommandSender sender);
+    protected abstract @NotNull Configuration getConfiguration(@Nullable CommandSender sender);
 
-    protected abstract Configuration getConfiguration(String lang);
+    protected abstract @NotNull Configuration getConfiguration(@Nullable String lang);
 
     protected abstract void loadLanguages();
 }

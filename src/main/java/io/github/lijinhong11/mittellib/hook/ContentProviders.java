@@ -59,7 +59,7 @@ public final class ContentProviders {
      * @param id the content provider's id
      * @return the content provider, null if not found
      */
-    public static @Nullable ContentProvider getById(String id) {
+    public static @Nullable ContentProvider getById(@NotNull String id) {
         for (ContentProvider provider : contentProviders.values()) {
             if (provider.getId().equalsIgnoreCase(id)) {
                 return provider;
@@ -188,7 +188,7 @@ public final class ContentProviders {
      *
      * @return the block
      */
-    public static @Nullable PackedBlock getBlockByLocation(Location loc) {
+    public static @Nullable PackedBlock getBlockByLocation(@NotNull Location loc) {
         for (ContentProvider cp : contentProviders.values()) {
             PackedBlock block = cp.getBlockByLocation(loc);
             if (block != null) {

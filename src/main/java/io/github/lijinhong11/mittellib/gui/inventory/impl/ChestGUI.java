@@ -94,7 +94,7 @@ public final class ChestGUI implements MittelGUI {
     }
 
     @Override
-    public void open(@NonNull Player player) {
+    public void open(@NotNull Player player) {
         player.closeInventory();
         player.openInventory(inv);
     }
@@ -154,48 +154,48 @@ public final class ChestGUI implements MittelGUI {
         private BiConsumer<Player, ChestGUI> closeConsumer;
 
         @Override
-        public ChestBuilder title(@NonNull Component title) {
+        public @NotNull ChestBuilder title(@NotNull Component title) {
             this.title = title;
             return this;
         }
 
         @Override
-        public ChestBuilder size(int size) {
+        public @NonNull ChestBuilder size(int size) {
             this.size = size;
             return this;
         }
 
         @Override
-        public ChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) String... structure) {
+        public @NonNull ChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) String... structure) {
             this.structure = structure;
             return this;
         }
 
         @Override
-        public ChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) List<String> structure) {
+        public @NonNull ChestBuilder structure(@NotNull @ArrayLenRange(from = 1, to = 6) List<String> structure) {
             return structure(structure.toArray(String[]::new));
         }
 
         @Override
-        public ChestBuilder bind(char bind, @NotNull MittelGUIItem item) {
+        public @NonNull ChestBuilder bind(char bind, @NotNull MittelGUIItem item) {
             this.bindings.put(bind, item);
             return this;
         }
 
         @Override
-        public ChestBuilder onOpen(@NotNull BiConsumer<Player, ChestGUI> openConsumer) {
+        public @NonNull ChestBuilder onOpen(@NotNull BiConsumer<Player, ChestGUI> openConsumer) {
             this.openConsumer = openConsumer;
             return this;
         }
 
         @Override
-        public ChestBuilder onClose(@NotNull BiConsumer<Player, ChestGUI> closeConsumer) {
+        public @NonNull ChestBuilder onClose(@NotNull BiConsumer<Player, ChestGUI> closeConsumer) {
             this.closeConsumer = closeConsumer;
             return this;
         }
 
         @Override
-        public ChestGUI build() {
+        public @NotNull ChestGUI build() {
             if (this.size == 0 || this.size % 9 != 0) {
                 this.size = this.structure.length * 9;
             }

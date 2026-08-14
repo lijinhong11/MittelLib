@@ -48,7 +48,7 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
      * @return the center BlockPos
      */
     @Override
-    public BlockPos center() {
+    public @NotNull BlockPos center() {
         return center;
     }
 
@@ -68,7 +68,7 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
      * @param r the radius
      * @return packed offset array (x,y,z,x,y,z,...)
      */
-    private static int[] computeOffsets(int r) {
+    private static int @NotNull [] computeOffsets(int r) {
         int r2 = r * r + r;
         List<Integer> offsets = new ArrayList<>();
 
@@ -103,12 +103,11 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
      * @param radius the radius
      * @return packed offsets
      */
-    private static int[] offsets(int radius) {
+    private static int @NotNull [] offsets(int radius) {
         return CACHE.computeIfAbsent(radius, SphereArea::computeOffsets);
     }
 
     public boolean contains(@NotNull BlockPos pos) {
-
         int dx = pos.x() - center.x();
         int dy = pos.y() - center.y();
         int dz = pos.z() - center.z();
@@ -128,7 +127,7 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
         }
     }
 
-    public List<BlockPos> asPosList() {
+    public @NotNull List<BlockPos> asPosList() {
         int[] off = offsets(radius);
 
         int cx = center.x();
@@ -149,7 +148,7 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
     }
 
     @Override
-    public AreaType getType() {
+    public @NotNull AreaType getType() {
         return AreaType.SPHERE;
     }
 
@@ -159,7 +158,7 @@ public record SphereArea(@NotNull BlockPos center, int radius) implements AreaOf
      * @param amount expansion amount
      * @return a new expanded SphereArea
      */
-    public SphereArea expand(int amount) {
+    public @NotNull SphereArea expand(int amount) {
         return new SphereArea(center, radius + amount);
     }
 

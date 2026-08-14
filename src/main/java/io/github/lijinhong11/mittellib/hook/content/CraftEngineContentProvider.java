@@ -83,19 +83,19 @@ public class CraftEngineContentProvider implements ContentProvider {
     }
 
     @Override
-    public void destroyBlock(Location loc) {
+    public void destroyBlock(@NotNull Location loc) {
         CraftEngineBlocks.remove(loc.getBlock());
     }
 
     @Override
-    public List<String> getItemSuggestions() {
+    public @NotNull List<String> getItemSuggestions() {
         return CraftEngineItems.loadedItems().keySet().stream()
                 .map(k -> "craftengine:" + k.asString())
                 .toList();
     }
 
     @Override
-    public List<String> getBlockSuggestions() {
+    public @NotNull List<String> getBlockSuggestions() {
         return CraftEngineBlocks.loadedBlocks().entrySet().stream()
                 .filter(b -> new PackedCraftEngineBlock(b.getValue()).toItem() != null)
                 .map(k -> "craftengine:" + k.getKey().asString())
@@ -103,7 +103,7 @@ public class CraftEngineContentProvider implements ContentProvider {
     }
 
     @Override
-    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+    public @Nullable PackedBlock getBlockByLocation(@NotNull Location loc) {
         Block block = loc.getBlock();
         if (!CraftEngineBlocks.isCustomBlock(block)) {
             return null;
@@ -124,12 +124,12 @@ public class CraftEngineContentProvider implements ContentProvider {
         }
 
         @Override
-        public String getId() {
+        public @NotNull String getId() {
             return block.id().asString();
         }
 
         @Override
-        public ItemStack toItem() {
+        public @Nullable ItemStack toItem() {
             CustomItem<ItemStack> bind = CraftEngineItems.byId(block.id());
             if (bind == null) {
                 return null;

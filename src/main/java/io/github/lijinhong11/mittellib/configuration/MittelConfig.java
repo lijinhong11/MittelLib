@@ -46,7 +46,7 @@ public class MittelConfig {
     @Getter
     private File file;
 
-    public MittelConfig(YamlConfiguration configuration) {
+    public MittelConfig(@NotNull YamlConfiguration configuration) {
         this.backend = configuration;
     }
 
@@ -199,19 +199,19 @@ public class MittelConfig {
         return backend.getStringList(path);
     }
 
-    public int getUnsignedInt(String path) {
+    public int getUnsignedInt(@NotNull String path) {
         return NumberUtils.asUnsigned(getInt(path));
     }
 
-    public long getUnsignedLong(String path) {
+    public long getUnsignedLong(@NotNull String path) {
         return NumberUtils.asUnsigned(getLong(path));
     }
 
-    public double getUnsignedDouble(String path) {
+    public double getUnsignedDouble(@NotNull String path) {
         return NumberUtils.asUnsigned(getDouble(path));
     }
 
-    public float getUnsignedFloat(String path) {
+    public float getUnsignedFloat(@NotNull String path) {
         return NumberUtils.asUnsigned(getFloat(path));
     }
 
@@ -228,11 +228,11 @@ public class MittelConfig {
         return cs == null ? backend.createSection(path) : cs;
     }
 
-    public Set<String> getKeys(boolean deep) {
+    public @NotNull Set<String> getKeys(boolean deep) {
         return backend.getKeys(deep);
     }
 
-    public Set<String> getKeys(@NotNull String path, boolean deep) {
+    public @NotNull Set<String> getKeys(@NotNull String path, boolean deep) {
         ConfigurationSection cs = getSection(path);
         return cs == null ? Collections.emptySet() : cs.getKeys(deep);
     }
@@ -277,7 +277,7 @@ public class MittelConfig {
         backend.setDefaults(defaults);
     }
 
-    public YamlConfigurationOptions options() {
+    public @NotNull YamlConfigurationOptions options() {
         return backend.options();
     }
 }

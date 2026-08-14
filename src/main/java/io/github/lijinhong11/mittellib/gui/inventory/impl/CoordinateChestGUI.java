@@ -35,7 +35,6 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 
 public final class CoordinateChestGUI implements MittelGUI {
     private final Inventory inv;
@@ -191,7 +190,7 @@ public final class CoordinateChestGUI implements MittelGUI {
     }
 
     @Override
-    public void open(@NonNull Player p) {
+    public void open(@NotNull Player p) {
         p.closeInventory();
         p.openInventory(inv);
     }
@@ -236,7 +235,7 @@ public final class CoordinateChestGUI implements MittelGUI {
         private BiConsumer<Player, CoordinateChestGUI> onOpen, onClose;
 
         @Override
-        public CoordinateBuilder title(@NonNull Component t) {
+        public @NotNull CoordinateBuilder title(@NotNull Component t) {
             this.title = t;
             return this;
         }
@@ -331,7 +330,7 @@ public final class CoordinateChestGUI implements MittelGUI {
         }
 
         @Override
-        public CoordinateChestGUI build() {
+        public @NotNull CoordinateChestGUI build() {
             if (structure != null) {
                 if (structure.length < 1 || structure.length > 6) {
                     throw new IllegalStateException("structure must contain between 1 and 6 rows");

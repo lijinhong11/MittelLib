@@ -65,26 +65,26 @@ public class ItemsAdderContentProvider implements ContentProvider {
     }
 
     @Override
-    public void destroyBlock(Location loc) {
+    public void destroyBlock(@NotNull Location loc) {
         CustomBlock.remove(loc);
     }
 
     @Override
-    public List<String> getItemSuggestions() {
+    public @NotNull List<String> getItemSuggestions() {
         return CustomStack.getNamespacedIdsInRegistry().stream()
                 .map(s -> "itemsadder:" + s)
                 .toList();
     }
 
     @Override
-    public List<String> getBlockSuggestions() {
+    public @NotNull List<String> getBlockSuggestions() {
         return CustomBlock.getNamespacedIdsInRegistry().stream()
                 .map(s -> "itemsadder:" + s)
                 .toList();
     }
 
     @Override
-    public @Nullable PackedBlock getBlockByLocation(Location loc) {
+    public @Nullable PackedBlock getBlockByLocation(@NotNull Location loc) {
         CustomBlock block = CustomBlock.byAlreadyPlaced(loc.getBlock());
         if (block == null) {
             return null;
@@ -100,7 +100,7 @@ public class ItemsAdderContentProvider implements ContentProvider {
         }
 
         @Override
-        public String getId() {
+        public @NotNull String getId() {
             return block.getId();
         }
 

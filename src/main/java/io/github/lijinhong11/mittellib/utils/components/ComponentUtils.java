@@ -26,6 +26,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
@@ -47,7 +48,7 @@ public class ComponentUtils {
         }
     }
 
-    private static String legacyReplacement(char code) {
+    private static @Nullable String legacyReplacement(char code) {
         return switch (code) {
             case '0' -> "<black>";
             case '1' -> "<dark_blue>";
@@ -80,7 +81,7 @@ public class ComponentUtils {
      * @param input the string
      * @return a {@link Component}
      */
-    public static Component deserialize(String input) {
+    public static @NotNull Component deserialize(@Nullable String input) {
         return deserialize(null, input);
     }
 
@@ -90,7 +91,7 @@ public class ComponentUtils {
      * @param input the string
      * @return a {@link Component}
      */
-    public static Component deserialize(@Nullable CommandSender cs, String input) {
+    public static @NotNull Component deserialize(@Nullable CommandSender cs, @Nullable String input) {
         if (input == null) {
             return Component.empty();
         }
@@ -107,7 +108,7 @@ public class ComponentUtils {
         }
     }
 
-    public static String fromLegacy(String legacy, String character) {
+    public static @NotNull String fromLegacy(@NotNull String legacy, @NotNull String character) {
         StringBuilder sb = new StringBuilder(legacy.length());
         char prefix = character.charAt(0);
 
@@ -139,11 +140,11 @@ public class ComponentUtils {
         return sb.toString();
     }
 
-    public static Component text(String input) {
+    public static @NotNull Component text(@NotNull String input) {
         return RESET.append(Component.text(input));
     }
 
-    public static String serialize(Component component) {
+    public static @NotNull String serialize(@NotNull Component component) {
         return MINI.serialize(component);
     }
 }

@@ -49,7 +49,7 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
      * @param loc2 the second location
      * @return a new CuboidArea
      */
-    public static CuboidArea createFromLocation(@NotNull Location loc1, @NotNull Location loc2) {
+    public static @NotNull CuboidArea createFromLocation(@NotNull Location loc1, @NotNull Location loc2) {
         return new CuboidArea(BlockPos.fromLocation(loc1), BlockPos.fromLocation(loc2));
     }
 
@@ -58,7 +58,7 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
      *
      * @return the minimum BlockPos
      */
-    public BlockPos getMin() {
+    public @NotNull BlockPos getMin() {
         return new BlockPos(Math.min(pos1.x(), pos2.x()), Math.min(pos1.y(), pos2.y()), Math.min(pos1.z(), pos2.z()));
     }
 
@@ -67,7 +67,7 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
      *
      * @return the maximum BlockPos
      */
-    public BlockPos getMax() {
+    public @NotNull BlockPos getMax() {
         return new BlockPos(Math.max(pos1.x(), pos2.x()), Math.max(pos1.y(), pos2.y()), Math.max(pos1.z(), pos2.z()));
     }
 
@@ -77,7 +77,7 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
      * @param world the world for the location
      * @return the center location
      */
-    public Location getCenterLocation(final @NotNull World world) {
+    public @NotNull Location getCenterLocation(final @NotNull World world) {
         BlockPos min = getMin();
         BlockPos max = getMax();
         double centerX = (min.x() + max.x()) / 2.0 + 0.5;
@@ -91,7 +91,7 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
      * @param x the amount to expand in X direction
      * @return a new expanded CuboidArea
      */
-    public CuboidArea expand(final int x) {
+    public @NotNull CuboidArea expand(final int x) {
         return expand(x, 0);
     }
 
@@ -102,7 +102,7 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
      * @param y the amount to expand in Y direction
      * @return a new expanded CuboidArea
      */
-    public CuboidArea expand(final int x, final int y) {
+    public @NotNull CuboidArea expand(final int x, final int y) {
         return expand(x, y, 0);
     }
 
@@ -114,11 +114,11 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
      * @param z the amount to expand in Z direction
      * @return a new expanded CuboidArea
      */
-    public CuboidArea expand(final int x, final int y, final int z) {
+    public @NotNull CuboidArea expand(final int x, final int y, final int z) {
         return new CuboidArea(pos1.minus(x, y, z), pos2.plus(x, y, z));
     }
 
-    public boolean contains(final BlockPos pos) {
+    public boolean contains(final @NotNull BlockPos pos) {
         BlockPos min = getMin();
         BlockPos max = getMax();
         return pos.x() >= min.x()
@@ -161,7 +161,7 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
     }
 
     @Override
-    public AreaType getType() {
+    public @NotNull AreaType getType() {
         return AreaType.CUBOID;
     }
 
@@ -170,7 +170,7 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
      *
      * @param action the action to perform for each position
      */
-    public void forEach(final Consumer<BlockPos> action) {
+    public void forEach(final @NotNull Consumer<BlockPos> action) {
         BlockPos min = getMin();
         BlockPos max = getMax();
         for (int x = min.x(); x <= max.x(); x++) {
@@ -182,7 +182,7 @@ public record CuboidArea(@NotNull BlockPos pos1, @NotNull BlockPos pos2) impleme
         }
     }
 
-    public List<BlockPos> asPosList() {
+    public @NotNull List<BlockPos> asPosList() {
         List<BlockPos> list = new ArrayList<>(volume());
         forEach(list::add);
         return list;
