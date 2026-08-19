@@ -43,7 +43,7 @@ dependencies {
     // libraries
     implementation("org.reflections:reflections:0.10.2")
     implementation("org.bstats:bstats-bukkit:3.2.1")
-    implementation("io.github.lijinhong11:MDatabase:1.2.0")
+    implementation("io.github.lijinhong11:MDatabase:1.2.1")
     implementation("com.ezylang:EvalEx:3.7.0")
 
     // placeholders
