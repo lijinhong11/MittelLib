@@ -11,5 +11,6 @@ common:
   enabled: "&aAtivado"
   disabled: "&cDesativado"
   search: "&bPesquisar"
+  search-prompt: "&eDigite sua pesquisa no chat."
   previous-page: "&ePágina anterior"
   next-page: "&ePróxima página"

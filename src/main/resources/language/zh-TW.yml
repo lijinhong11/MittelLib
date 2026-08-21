@@ -11,5 +11,6 @@ common:
   enabled: "&a已啟用"
   disabled: "&c已停用"
   search: "&b搜尋"
+  search-prompt: "&e請在聊天中輸入搜尋內容。"
   previous-page: "&e上一頁"
   next-page: "&e下一頁"

@@ -45,9 +45,10 @@ public final class MaterialChooser {
                 .toList();
 
         gui.setPageItems(usableBlocks.stream()
+                .filter(b -> b.toItem() != null)
                 .map(b -> ButtonItem.clickable(b.toItem(), (g, e) -> {
-                    blockConsumer.accept(b);
                     p.closeInventory();
+                    blockConsumer.accept(b);
                     return false;
                 }))
                 .toList());
@@ -66,8 +67,8 @@ public final class MaterialChooser {
 
         gui.setPageItems(usableBlocks.stream()
                 .map(b -> ButtonItem.clickable(b.toItem(), (g, e) -> {
-                    blockConsumer.accept(b);
                     p.closeInventory();
+                    blockConsumer.accept(b);
                     return false;
                 }))
                 .toList());

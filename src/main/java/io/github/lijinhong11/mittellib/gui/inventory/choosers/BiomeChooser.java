@@ -54,6 +54,7 @@ public final class BiomeChooser {
         gui.open(player);
     }
 
+    // It's dumb, but no ways to get them, right?
     private static @NotNull ItemStack getBiomeIcon(@NotNull Biome biome) {
         NamespacedKey key = biome.getKey();
         Material icon =
@@ -125,8 +126,8 @@ public final class BiomeChooser {
 
         @Override
         public boolean onClick(@NotNull MittelGUI gui, @NotNull InventoryClickEvent event) {
-            biomeConsumer.accept(biome);
             player.closeInventory();
+            biomeConsumer.accept(biome);
             return false;
         }
     }

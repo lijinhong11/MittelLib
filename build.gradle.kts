@@ -52,16 +52,17 @@ dependencies {
 
     // content provider
     compileOnly("dev.lone:api-itemsadder:4.0.10")
-    compileOnly("com.nexomc:nexo:1.16.1")
-    compileOnly("net.momirealms:craft-engine-core:0.0.67")
-    compileOnly("net.momirealms:craft-engine-bukkit:0.0.67")
-    compileOnly("io.th0rgal:oraxen:1.207.0")
+    compileOnly("com.nexomc:nexo:1.27.0")
+    compileOnly("net.momirealms:craft-engine-core:26.8")
+    compileOnly("net.momirealms:craft-engine-bukkit:26.8")
+    compileOnly("io.th0rgal:oraxen:1.218.0")
     compileOnly("net.Indyuce:MMOItems-API:6.10.1-SNAPSHOT")
     compileOnly("io.lumine:MythicLib-dist:1.7.1-SNAPSHOT")
     compileOnly("maven.modrinth:SCore:5.25.7.19")
     compileOnly("com.willfp:eco:6.77.3")
     compileOnly("com.willfp:EcoItems:5.66.0")
     compileOnly("com.willfp:libreforge:4.79.0:all")
+    compileOnly("io.lumine:Mythic-Dist:5.12.1")
 
     //other hooks
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {

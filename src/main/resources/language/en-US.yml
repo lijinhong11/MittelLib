@@ -11,5 +11,6 @@ common:
   enabled: "&aEnabled"
   disabled: "&cDisabled"
   search: "&bSearch"
+  search-prompt: "&eEnter your search query in chat."
   previous-age: "&ePrevious Page"
   next-page: "&eNext Page"

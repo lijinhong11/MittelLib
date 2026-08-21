@@ -20,14 +20,16 @@ package io.github.lijinhong11.mittellib.hook.content;
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
 import io.github.lijinhong11.mittellib.utils.BukkitUtils;
+import io.github.lijinhong11.mittellib.utils.components.ComponentUtils;
 import java.util.List;
 import net.momirealms.craftengine.bukkit.api.CraftEngineBlocks;
 import net.momirealms.craftengine.bukkit.api.CraftEngineItems;
-import net.momirealms.craftengine.core.block.CustomBlock;
+import net.momirealms.craftengine.bukkit.item.BukkitItemDefinition;
+import net.momirealms.craftengine.core.block.BlockDefinition;
 import net.momirealms.craftengine.core.block.ImmutableBlockState;
-import net.momirealms.craftengine.core.item.CustomItem;
 import net.momirealms.craftengine.core.util.Key;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
@@ -48,17 +50,17 @@ public class CraftEngineContentProvider implements ContentProvider {
             return null;
         }
 
-        CustomItem<ItemStack> ci = CraftEngineItems.byId(Key.of(key.namespace(), key.value()));
-        if (ci == null) {
+        BukkitItemDefinition item = CraftEngineItems.byId(Key.of(key.namespace(), key.value()));
+        if (item == null) {
             return null;
         }
 
-        return ci.buildItemStack();
+        return item.buildBukkitItem();
     }
 
     @Override
     public @Nullable String getIdFromItem(@NotNull ItemStack item) {
-        CustomItem<ItemStack> customItem = CraftEngineItems.byItemStack(item);
+        BukkitItemDefinition customItem = CraftEngineItems.byItemStack(item);
 
         if (customItem == null) {
             return null;
@@ -74,7 +76,7 @@ public class CraftEngineContentProvider implements ContentProvider {
             return null;
         }
 
-        CustomBlock ci = CraftEngineBlocks.byId(Key.of(key.namespace(), key.value()));
+        BlockDefinition ci = CraftEngineBlocks.byId(Key.of(key.namespace(), key.value()));
         if (ci == null) {
             return null;
         }
@@ -117,7 +119,7 @@ public class CraftEngineContentProvider implements ContentProvider {
         return new PackedCraftEngineBlock(ibs.behavior().block());
     }
 
-    private record PackedCraftEngineBlock(CustomBlock block) implements PackedBlock {
+    private record PackedCraftEngineBlock(BlockDefinition block) implements PackedBlock {
         @Override
         public void place(@NotNull Location location) {
             CraftEngineBlocks.place(location, block.id(), true);
@@ -130,12 +132,14 @@ public class CraftEngineContentProvider implements ContentProvider {
 
         @Override
         public @Nullable ItemStack toItem() {
-            CustomItem<ItemStack> bind = CraftEngineItems.byId(block.id());
+            BukkitItemDefinition bind = CraftEngineItems.byId(block.id());
             if (bind == null) {
-                return null;
+                ItemStack def = ItemStack.of(Material.PAPER, 1);
+                def.editMeta(m -> m.displayName(ComponentUtils.text(block.id().asString())));
+                return def;
             }
 
-            return bind.buildItemStack();
+            return bind.buildBukkitItem();
         }
     }
 }

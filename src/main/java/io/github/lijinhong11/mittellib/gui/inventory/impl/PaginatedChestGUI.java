@@ -275,6 +275,7 @@ public final class PaginatedChestGUI implements MittelGUI {
                             open(target);
                         },
                         null));
+        MittelLib.getInstance().getLanguageManager().sendMessage(player, "common.search-prompt");
     }
 
     @Override
