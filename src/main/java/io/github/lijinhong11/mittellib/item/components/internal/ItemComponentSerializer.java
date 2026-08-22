@@ -55,7 +55,6 @@ import org.reflections.Reflections;
 
 @UtilityClass
 @ApiStatus.Internal
-@SuppressWarnings("UnstableApiUsage")
 public class ItemComponentSerializer {
     private static final Map<String, ReadMethod> READERS = new HashMap<>();
     private static final Map<Class<?>, String> KEYS = new HashMap<>();
@@ -135,9 +134,9 @@ public class ItemComponentSerializer {
                 key,
                 new ReadMethod(
                         cs -> cs.getBoolean(key)
-                                ? new SimpleItemComponent<>(key, true, (item, ignored) -> item.setData(dataType))
+                                ? new SimpleItemComponent<>(key, true, (item, _) -> item.setData(dataType))
                                 : null,
-                        ignored -> new SimpleItemComponent<>(key, true, (item, value) -> item.setData(dataType)),
+                        ignored -> new SimpleItemComponent<>(key, true, (item, _) -> item.setData(dataType)),
                         true));
 
         TYPE_KEYS.put(dataType, key);
