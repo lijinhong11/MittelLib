@@ -43,7 +43,7 @@ import org.bukkit.profile.PlayerTextures;
 @SuppressWarnings("unchecked")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class ProfileComponent extends ReadWriteItemComponent {
+public final class ProfileComponent extends ReadWriteItemComponent {
     private final UUID uuid;
     private String name;
     private Collection<ProfileProperty> properties;

@@ -37,7 +37,7 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 
 @ItemComponentSpec(key = "trim")
 @AllArgsConstructor
-public class ArmorTrimComponent extends ReadWriteItemComponent {
+public final class ArmorTrimComponent extends ReadWriteItemComponent {
     private static final Registry<TrimMaterial> TRIM_MATERIAL_REGISTRY =
             RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL);
     private static final Registry<TrimPattern> TRIM_PATTERN_REGISTRY =

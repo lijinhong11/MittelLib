@@ -24,7 +24,7 @@ import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
-public class FloatInputDialog extends AbstractInputDialog {
+public final class FloatInputDialog extends AbstractInputDialog {
     private final float min;
     private final float max;
     private final float initial;

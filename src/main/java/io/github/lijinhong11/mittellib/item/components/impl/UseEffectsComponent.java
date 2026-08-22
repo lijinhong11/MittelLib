@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Range;
 @ItemComponentSpec(key = "useEffects")
 @NoArgsConstructor
 @AllArgsConstructor
-public class UseEffectsComponent extends ReadWriteItemComponent {
+public final class UseEffectsComponent extends ReadWriteItemComponent {
     private boolean canSprint = false;
     private boolean interactVibrations = true;
     private @Range(from = 0, to = 1) @NonNegative float speedMultiplier = 0.2f;

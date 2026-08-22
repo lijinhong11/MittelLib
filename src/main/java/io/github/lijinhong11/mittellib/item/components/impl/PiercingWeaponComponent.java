@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 @ItemComponentSpec(key = "piercingWeapon")
 @AllArgsConstructor
 @NoArgsConstructor
-public class PiercingWeaponComponent extends ReadWriteItemComponent {
+public final class PiercingWeaponComponent extends ReadWriteItemComponent {
     private @Nullable Key sound;
     private @Nullable Key hitSound;
     private boolean dealsKnockback = true;

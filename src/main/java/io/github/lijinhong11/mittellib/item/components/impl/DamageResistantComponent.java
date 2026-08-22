@@ -36,7 +36,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 @ItemComponentSpec(key = "damageResistant", requiredVersion = MCVersion.V26_1_X)
-public class DamageResistantComponent extends ReadWriteItemComponent {
+public final class DamageResistantComponent extends ReadWriteItemComponent {
     private final RegistryKeySet<DamageType> types;
 
     public DamageResistantComponent(RegistryKeySet<DamageType> types) {

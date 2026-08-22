@@ -39,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 @ItemComponentSpec(key = "kineticWeapon")
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class KineticWeaponComponent extends ReadWriteItemComponent {
+public final class KineticWeaponComponent extends ReadWriteItemComponent {
     private final @NotNull KineticWeapon.Condition dismount;
     private final @NotNull KineticWeapon.Condition knockback;
     private final @NotNull KineticWeapon.Condition damage;

@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 @ItemComponentSpec(key = "modelData")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class CustomModelDataComponent extends ReadWriteItemComponent {
+public final class CustomModelDataComponent extends ReadWriteItemComponent {
     private List<Float> floats = new ArrayList<>();
     private List<Boolean> flags = new ArrayList<>();
     private List<String> strings = new ArrayList<>();

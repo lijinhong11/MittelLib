@@ -30,7 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ButtonItem implements MittelGUIItem {
+public final class ButtonItem implements MittelGUIItem {
     public static final ButtonItem BACKGROUND;
 
     static {

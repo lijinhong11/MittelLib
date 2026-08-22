@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 @ItemComponentSpec(key = "useRemainder")
 @AllArgsConstructor
-public class UseRemainderComponent extends ReadWriteItemComponent {
+public final class UseRemainderComponent extends ReadWriteItemComponent {
     private final @NotNull ItemStack transfromInto;
 
     public static UseRemainderComponent fromMinecraftComponent(UseRemainder useRemainder) {

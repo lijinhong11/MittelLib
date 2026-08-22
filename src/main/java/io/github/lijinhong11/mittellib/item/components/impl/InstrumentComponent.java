@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 @ItemComponentSpec(key = "instrument")
 @AllArgsConstructor
-public class InstrumentComponent extends ReadWriteItemComponent {
+public final class InstrumentComponent extends ReadWriteItemComponent {
     private final @NotNull MusicInstrument instrument;
 
     public static InstrumentComponent fromMinecraftComponent(MusicInstrument instrument) {

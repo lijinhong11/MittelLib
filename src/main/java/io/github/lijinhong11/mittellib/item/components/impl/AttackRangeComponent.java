@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Range;
 @ItemComponentSpec(key = " attackRange")
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttackRangeComponent extends ReadWriteItemComponent {
+public final class AttackRangeComponent extends ReadWriteItemComponent {
     private @Range(from = 0, to = 64) float minReach = 0;
     private @Range(from = 0, to = 64) float maxReach = 3;
     private @Range(from = 0, to = 64) float minCreativeReach = 0;

@@ -14,47 +14,46 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package io.github.lijinhong11.mittellib.item.components.impl;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
+import io.github.lijinhong11.mittellib.utils.components.ComponentUtils;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.DeathProtection;
-import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
-import java.util.List;
-import lombok.AllArgsConstructor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-@ItemComponentSpec(key = "deathProtection")
-@AllArgsConstructor
-public final class DeathProtectionComponent extends ReadWriteItemComponent {
-    private final List<ConsumeEffect> effects;
+@ItemComponentSpec(key = "customName")
+public final class CustomNameComponent extends ReadWriteItemComponent {
+    private final Component value;
 
-    public static DeathProtectionComponent fromMinecraftComponent(DeathProtection deathProtection) {
-        return new DeathProtectionComponent(deathProtection.deathEffects());
+    public CustomNameComponent(@NotNull Component value) {
+        this.value = value;
     }
 
     public static DataComponentType getDataComponentType() {
-        return DataComponentTypes.DEATH_PROTECTION;
+        return DataComponentTypes.CUSTOM_NAME;
     }
 
-    public static DeathProtectionComponent readFromSection(ConfigurationSection cs) {
-        List<ConsumeEffect> effectList = ComponentCommons.readConsumeEffects(cs);
-        return new DeathProtectionComponent(effectList);
+    public static CustomNameComponent fromMinecraftComponent(Component value) {
+        return new CustomNameComponent(value);
+    }
+
+    public static CustomNameComponent readFromSection(ConfigurationSection cs) {
+        return new CustomNameComponent(ComponentUtils.deserialize(cs.getString("value")));
     }
 
     @Override
     public void applyToItem(ItemStack item) {
-        item.setData(DataComponentTypes.DEATH_PROTECTION, DeathProtection.deathProtection(effects));
+        item.setData(DataComponentTypes.CUSTOM_NAME, value);
     }
 
     @Override
     public void write(ConfigurationSection cs) {
-        if (effects != null && !effects.isEmpty()) {
-            ComponentCommons.writeConsumeEffects(effects, cs);
-        }
+        cs.set("value", ComponentUtils.serialize(value));
     }
 }

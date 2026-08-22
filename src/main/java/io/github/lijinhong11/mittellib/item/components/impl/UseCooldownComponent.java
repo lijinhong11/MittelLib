@@ -38,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class UseCooldownComponent extends ReadWriteItemComponent {
+public final class UseCooldownComponent extends ReadWriteItemComponent {
     private final @Positive float cooldown;
     private @Nullable Key cooldownGroup;
 

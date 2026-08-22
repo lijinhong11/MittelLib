@@ -14,47 +14,45 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package io.github.lijinhong11.mittellib.item.components.impl;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
 import io.github.lijinhong11.mittellib.item.components.internal.ItemComponentSpec;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.DeathProtection;
-import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
+import io.papermc.paper.datacomponent.item.BundleContents;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
-@ItemComponentSpec(key = "deathProtection")
-@AllArgsConstructor
-public final class DeathProtectionComponent extends ReadWriteItemComponent {
-    private final List<ConsumeEffect> effects;
+@ItemComponentSpec(key = "bundleContents")
+public final class BundleContentsComponent extends ReadWriteItemComponent {
+    private final List<ItemStack> contents;
 
-    public static DeathProtectionComponent fromMinecraftComponent(DeathProtection deathProtection) {
-        return new DeathProtectionComponent(deathProtection.deathEffects());
+    public BundleContentsComponent(List<ItemStack> contents) {
+        this.contents = contents;
     }
 
     public static DataComponentType getDataComponentType() {
-        return DataComponentTypes.DEATH_PROTECTION;
+        return DataComponentTypes.BUNDLE_CONTENTS;
     }
 
-    public static DeathProtectionComponent readFromSection(ConfigurationSection cs) {
-        List<ConsumeEffect> effectList = ComponentCommons.readConsumeEffects(cs);
-        return new DeathProtectionComponent(effectList);
+    public static BundleContentsComponent fromMinecraftComponent(BundleContents value) {
+        return new BundleContentsComponent(value.contents());
+    }
+
+    public static BundleContentsComponent readFromSection(ConfigurationSection cs) {
+        return new BundleContentsComponent(ContainerComponent.readItems(cs));
     }
 
     @Override
     public void applyToItem(ItemStack item) {
-        item.setData(DataComponentTypes.DEATH_PROTECTION, DeathProtection.deathProtection(effects));
+        item.setData(DataComponentTypes.BUNDLE_CONTENTS, BundleContents.bundleContents(contents));
     }
 
     @Override
     public void write(ConfigurationSection cs) {
-        if (effects != null && !effects.isEmpty()) {
-            ComponentCommons.writeConsumeEffects(effects, cs);
-        }
+        ContainerComponent.writeItems(cs, contents);
     }
 }

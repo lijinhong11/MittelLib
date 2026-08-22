@@ -31,12 +31,13 @@ import lombok.NoArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.common.value.qual.ArrayLenRange;
 
 @ItemComponentSpec(key = "chargedProjectiles")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChargedProjectilesComponent extends ReadWriteItemComponent {
-    private List<ItemStack> projectiles;
+public final class ChargedProjectilesComponent extends ReadWriteItemComponent {
+    private @ArrayLenRange(to = 1024) List<ItemStack> projectiles;
 
     public static DataComponentType getDataComponentType() {
         return DataComponentTypes.CHARGED_PROJECTILES;

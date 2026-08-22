@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 @ItemComponentSpec(key = "dyedColor")
 @NoArgsConstructor
 @AllArgsConstructor
-public class DyedColorComponent extends ReadWriteItemComponent {
+public final class DyedColorComponent extends ReadWriteItemComponent {
     private Color color;
 
     public static DyedColorComponent fromMinecraftComponent(DyedItemColor dyedItemColor) {

@@ -45,7 +45,7 @@ import org.jetbrains.annotations.Nullable;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @SuppressWarnings("UnstableApiUsage")
-public class EquippableComponent extends ReadWriteItemComponent {
+public final class EquippableComponent extends ReadWriteItemComponent {
     private final @NotNull EquipmentSlot slot;
     private @Nullable Key equipSound;
     private @Nullable Key assetId;

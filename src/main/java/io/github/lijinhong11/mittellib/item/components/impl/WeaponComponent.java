@@ -32,7 +32,7 @@ import org.checkerframework.checker.index.qual.NonNegative;
 @ItemComponentSpec(key = "weapon")
 @NoArgsConstructor
 @AllArgsConstructor
-public class WeaponComponent extends ReadWriteItemComponent {
+public final class WeaponComponent extends ReadWriteItemComponent {
     private @NonNegative int itemDamagePerAttack = 1;
     private @NonNegative float disableBlockingForSeconds = 0;
 

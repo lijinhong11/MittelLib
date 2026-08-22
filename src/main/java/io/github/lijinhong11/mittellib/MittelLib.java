@@ -22,9 +22,9 @@ import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.hook.economy.VaultHook;
 import io.github.lijinhong11.mittellib.hook.point.PlayerPointsHook;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
-import io.github.lijinhong11.mittellib.utils.ModrinthUpdateChecker;
 import io.github.lijinhong11.mittellib.utils.components.MittelLibTranslator;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
+
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
@@ -55,8 +55,6 @@ public final class MittelLib extends JavaPlugin {
     public void onEnable() {
         // Shut up bstats relocation
         System.setProperty("bstats.relocatecheck", "false");
-
-        new ModrinthUpdateChecker(this, "mittellib").check();
 
         languageManager = new SyncLanguageManager(this);
         GlobalTranslator.translator().addSource(new MittelLibTranslator(this, languageManager));

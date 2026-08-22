@@ -44,7 +44,7 @@ import org.checkerframework.checker.index.qual.NonNegative;
 @ItemComponentSpec(key = "tool")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ToolComponent extends ReadWriteItemComponent {
+public final class ToolComponent extends ReadWriteItemComponent {
     private @NonNegative float defaultMiningSpeed = 1;
     private @NonNegative int damagePerBlock = 1;
     private boolean canDestroyBlocksInCreative = true;

@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 @ItemComponentSpec(key = "food")
 @AllArgsConstructor
 @NoArgsConstructor
-public class FoodComponent extends ReadWriteItemComponent {
+public final class FoodComponent extends ReadWriteItemComponent {
     private @NonNegative int nutrition = 0;
 
     private float saturation = 0.0f;

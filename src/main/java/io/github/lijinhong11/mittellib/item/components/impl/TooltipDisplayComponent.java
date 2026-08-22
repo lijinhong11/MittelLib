@@ -35,7 +35,7 @@ import org.bukkit.inventory.ItemStack;
 @ItemComponentSpec(key = "tooltipDisplay")
 @NoArgsConstructor
 @AllArgsConstructor
-public class TooltipDisplayComponent extends ReadWriteItemComponent {
+public final class TooltipDisplayComponent extends ReadWriteItemComponent {
     private boolean hideTooltip = false;
 
     private Set<DataComponentType> hiddenComponents = new HashSet<>();

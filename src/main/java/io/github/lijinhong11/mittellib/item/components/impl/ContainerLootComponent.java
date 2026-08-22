@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 @ItemComponentSpec(key = "containerLoot")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class ContainerLootComponent extends ReadWriteItemComponent {
+public final class ContainerLootComponent extends ReadWriteItemComponent {
     private final @NotNull Key lootTable;
     private long seed = 0L;
 

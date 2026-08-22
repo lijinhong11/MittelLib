@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 @ItemComponentSpec(key = "lodestoneTracker")
 @AllArgsConstructor
 @NoArgsConstructor
-public class LodestoneTrackerComponent extends ReadWriteItemComponent {
+public final class LodestoneTrackerComponent extends ReadWriteItemComponent {
     private @Nullable Location location;
     private boolean tracked = true;
 

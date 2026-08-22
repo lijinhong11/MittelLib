@@ -27,6 +27,8 @@ import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Enchantable;
 import io.papermc.paper.datacomponent.item.JukeboxPlayable;
+import io.papermc.paper.datacomponent.item.MapId;
+import io.papermc.paper.datacomponent.item.OminousBottleAmplifier;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import java.lang.reflect.InvocationTargetException;
@@ -142,7 +144,7 @@ public class ItemComponentSerializer {
     }
 
     private static void registerSimples() {
-        MCVersion current = MCVersion.getCurrent();
+        registerNonValued("unbreakable", DataComponentTypes.UNBREAKABLE);
 
         registerSimple(
                 "damage", Integer.class, DataComponentTypes.DAMAGE, (i, e) -> i.setData(DataComponentTypes.DAMAGE, e));
@@ -161,6 +163,31 @@ public class ItemComponentSerializer {
                 Integer.class,
                 DataComponentTypes.ENCHANTABLE,
                 (i, e) -> i.setData(DataComponentTypes.ENCHANTABLE, Enchantable.enchantable(e)));
+
+        registerSimple(
+                "repairCost", Integer.class, DataComponentTypes.REPAIR_COST, (i, e) -> i.setData(DataComponentTypes.REPAIR_COST, e));
+        registerSimple(
+                "enchantmentGlintOverride",
+                Boolean.class,
+                DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE,
+                (i, e) -> i.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, e));
+        registerSimple(
+                "minimumAttackCharge",
+                Float.class,
+                DataComponentTypes.MINIMUM_ATTACK_CHARGE,
+                (i, e) -> i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e));
+        registerSimple(
+                "potionDurationScale",
+                Float.class,
+                DataComponentTypes.POTION_DURATION_SCALE,
+                (i, e) -> i.setData(DataComponentTypes.POTION_DURATION_SCALE, e));
+        registerSimple(
+                "mapId", Integer.class, DataComponentTypes.MAP_ID, (i, e) -> i.setData(DataComponentTypes.MAP_ID, MapId.mapId(e)));
+        registerSimple(
+                "ominousBottleAmplifier",
+                Integer.class,
+                DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER,
+                (i, e) -> i.setData(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER, OminousBottleAmplifier.amplifier(e)));
 
         registerSimple("baseColor", String.class, DataComponentTypes.BASE_COLOR, (i, e) -> {
             DyeColor dyeColor = EnumUtils.readEnum(DyeColor.class, e);
@@ -235,18 +262,45 @@ public class ItemComponentSerializer {
 
         registerNonValued("intangibleProjectile", DataComponentTypes.INTANGIBLE_PROJECTILE);
 
-        registerSimple(
-                "minimumAttackCharge",
-                float.class,
-                DataComponentTypes.INTANGIBLE_PROJECTILE,
-                (i, e) -> i.setData(DataComponentTypes.MINIMUM_ATTACK_CHARGE, e));
-
         registerSimple("dye", String.class, DataComponentTypes.DYE, (i, s) -> {
             try {
                 DyeColor dyeColor = DyeColor.valueOf(s.toUpperCase());
                 i.setData(DataComponentTypes.DYE, dyeColor);
             } catch (IllegalArgumentException e) {
                 MittelLib.getInstance().getLogger().severe("Failed to find a dye color with name " + s);
+            }
+        });
+
+        registerSimple("noteBlockSound", String.class, DataComponentTypes.NOTE_BLOCK_SOUND, (i, s) -> {
+            NamespacedKey key = BukkitUtils.getNamespacedKey(s);
+            if (key != null) {
+                i.setData(DataComponentTypes.NOTE_BLOCK_SOUND, key);
+            }
+        });
+
+        registerSimple("breakSound", String.class, DataComponentTypes.BREAK_SOUND, (i, s) -> {
+            NamespacedKey key = BukkitUtils.getNamespacedKey(s);
+            if (key != null) {
+                i.setData(DataComponentTypes.BREAK_SOUND, key);
+            }
+        });
+
+        registerEnum("wolfCollar", DyeColor.class, DataComponentTypes.WOLF_COLLAR, (i, e) -> i.setData(DataComponentTypes.WOLF_COLLAR, e));
+        registerEnum("catCollar", DyeColor.class, DataComponentTypes.CAT_COLLAR, (i, e) -> i.setData(DataComponentTypes.CAT_COLLAR, e));
+        registerEnum("sheepColor", DyeColor.class, DataComponentTypes.SHEEP_COLOR, (i, e) -> i.setData(DataComponentTypes.SHEEP_COLOR, e));
+        registerEnum("shulkerColor", DyeColor.class, DataComponentTypes.SHULKER_COLOR, (i, e) -> i.setData(DataComponentTypes.SHULKER_COLOR, e));
+        registerEnum("tropicalFishBaseColor", DyeColor.class, DataComponentTypes.TROPICAL_FISH_BASE_COLOR, (i, e) -> i.setData(DataComponentTypes.TROPICAL_FISH_BASE_COLOR, e));
+        registerEnum("tropicalFishPatternColor", DyeColor.class, DataComponentTypes.TROPICAL_FISH_PATTERN_COLOR, (i, e) -> i.setData(DataComponentTypes.TROPICAL_FISH_PATTERN_COLOR, e));
+    }
+
+    private static <T extends Enum<T>> void registerEnum(
+            String key, Class<T> type, DataComponentType dataType, BiConsumer<ItemStack, T> applier) {
+        registerSimple(key, String.class, dataType, (item, value) -> {
+            T enumValue = EnumUtils.readEnum(type, value);
+            if (enumValue != null) {
+                applier.accept(item, enumValue);
+            } else {
+                MittelLib.getInstance().getLogger().severe("Invalid value for "+ type.getSimpleName() + ":" + value);
             }
         });
     }

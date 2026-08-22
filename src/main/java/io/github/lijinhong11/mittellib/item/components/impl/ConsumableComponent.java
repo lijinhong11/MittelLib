@@ -42,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 @ItemComponentSpec(key = "consumable")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConsumableComponent extends ReadWriteItemComponent {
+public final class ConsumableComponent extends ReadWriteItemComponent {
     private @NonNegative float consumeSeconds = 1.6f;
     private ItemUseAnimation animation = ItemUseAnimation.EAT;
     private Key sound = NamespacedKey.minecraft("entity.generic.eat");

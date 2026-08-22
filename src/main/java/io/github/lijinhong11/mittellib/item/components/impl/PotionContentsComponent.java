@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
 @ItemComponentSpec(key = "potionContents")
 @AllArgsConstructor
 @NoArgsConstructor
-public class PotionContentsComponent extends ReadWriteItemComponent {
+public final class PotionContentsComponent extends ReadWriteItemComponent {
     private static final Registry<PotionType> POTION_TYPES =
             RegistryAccess.registryAccess().getRegistry(RegistryKey.POTION);
 

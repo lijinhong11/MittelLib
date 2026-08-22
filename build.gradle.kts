@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:[26.1.+, 26.2)")
+    compileOnly("io.papermc.paper:paper-api:26.2.build.+")
 
     // libraries
     implementation("org.reflections:reflections:0.10.2")
