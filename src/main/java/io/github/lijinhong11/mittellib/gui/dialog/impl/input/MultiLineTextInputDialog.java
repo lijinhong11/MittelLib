@@ -20,6 +20,8 @@ package io.github.lijinhong11.mittellib.gui.dialog.impl.input;
 import io.papermc.paper.dialog.DialogResponseView;
 import io.papermc.paper.registry.data.dialog.input.DialogInput;
 import io.papermc.paper.registry.data.dialog.input.TextDialogInput;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,7 +32,7 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
     private final int maxLength;
     private final int maxLines;
     private final int height;
-    private final String initial;
+    private final List<String> initial;
     private final Consumer<List<String>> callback;
 
     MultiLineTextInputDialog(
@@ -40,7 +42,7 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
             int maxLength,
             int maxLines,
             int height,
-            String initial) {
+            List<String> initial) {
         super(title, label);
 
         this.callback = callback;
@@ -52,7 +54,7 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
 
     public static MultiLineTextInputDialog create(
             @NotNull Component title, @NotNull Component label, @NotNull Consumer<List<String>> callback) {
-        return new MultiLineTextInputDialog(title, label, callback, 4096, Integer.MAX_VALUE, 0, "");
+        return new MultiLineTextInputDialog(title, label, callback, 4096, Integer.MAX_VALUE, 0, new ArrayList<>());
     }
 
     public static MultiLineTextInputDialog create(
@@ -61,7 +63,7 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
             @NotNull Consumer<List<String>> callback,
             int maxLength,
             int maxLines) {
-        return new MultiLineTextInputDialog(title, label, callback, maxLength, maxLines, 0, "");
+        return new MultiLineTextInputDialog(title, label, callback, maxLength, maxLines, 0, new ArrayList<>());
     }
 
     public static MultiLineTextInputDialog create(
@@ -73,14 +75,22 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
             int height,
             @NotNull List<String> initial) {
         return new MultiLineTextInputDialog(
-                title, label, callback, maxLength, maxLines, height, String.join("\n", initial));
+                title, label, callback, maxLength, maxLines, height, initial);
     }
 
     @Override
     public @NotNull List<? extends DialogInput> getInputs() {
+        String init = "";
+        for (String s : initial) {
+            init = init.concat(s);
+            if (!s.equals(initial.getLast())) {
+                init = init.concat("\n");
+            }
+        }
+
         return List.of(DialogInput.text(INPUT_KEY, label)
                 .maxLength(maxLength)
-                .initial(initial)
+                .initial(init)
                 .multiline(TextDialogInput.MultilineOptions.create(maxLines, height > 0 ? height : null))
                 .build());
     }
