@@ -50,6 +50,10 @@ public class StringUtils {
     }
 
     public static @NotNull String parsePlaceholders(@Nullable CommandSender cs, @NotNull String text) {
+        if (cs instanceof Player a) {
+            text = text.replace("%player%", a.getName());
+        }
+
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             text = PlaceholderAPI.setPlaceholders(cs instanceof Player p ? p : null, text);
         }
