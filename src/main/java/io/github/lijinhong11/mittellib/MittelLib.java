@@ -24,7 +24,6 @@ import io.github.lijinhong11.mittellib.hook.point.PlayerPointsHook;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.lijinhong11.mittellib.utils.components.MittelLibTranslator;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
-
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;

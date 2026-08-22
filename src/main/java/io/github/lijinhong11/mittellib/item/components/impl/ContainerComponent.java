@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 package io.github.lijinhong11.mittellib.item.components.impl;
 
 import io.github.lijinhong11.mittellib.configuration.ReadWriteItemComponent;
@@ -66,17 +66,22 @@ public final class ContainerComponent extends ReadWriteItemComponent {
                 items.add(MittelItem.readFromSection(section).get());
             } else if (value instanceof java.util.Map<?, ?> map) {
                 YamlConfiguration yaml = new YamlConfiguration();
-                items.add(MittelItem.readFromSection(yaml.createSection("item", map)).get());
+                items.add(MittelItem.readFromSection(yaml.createSection("item", map))
+                        .get());
             }
         }
         return items;
     }
 
     static void writeItems(ConfigurationSection cs, List<ItemStack> items) {
-        cs.set("items", items.stream().map(item -> {
-                    YamlConfiguration yaml = new YamlConfiguration();
-                    new MittelItem(item).write(yaml);
-                    return yaml.getValues(false);
-                }).toList());
+        cs.set(
+                "items",
+                items.stream()
+                        .map(item -> {
+                            YamlConfiguration yaml = new YamlConfiguration();
+                            new MittelItem(item).write(yaml);
+                            return yaml.getValues(false);
+                        })
+                        .toList());
     }
 }

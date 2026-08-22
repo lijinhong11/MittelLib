@@ -164,7 +164,10 @@ public class ItemComponentSerializer {
                 (i, e) -> i.setData(DataComponentTypes.ENCHANTABLE, Enchantable.enchantable(e)));
 
         registerSimple(
-                "repairCost", Integer.class, DataComponentTypes.REPAIR_COST, (i, e) -> i.setData(DataComponentTypes.REPAIR_COST, e));
+                "repairCost",
+                Integer.class,
+                DataComponentTypes.REPAIR_COST,
+                (i, e) -> i.setData(DataComponentTypes.REPAIR_COST, e));
         registerSimple(
                 "enchantmentGlintOverride",
                 Boolean.class,
@@ -181,7 +184,10 @@ public class ItemComponentSerializer {
                 DataComponentTypes.POTION_DURATION_SCALE,
                 (i, e) -> i.setData(DataComponentTypes.POTION_DURATION_SCALE, e));
         registerSimple(
-                "mapId", Integer.class, DataComponentTypes.MAP_ID, (i, e) -> i.setData(DataComponentTypes.MAP_ID, MapId.mapId(e)));
+                "mapId",
+                Integer.class,
+                DataComponentTypes.MAP_ID,
+                (i, e) -> i.setData(DataComponentTypes.MAP_ID, MapId.mapId(e)));
         registerSimple(
                 "ominousBottleAmplifier",
                 Integer.class,
@@ -284,12 +290,36 @@ public class ItemComponentSerializer {
             }
         });
 
-        registerEnum("wolfCollar", DyeColor.class, DataComponentTypes.WOLF_COLLAR, (i, e) -> i.setData(DataComponentTypes.WOLF_COLLAR, e));
-        registerEnum("catCollar", DyeColor.class, DataComponentTypes.CAT_COLLAR, (i, e) -> i.setData(DataComponentTypes.CAT_COLLAR, e));
-        registerEnum("sheepColor", DyeColor.class, DataComponentTypes.SHEEP_COLOR, (i, e) -> i.setData(DataComponentTypes.SHEEP_COLOR, e));
-        registerEnum("shulkerColor", DyeColor.class, DataComponentTypes.SHULKER_COLOR, (i, e) -> i.setData(DataComponentTypes.SHULKER_COLOR, e));
-        registerEnum("tropicalFishBaseColor", DyeColor.class, DataComponentTypes.TROPICAL_FISH_BASE_COLOR, (i, e) -> i.setData(DataComponentTypes.TROPICAL_FISH_BASE_COLOR, e));
-        registerEnum("tropicalFishPatternColor", DyeColor.class, DataComponentTypes.TROPICAL_FISH_PATTERN_COLOR, (i, e) -> i.setData(DataComponentTypes.TROPICAL_FISH_PATTERN_COLOR, e));
+        registerEnum(
+                "wolfCollar",
+                DyeColor.class,
+                DataComponentTypes.WOLF_COLLAR,
+                (i, e) -> i.setData(DataComponentTypes.WOLF_COLLAR, e));
+        registerEnum(
+                "catCollar",
+                DyeColor.class,
+                DataComponentTypes.CAT_COLLAR,
+                (i, e) -> i.setData(DataComponentTypes.CAT_COLLAR, e));
+        registerEnum(
+                "sheepColor",
+                DyeColor.class,
+                DataComponentTypes.SHEEP_COLOR,
+                (i, e) -> i.setData(DataComponentTypes.SHEEP_COLOR, e));
+        registerEnum(
+                "shulkerColor",
+                DyeColor.class,
+                DataComponentTypes.SHULKER_COLOR,
+                (i, e) -> i.setData(DataComponentTypes.SHULKER_COLOR, e));
+        registerEnum(
+                "tropicalFishBaseColor",
+                DyeColor.class,
+                DataComponentTypes.TROPICAL_FISH_BASE_COLOR,
+                (i, e) -> i.setData(DataComponentTypes.TROPICAL_FISH_BASE_COLOR, e));
+        registerEnum(
+                "tropicalFishPatternColor",
+                DyeColor.class,
+                DataComponentTypes.TROPICAL_FISH_PATTERN_COLOR,
+                (i, e) -> i.setData(DataComponentTypes.TROPICAL_FISH_PATTERN_COLOR, e));
     }
 
     private static <T extends Enum<T>> void registerEnum(
@@ -299,7 +329,7 @@ public class ItemComponentSerializer {
             if (enumValue != null) {
                 applier.accept(item, enumValue);
             } else {
-                MittelLib.getInstance().getLogger().severe("Invalid value for "+ type.getSimpleName() + ":" + value);
+                MittelLib.getInstance().getLogger().severe("Invalid value for " + type.getSimpleName() + ":" + value);
             }
         });
     }
