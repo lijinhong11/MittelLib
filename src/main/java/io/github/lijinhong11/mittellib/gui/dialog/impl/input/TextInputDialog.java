@@ -59,7 +59,7 @@ public final class TextInputDialog extends AbstractInputDialog {
     @Override
     public @NotNull List<? extends DialogInput> getInputs() {
         return List.of(DialogInput.text(INPUT_KEY, label)
-                .width(calculateInputWidth(maxLength, 1))
+                .width(400)
                 .maxLength(maxLength)
                 .initial(initial)
                 .build());

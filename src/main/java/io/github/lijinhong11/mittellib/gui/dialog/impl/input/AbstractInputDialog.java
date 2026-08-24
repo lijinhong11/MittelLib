@@ -45,11 +45,6 @@ public abstract class AbstractInputDialog extends AbstractDialog {
         this.label = label;
     }
 
-    protected static int calculateInputWidth(int maxLength, int maxLines) {
-        int width = (int) Math.ceil((double) maxLength / Math.max(1, maxLines));
-        return (int) Math.clamp(width, 1L, 1024L);
-    }
-
     @Override
     public @NotNull Component getTitle() {
         return title;

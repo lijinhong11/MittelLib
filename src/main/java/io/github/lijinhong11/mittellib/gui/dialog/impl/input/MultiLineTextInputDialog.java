@@ -87,7 +87,7 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
         }
 
         return List.of(DialogInput.text(INPUT_KEY, label)
-                .width(calculateInputWidth(maxLength, maxLines))
+                .width(400)
                 .maxLength(maxLength)
                 .initial(init)
                 .multiline(TextDialogInput.MultilineOptions.create(maxLines, height > 0 ? height : null))
