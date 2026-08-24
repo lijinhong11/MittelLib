@@ -19,7 +19,6 @@ package io.github.lijinhong11.mittellib;
 
 import io.github.lijinhong11.mittellib.gui.inventory.MittelGUIListener;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
-import io.github.lijinhong11.mittellib.hook.economy.EconomyProvider;
 import io.github.lijinhong11.mittellib.hook.economy.EconomyProviders;
 import io.github.lijinhong11.mittellib.hook.point.PlayerPointsHook;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;

@@ -14,19 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 package io.github.lijinhong11.mittellib.hook.economy;
 
-import java.lang.reflect.Constructor;
-import java.util.Comparator;
+import io.github.lijinhong11.mittellib.MittelLib;
+import io.github.lijinhong11.mittellib.hook.economy.impl.VaultEconomyProvider;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.experimental.UtilityClass;
 import org.bukkit.OfflinePlayer;
-import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 
 @UtilityClass
 public class EconomyProviders {
@@ -34,28 +30,14 @@ public class EconomyProviders {
     private static EconomyProvider activeProvider;
 
     /**
-     * Discovers and initializes economy providers bundled with MittelLib.
+     * Initializes the economy providers bundled with MittelLib.
      */
     public static void init() {
         if (!PROVIDERS.isEmpty()) {
             return;
         }
 
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .forPackages("io.github.lijinhong11.mittellib.hook.economy")
-                .filterInputsBy(new FilterBuilder().includePattern(".*economy.*"))
-                .addScanners(Scanners.TypesAnnotated));
-
-        reflections.getTypesAnnotatedWith(EconomyProviderSpec.class).stream()
-                .sorted(Comparator.comparingInt(type -> -type.getAnnotation(EconomyProviderSpec.class).priority()))
-                .forEach(type -> {
-                    try {
-                        Constructor<?> constructor = type.getDeclaredConstructor();
-                        constructor.setAccessible(true);
-                        register((EconomyProvider) constructor.newInstance());
-                    } catch (Exception ignored) {
-                    }
-                });
+        register(new VaultEconomyProvider());
     }
 
     /**
@@ -66,6 +48,9 @@ public class EconomyProviders {
     public static void register(EconomyProvider provider) {
         String id = provider.getId().toLowerCase();
         PROVIDERS.put(id, provider);
+
+        MittelLib.getInstance().getLogger().info("Registered economy provider: " + id);
+
         selectProvider();
     }
 

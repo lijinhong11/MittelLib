@@ -24,5 +24,6 @@ softdepend:
   - MiniPlaceholders
 
   - Vault
-  - PlayerPoints
   - ServiceIO
+  - PlayerPoints
+
