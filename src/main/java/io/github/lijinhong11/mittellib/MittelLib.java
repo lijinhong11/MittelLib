@@ -19,7 +19,8 @@ package io.github.lijinhong11.mittellib;
 
 import io.github.lijinhong11.mittellib.gui.inventory.MittelGUIListener;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
-import io.github.lijinhong11.mittellib.hook.economy.VaultHook;
+import io.github.lijinhong11.mittellib.hook.economy.EconomyProvider;
+import io.github.lijinhong11.mittellib.hook.economy.EconomyProviders;
 import io.github.lijinhong11.mittellib.hook.point.PlayerPointsHook;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.lijinhong11.mittellib.utils.components.MittelLibTranslator;
@@ -59,7 +60,7 @@ public final class MittelLib extends JavaPlugin {
         GlobalTranslator.translator().addSource(new MittelLibTranslator(this, languageManager));
 
         ContentProviders.init();
-        VaultHook.init();
+        EconomyProviders.init();
         PlayerPointsHook.init();
 
         Bukkit.getPluginManager().registerEvents(new MittelGUIListener(), this);

@@ -53,8 +53,8 @@ dependencies {
     // content provider
     compileOnly("dev.lone:api-itemsadder:4.0.10")
     compileOnly("com.nexomc:nexo:1.27.0")
-    compileOnly("net.momirealms:craft-engine-core:26.8")
-    compileOnly("net.momirealms:craft-engine-bukkit:26.8")
+    compileOnly("net.momirealms:craft-engine-core:26.8.1")
+    compileOnly("net.momirealms:craft-engine-bukkit:26.8.1")
     compileOnly("io.th0rgal:oraxen:1.218.0")
     compileOnly("net.Indyuce:MMOItems-API:6.10.1-SNAPSHOT")
     compileOnly("io.lumine:MythicLib-dist:1.7.1-SNAPSHOT")

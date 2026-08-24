@@ -104,15 +104,15 @@ public abstract class UniversalPlaceholderExpansion {
         public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
             if (params.isEmpty()) return null;
 
-            String[] split = params.split("_");
-            String key = split[0].toLowerCase(Locale.ROOT);
+            PlaceholderMatch match = findPapiMatch(params);
+            if (match == null) return null;
 
-            PlaceholderEntry entry = placeholders.get(key);
+            PlaceholderEntry entry = match.entry();
             if (entry == null) return null;
 
             if (entry.type == PlaceholderType.RELATIONAL) return null;
 
-            String[] args = Arrays.copyOfRange(split, 1, split.length);
+            String[] args = match.arguments();
 
             return entry.handle.parse(player, null, args);
         }
@@ -134,6 +134,21 @@ public abstract class UniversalPlaceholderExpansion {
             return entry.handle.parse(one, two, args);
         }
     }
+
+    private PlaceholderMatch findPapiMatch(String params) {
+        String normalized = params.toLowerCase(Locale.ROOT);
+        return placeholders.entrySet().stream()
+                .filter(entry -> normalized.equals(entry.getKey()) || normalized.startsWith(entry.getKey() + "_"))
+                .max(Map.Entry.comparingByKey(java.util.Comparator.comparingInt(String::length)))
+                .map(entry -> new PlaceholderMatch(
+                        entry.getValue(),
+                        normalized.equals(entry.getKey())
+                                ? new String[0]
+                                : params.substring(entry.getKey().length() + 1).split("_")))
+                .orElse(null);
+    }
+
+    private record PlaceholderMatch(PlaceholderEntry entry, String[] arguments) {}
 
     private void registerMiniPlaceholders() {
         Expansion.Builder builder =

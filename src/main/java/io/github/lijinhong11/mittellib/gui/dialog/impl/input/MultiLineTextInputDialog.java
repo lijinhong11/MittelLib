@@ -20,7 +20,6 @@ package io.github.lijinhong11.mittellib.gui.dialog.impl.input;
 import io.papermc.paper.dialog.DialogResponseView;
 import io.papermc.paper.registry.data.dialog.input.DialogInput;
 import io.papermc.paper.registry.data.dialog.input.TextDialogInput;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +53,7 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
 
     public static MultiLineTextInputDialog create(
             @NotNull Component title, @NotNull Component label, @NotNull Consumer<List<String>> callback) {
-        return new MultiLineTextInputDialog(title, label, callback, 4096, Integer.MAX_VALUE, 0, new ArrayList<>());
+        return new MultiLineTextInputDialog(title, label, callback, 7500, 50, 0, new ArrayList<>());
     }
 
     public static MultiLineTextInputDialog create(
@@ -74,8 +73,7 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
             int maxLines,
             int height,
             @NotNull List<String> initial) {
-        return new MultiLineTextInputDialog(
-                title, label, callback, maxLength, maxLines, height, initial);
+        return new MultiLineTextInputDialog(title, label, callback, maxLength, maxLines, height, initial);
     }
 
     @Override
@@ -89,6 +87,7 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
         }
 
         return List.of(DialogInput.text(INPUT_KEY, label)
+                .width(calculateInputWidth(maxLength, maxLines))
                 .maxLength(maxLength)
                 .initial(init)
                 .multiline(TextDialogInput.MultilineOptions.create(maxLines, height > 0 ? height : null))
