@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 package io.github.lijinhong11.mittellib.gui.dialog.impl;
 
 import io.papermc.paper.registry.data.dialog.ActionButton;
@@ -43,8 +43,7 @@ public final class NotificationDialog extends AbstractDialog {
         this.message = message;
     }
 
-    public static @NotNull NotificationDialog create(
-            @NotNull Component title, @NotNull Component message) {
+    public static @NotNull NotificationDialog create(@NotNull Component title, @NotNull Component message) {
         return new NotificationDialog(title, message);
     }
 
