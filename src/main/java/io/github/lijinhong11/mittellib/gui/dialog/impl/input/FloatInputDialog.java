@@ -23,6 +23,7 @@ import it.unimi.dsi.fastutil.floats.FloatConsumer;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class FloatInputDialog extends AbstractInputDialog {
     private final float min;
@@ -33,7 +34,19 @@ public final class FloatInputDialog extends AbstractInputDialog {
 
     FloatInputDialog(
             Component title, Component label, float initial, float min, float max, float step, FloatConsumer callback) {
-        super(title, label);
+        this(title, label, initial, min, max, step, callback, null);
+    }
+
+    FloatInputDialog(
+            Component title,
+            Component label,
+            float initial,
+            float min,
+            float max,
+            float step,
+            FloatConsumer callback,
+            @Nullable Runnable cancelCallback) {
+        super(title, label, cancelCallback);
 
         this.initial = initial;
         this.min = min;
@@ -48,13 +61,47 @@ public final class FloatInputDialog extends AbstractInputDialog {
     }
 
     public static FloatInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            float min,
+            float max,
+            float step,
+            @NotNull FloatConsumer callback,
+            @Nullable Runnable cancelCallback) {
+        return new FloatInputDialog(title, label, min, min, max, step, callback, cancelCallback);
+    }
+
+    public static FloatInputDialog create(
             Component title, Component label, float initial, float min, float max, float step, FloatConsumer callback) {
         return new FloatInputDialog(title, label, initial, min, max, step, callback);
+    }
+
+    public static FloatInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            float initial,
+            float min,
+            float max,
+            float step,
+            @NotNull FloatConsumer callback,
+            @Nullable Runnable cancelCallback) {
+        return new FloatInputDialog(title, label, initial, min, max, step, callback, cancelCallback);
     }
 
     public static FloatInputDialog createWithDefaultStep(
             Component title, Component label, float initial, float min, float max, FloatConsumer callback) {
         return new FloatInputDialog(title, label, initial, min, max, 0.1f, callback);
+    }
+
+    public static FloatInputDialog createWithDefaultStep(
+            @NotNull Component title,
+            @NotNull Component label,
+            float initial,
+            float min,
+            float max,
+            @NotNull FloatConsumer callback,
+            @Nullable Runnable cancelCallback) {
+        return new FloatInputDialog(title, label, initial, min, max, 0.1f, callback, cancelCallback);
     }
 
     @Override

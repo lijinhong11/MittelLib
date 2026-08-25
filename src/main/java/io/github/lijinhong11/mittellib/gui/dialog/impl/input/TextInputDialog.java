@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class TextInputDialog extends AbstractInputDialog {
     private final int maxLength;
@@ -30,7 +31,17 @@ public final class TextInputDialog extends AbstractInputDialog {
     private final Consumer<String> callback;
 
     TextInputDialog(Component title, Component label, Consumer<String> callback, int maxLength, String initial) {
-        super(title, label);
+        this(title, label, callback, maxLength, initial, null);
+    }
+
+    TextInputDialog(
+            Component title,
+            Component label,
+            Consumer<String> callback,
+            int maxLength,
+            String initial,
+            @Nullable Runnable cancelCallback) {
+        super(title, label, cancelCallback);
 
         this.callback = callback;
         this.maxLength = maxLength;
@@ -43,6 +54,14 @@ public final class TextInputDialog extends AbstractInputDialog {
     }
 
     public static TextInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            @NotNull Consumer<String> callback,
+            @Nullable Runnable cancelCallback) {
+        return new TextInputDialog(title, label, callback, 512, "", cancelCallback);
+    }
+
+    public static TextInputDialog create(
             @NotNull Component title, @NotNull Component label, @NotNull Consumer<String> callback, int maxLength) {
         return new TextInputDialog(title, label, callback, maxLength, "");
     }
@@ -52,8 +71,27 @@ public final class TextInputDialog extends AbstractInputDialog {
             @NotNull Component label,
             @NotNull Consumer<String> callback,
             int maxLength,
+            @Nullable Runnable cancelCallback) {
+        return new TextInputDialog(title, label, callback, maxLength, "", cancelCallback);
+    }
+
+    public static TextInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            @NotNull Consumer<String> callback,
+            int maxLength,
             @NotNull String initial) {
         return new TextInputDialog(title, label, callback, maxLength, initial);
+    }
+
+    public static TextInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            @NotNull Consumer<String> callback,
+            int maxLength,
+            @NotNull String initial,
+            @Nullable Runnable cancelCallback) {
+        return new TextInputDialog(title, label, callback, maxLength, initial, cancelCallback);
     }
 
     @Override

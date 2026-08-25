@@ -20,7 +20,7 @@ package io.github.lijinhong11.mittellib.gui.inventory.impl;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.gui.inventory.MittelGUI;
 import io.github.lijinhong11.mittellib.gui.inventory.item.MittelGUIItem;
-import io.github.lijinhong11.mittellib.utils.chat.ChatInput;
+import io.github.lijinhong11.mittellib.gui.dialog.impl.input.TextInputDialog;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import java.util.*;
@@ -267,15 +267,19 @@ public final class PaginatedChestGUI implements MittelGUI {
 
     private void beginSearch(Player player) {
         player.closeInventory();
-        ChatInput.waitForPlayer(MittelLib.getInstance(), player, (target, query) -> target.getScheduler()
-                .run(
-                        MittelLib.getInstance(),
-                        ignored -> {
+                TextInputDialog.create(
+                        MittelLib.getInstance()
+                                .getLanguageManager()
+                                .getMsgComponent(player, "common.search-dialog-title"),
+                        MittelLib.getInstance()
+                                .getLanguageManager()
+                                .getMsgComponent(player, "common.search-dialog-label"),
+                        query -> {
                             search(query);
-                            open(target);
+                            open(player);
                         },
-                        null));
-        MittelLib.getInstance().getLanguageManager().sendMessage(player, "common.search-prompt");
+                        () -> open(player))
+                .show(player);
     }
 
     @Override

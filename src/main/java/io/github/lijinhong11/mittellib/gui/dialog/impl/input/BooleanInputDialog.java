@@ -24,6 +24,7 @@ import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class BooleanInputDialog extends AbstractInputDialog {
     private final boolean initial;
@@ -38,7 +39,18 @@ public final class BooleanInputDialog extends AbstractInputDialog {
             boolean initial,
             String onTrue,
             String onFalse) {
-        super(title, label);
+        this(title, label, callback, initial, onTrue, onFalse, null);
+    }
+
+    BooleanInputDialog(
+            Component title,
+            Component label,
+            BooleanConsumer callback,
+            boolean initial,
+            String onTrue,
+            String onFalse,
+            @Nullable Runnable cancelCallback) {
+        super(title, label, cancelCallback);
 
         this.callback = callback;
         this.initial = initial;
@@ -47,7 +59,16 @@ public final class BooleanInputDialog extends AbstractInputDialog {
     }
 
     BooleanInputDialog(Component title, Component label, BooleanConsumer callback, boolean initial) {
-        super(title, label);
+        this(title, label, callback, initial, null);
+    }
+
+    BooleanInputDialog(
+            Component title,
+            Component label,
+            BooleanConsumer callback,
+            boolean initial,
+            @Nullable Runnable cancelCallback) {
+        super(title, label, cancelCallback);
 
         this.callback = callback;
         this.initial = initial;
@@ -68,6 +89,26 @@ public final class BooleanInputDialog extends AbstractInputDialog {
             @NotNull String onTrue,
             @NotNull String onFalse) {
         return new BooleanInputDialog(title, label, callback, initial, onTrue, onFalse);
+    }
+
+    public static BooleanInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            @NotNull BooleanConsumer callback,
+            boolean initial,
+            @Nullable Runnable cancelCallback) {
+        return new BooleanInputDialog(title, label, callback, initial, cancelCallback);
+    }
+
+    public static BooleanInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            @NotNull BooleanConsumer callback,
+            boolean initial,
+            @NotNull String onTrue,
+            @NotNull String onFalse,
+            @Nullable Runnable cancelCallback) {
+        return new BooleanInputDialog(title, label, callback, initial, onTrue, onFalse, cancelCallback);
     }
 
     @Override

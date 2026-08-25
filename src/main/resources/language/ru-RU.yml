@@ -11,6 +11,7 @@ common:
   enabled: "&aВключено"
   disabled: "&cВыключено"
   search: "&bПоиск"
-  search-prompt: "&eВведите поисковый запрос в чат."
+  search-dialog-title: "&bПоиск"
+  search-dialog-label: "&7Введите поисковый запрос"
   previous-page: "&eПред. страница"
   next-page: "&eСлед. страница"

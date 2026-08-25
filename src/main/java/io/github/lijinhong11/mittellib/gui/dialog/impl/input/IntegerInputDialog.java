@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.IntConsumer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class IntegerInputDialog extends AbstractInputDialog {
     private final int min;
@@ -31,7 +32,18 @@ public final class IntegerInputDialog extends AbstractInputDialog {
     private final IntConsumer callback;
 
     IntegerInputDialog(Component title, Component label, int initial, int min, int max, IntConsumer callback) {
-        super(title, label);
+        this(title, label, initial, min, max, callback, null);
+    }
+
+    IntegerInputDialog(
+            Component title,
+            Component label,
+            int initial,
+            int min,
+            int max,
+            IntConsumer callback,
+            @Nullable Runnable cancelCallback) {
+        super(title, label, cancelCallback);
 
         this.initial = initial;
         this.min = min;
@@ -44,8 +56,29 @@ public final class IntegerInputDialog extends AbstractInputDialog {
     }
 
     public static IntegerInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            int min,
+            int max,
+            @NotNull IntConsumer callback,
+            @Nullable Runnable cancelCallback) {
+        return new IntegerInputDialog(title, label, min, min, max, callback, cancelCallback);
+    }
+
+    public static IntegerInputDialog create(
             Component title, Component label, int initial, int min, int max, IntConsumer callback) {
         return new IntegerInputDialog(title, label, initial, min, max, callback);
+    }
+
+    public static IntegerInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            int initial,
+            int min,
+            int max,
+            @NotNull IntConsumer callback,
+            @Nullable Runnable cancelCallback) {
+        return new IntegerInputDialog(title, label, initial, min, max, callback, cancelCallback);
     }
 
     @Override

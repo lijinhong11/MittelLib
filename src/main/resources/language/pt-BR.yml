@@ -11,6 +11,7 @@ common:
   enabled: "&aAtivado"
   disabled: "&cDesativado"
   search: "&bPesquisar"
-  search-prompt: "&eDigite sua pesquisa no chat."
+  search-dialog-title: "&bPesquisar"
+  search-dialog-label: "&7Digite uma pesquisa"
   previous-page: "&ePágina anterior"
   next-page: "&ePróxima página"

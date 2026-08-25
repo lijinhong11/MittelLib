@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class MultiLineTextInputDialog extends AbstractInputDialog {
     private final int maxLength;
@@ -42,7 +43,19 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
             int maxLines,
             int height,
             List<String> initial) {
-        super(title, label);
+        this(title, label, callback, maxLength, maxLines, height, initial, null);
+    }
+
+    MultiLineTextInputDialog(
+            Component title,
+            Component label,
+            Consumer<List<String>> callback,
+            int maxLength,
+            int maxLines,
+            int height,
+            List<String> initial,
+            @Nullable Runnable cancelCallback) {
+        super(title, label, cancelCallback);
 
         this.callback = callback;
         this.maxLength = maxLength;
@@ -60,6 +73,14 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
             @NotNull Component title,
             @NotNull Component label,
             @NotNull Consumer<List<String>> callback,
+            @Nullable Runnable cancelCallback) {
+        return new MultiLineTextInputDialog(title, label, callback, 7500, 50, 0, new ArrayList<>(), cancelCallback);
+    }
+
+    public static MultiLineTextInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            @NotNull Consumer<List<String>> callback,
             int maxLength,
             int maxLines) {
         return new MultiLineTextInputDialog(title, label, callback, maxLength, maxLines, 0, new ArrayList<>());
@@ -71,9 +92,33 @@ public final class MultiLineTextInputDialog extends AbstractInputDialog {
             @NotNull Consumer<List<String>> callback,
             int maxLength,
             int maxLines,
+            @Nullable Runnable cancelCallback) {
+        return new MultiLineTextInputDialog(
+                title, label, callback, maxLength, maxLines, 0, new ArrayList<>(), cancelCallback);
+    }
+
+    public static MultiLineTextInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            @NotNull Consumer<List<String>> callback,
+            int maxLength,
+            int maxLines,
             int height,
             @NotNull List<String> initial) {
         return new MultiLineTextInputDialog(title, label, callback, maxLength, maxLines, height, initial);
+    }
+
+    public static MultiLineTextInputDialog create(
+            @NotNull Component title,
+            @NotNull Component label,
+            @NotNull Consumer<List<String>> callback,
+            int maxLength,
+            int maxLines,
+            int height,
+            @NotNull List<String> initial,
+            @Nullable Runnable cancelCallback) {
+        return new MultiLineTextInputDialog(
+                title, label, callback, maxLength, maxLines, height, initial, cancelCallback);
     }
 
     @Override

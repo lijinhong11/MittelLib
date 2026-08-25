@@ -11,6 +11,7 @@ common:
   enabled: "&aEnabled"
   disabled: "&cDisabled"
   search: "&bSearch"
-  search-prompt: "&eEnter your search query in chat."
+  search-dialog-title: "&bSearch"
+  search-dialog-label: "&7Enter a search query"
   previous-age: "&ePrevious Page"
   next-page: "&eNext Page"

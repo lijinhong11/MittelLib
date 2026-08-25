@@ -24,7 +24,6 @@ import io.papermc.paper.registry.data.dialog.action.DialogAction;
 import io.papermc.paper.registry.data.dialog.body.DialogBody;
 import io.papermc.paper.registry.data.dialog.type.DialogType;
 import java.util.List;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -38,11 +37,17 @@ public abstract class AbstractInputDialog extends AbstractDialog {
     private static final Component CANCEL = Component.translatable("gui.cancel");
 
     private final Component title;
+    private final @Nullable Runnable cancelCallback;
     protected Component label;
 
     AbstractInputDialog(Component title, Component label) {
+        this(title, label, null);
+    }
+
+    AbstractInputDialog(Component title, Component label, @Nullable Runnable cancelCallback) {
         this.title = title;
         this.label = label;
+        this.cancelCallback = cancelCallback;
     }
 
     @Override
@@ -69,7 +74,12 @@ public abstract class AbstractInputDialog extends AbstractDialog {
                                 ClickCallback.Options.builder().build()))
                         .build(),
                 ActionButton.builder(CANCEL)
-                        .action(DialogAction.staticAction(ClickEvent.callback(Audience::closeDialog)))
+                        .action(DialogAction.staticAction(ClickEvent.callback(audience -> {
+                            audience.closeDialog();
+                            if (cancelCallback != null) {
+                                cancelCallback.run();
+                            }
+                        })))
                         .build());
     }
 
