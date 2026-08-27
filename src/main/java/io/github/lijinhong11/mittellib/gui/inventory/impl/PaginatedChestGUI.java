@@ -20,6 +20,7 @@ package io.github.lijinhong11.mittellib.gui.inventory.impl;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.gui.dialog.impl.input.TextInputDialog;
 import io.github.lijinhong11.mittellib.gui.inventory.MittelGUI;
+import io.github.lijinhong11.mittellib.gui.inventory.PlayerInventoryHolder;
 import io.github.lijinhong11.mittellib.gui.inventory.item.MittelGUIItem;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -42,6 +43,9 @@ import org.jspecify.annotations.NonNull;
 
 public final class PaginatedChestGUI implements MittelGUI {
     private final Inventory inv;
+    private final Map<UUID, PaginatedChestGUI> playerViews = new HashMap<>();
+    private final Component title;
+    private final PaginatedChestGUI owner;
     private final MittelGUIItem[] renderedItems;
     private final Map<Character, MittelGUIItem> bindings;
     private final List<MittelGUIItem> pageItems;
@@ -59,12 +63,16 @@ public final class PaginatedChestGUI implements MittelGUI {
 
     private int page;
     private String searchQuery = "";
+    private int pageBeforeSearch;
+    private boolean hasPageBeforeSearch;
 
     private final PageButtonItem cachedPrevButton;
     private final PageButtonItem cachedNextButton;
     private final SearchButtonItem cachedSearchButton;
 
     private PaginatedChestGUI(Builder builder) {
+        this.owner = this;
+        this.title = builder.title;
         this.inv = Bukkit.createInventory(this, builder.size, builder.title);
         this.renderedItems = new MittelGUIItem[builder.size];
         this.bindings = new HashMap<>(builder.bindings);
@@ -79,6 +87,32 @@ public final class PaginatedChestGUI implements MittelGUI {
         this.cachedNextButton = new PageButtonItem(builder.nextPageItem, PaginatedChestGUI::nextPage);
         this.cachedSearchButton = builder.searchItem == null ? null : new SearchButtonItem(builder.searchItem);
         init(builder);
+    }
+
+    private PaginatedChestGUI(PaginatedChestGUI source, Player player) {
+        this.owner = source;
+        PlayerInventoryHolder holder = new PlayerInventoryHolder(this, player.getUniqueId());
+        this.title = source.title;
+        this.inv = Bukkit.createInventory(holder, source.inv.getSize(), source.title);
+        holder.inventory(this.inv);
+        this.renderedItems = new MittelGUIItem[source.renderedItems.length];
+        this.bindings = new HashMap<>(source.bindings);
+        this.pageItems = new ArrayList<>(source.pageItems);
+        this.structure = source.structure.clone();
+        this.contentBind = source.contentBind;
+        this.previousPageBind = source.previousPageBind;
+        this.nextPageBind = source.nextPageBind;
+        this.searchBind = source.searchBind;
+        this.searchCallback = source.searchCallback;
+        this.openConsumer = source.openConsumer;
+        this.closeConsumer = source.closeConsumer;
+        this.cachedPrevButton = new PageButtonItem(source.cachedPrevButton.item(), PaginatedChestGUI::previousPage);
+        this.cachedNextButton = new PageButtonItem(source.cachedNextButton.item(), PaginatedChestGUI::nextPage);
+        this.cachedSearchButton =
+                source.cachedSearchButton == null ? null : new SearchButtonItem(source.cachedSearchButton.item());
+        collectContentSlots();
+        updateVisibleItems();
+        render();
     }
 
     private void init(Builder builder) {
@@ -166,12 +200,23 @@ public final class PaginatedChestGUI implements MittelGUI {
     @Override
     public void open(@NotNull Player player) {
         player.closeInventory();
-        player.openInventory(this.inv);
+        if (owner != this) {
+            owner.playerViews.put(player.getUniqueId(), this);
+            player.openInventory(inv);
+            return;
+        }
+
+        PaginatedChestGUI view = new PaginatedChestGUI(this, player);
+        this.playerViews.put(player.getUniqueId(), view);
+        view.open(player);
     }
 
     @Override
     public @NotNull List<HumanEntity> viewers() {
-        return this.inv.getViewers();
+        if (owner != this) return inv.getViewers();
+        return this.playerViews.values().stream()
+                .flatMap(view -> view.inv.getViewers().stream())
+                .toList();
     }
 
     @Override
@@ -179,11 +224,15 @@ public final class PaginatedChestGUI implements MittelGUI {
         return this.inv;
     }
 
-    public int currentPage() {
-        return this.page;
+    public int currentPage(@NotNull Player player) {
+        return viewFor(player).page;
     }
 
-    public int pageCount() {
+    public int pageCount(@NotNull Player player) {
+        return viewFor(player).pageCount();
+    }
+
+    private int pageCount() {
         return Math.max(1, (int) Math.ceil((double) this.visiblePageItems.size() / this.contentSlots.size()));
     }
 
@@ -195,57 +244,96 @@ public final class PaginatedChestGUI implements MittelGUI {
         return List.copyOf(this.pageItems);
     }
 
-    public @NotNull List<MittelGUIItem> visiblePageItems() {
-        return List.copyOf(this.visiblePageItems);
+    public @NotNull List<MittelGUIItem> visiblePageItems(@NotNull Player player) {
+        return List.copyOf(viewFor(player).visiblePageItems);
     }
 
-    public @NotNull String searchQuery() {
-        return this.searchQuery;
+    public @NotNull String searchQuery(@NotNull Player player) {
+        return viewFor(player).searchQuery;
     }
 
     public boolean searchEnabled() {
         return this.searchBind != null;
     }
 
-    public void setPage(@Range(from = 0, to = Integer.MAX_VALUE) int page) {
+    public void setPage(@NotNull Player player, @Range(from = 0, to = Integer.MAX_VALUE) int page) {
+        viewFor(player).setPageInternal(page);
+    }
+
+    private void setPageInternal(@Range(from = 0, to = Integer.MAX_VALUE) int page) {
         int maxPage = pageCount() - 1;
         this.page = Math.clamp(page, 0, maxPage);
         render();
     }
 
-    public void nextPage() {
-        setPage(this.page + 1);
+    public void nextPage(@NotNull Player player) {
+        PaginatedChestGUI view = viewFor(player);
+        view.setPageInternal(view.page + 1);
     }
 
-    public void previousPage() {
-        setPage(this.page - 1);
+    public void previousPage(@NotNull Player player) {
+        PaginatedChestGUI view = viewFor(player);
+        view.setPageInternal(view.page - 1);
     }
 
     public void addPageItem(@NotNull MittelGUIItem item) {
         this.pageItems.add(item);
         updateVisibleItems();
-        setPage(this.page);
+        setPageInternal(this.page);
+        if (owner == this) {
+            playerViews.values().forEach(view -> {
+                view.pageItems.add(item);
+                view.updateVisibleItems();
+                view.setPageInternal(view.page);
+            });
+        }
     }
 
     public void setPageItems(@NotNull Collection<? extends MittelGUIItem> items) {
         this.pageItems.clear();
         this.pageItems.addAll(items);
         updateVisibleItems();
-        setPage(this.page);
+        setPageInternal(this.page);
+        if (owner == this) {
+            playerViews.values().forEach(view -> {
+                view.pageItems.clear();
+                view.pageItems.addAll(items);
+                view.updateVisibleItems();
+                view.setPageInternal(view.page);
+            });
+        }
     }
 
-    public void search(@NotNull String query) {
+    public void search(@NotNull Player player, @NotNull String query) {
+        viewFor(player).searchInternal(query);
+    }
+
+    private void searchInternal(@NotNull String query) {
         if (!searchEnabled()) {
             return;
         }
 
-        this.searchQuery = query.trim();
+        String newQuery = query.trim();
+        if (this.searchQuery.isEmpty() && !newQuery.isEmpty()) {
+            this.pageBeforeSearch = this.page;
+            this.hasPageBeforeSearch = true;
+        }
+
+        if (!newQuery.isEmpty()) {
+            this.searchQuery = newQuery;
+            updateVisibleItems();
+            setPageInternal(0);
+            return;
+        }
+
+        this.searchQuery = "";
         updateVisibleItems();
-        setPage(0);
+        setPageInternal(this.hasPageBeforeSearch ? this.pageBeforeSearch : this.page);
+        this.hasPageBeforeSearch = false;
     }
 
-    public void clearSearch() {
-        search("");
+    public void clearSearch(@NotNull Player player) {
+        search(player, "");
     }
 
     private void updateVisibleItems() {
@@ -263,6 +351,8 @@ public final class PaginatedChestGUI implements MittelGUI {
     }
 
     private void beginSearch(Player player) {
+        PaginatedChestGUI view = viewFor(player);
+        int page = view.page;
         player.closeInventory();
         TextInputDialog.create(
                         MittelLib.getInstance()
@@ -272,10 +362,13 @@ public final class PaginatedChestGUI implements MittelGUI {
                                 .getLanguageManager()
                                 .getMsgComponent(player, "common.search-dialog-label"),
                         query -> {
-                            search(query);
-                            open(player);
+                            view.searchInternal(query);
+                            view.open(player);
                         },
-                        () -> open(player))
+                        () -> {
+                            view.open(player);
+                            view.setPageInternal(page);
+                        })
                 .show(player);
     }
 
@@ -298,6 +391,7 @@ public final class PaginatedChestGUI implements MittelGUI {
 
     @Override
     public void handleClose(@NotNull InventoryCloseEvent e) {
+        if (owner != this && e.getPlayer() instanceof Player p) owner.playerViews.remove(p.getUniqueId(), this);
         if (e.getPlayer() instanceof Player p && this.closeConsumer != null) {
             this.closeConsumer.accept(p, this);
         }
@@ -324,8 +418,8 @@ public final class PaginatedChestGUI implements MittelGUI {
 
         @Override
         public boolean onClick(MittelGUI gui, InventoryClickEvent event) {
-            if (gui instanceof PaginatedChestGUI paginated) {
-                action.accept(paginated);
+            if (gui instanceof PaginatedChestGUI paginated && event.getWhoClicked() instanceof Player player) {
+                action.accept(paginated, player);
             }
 
             return false;
@@ -347,9 +441,17 @@ public final class PaginatedChestGUI implements MittelGUI {
         }
     }
 
+    private PaginatedChestGUI viewFor(@NotNull Player player) {
+        PaginatedChestGUI view = owner.playerViews.get(player.getUniqueId());
+        if (view == null) {
+            throw new IllegalStateException("Player does not have this paginated GUI open");
+        }
+        return view;
+    }
+
     @FunctionalInterface
     private interface PageAction {
-        void accept(PaginatedChestGUI gui);
+        void accept(PaginatedChestGUI gui, Player player);
     }
 
     public static class Builder implements PagedChestBuilder {

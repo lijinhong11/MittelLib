@@ -18,10 +18,11 @@
 package io.github.lijinhong11.mittellib.gui.inventory.impl;
 
 import io.github.lijinhong11.mittellib.gui.inventory.MittelGUI;
+import io.github.lijinhong11.mittellib.gui.inventory.PlayerInventoryHolder;
 import io.github.lijinhong11.mittellib.gui.inventory.item.MittelGUIItem;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
-import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -37,14 +38,14 @@ import org.jetbrains.annotations.Range;
 
 public final class AnvilGUI implements MittelGUI {
     private final Inventory inv;
+    private final Map<java.util.UUID, AnvilGUI> playerViews = new java.util.HashMap<>();
+    private final Component title;
+    private final AnvilGUI owner;
 
-    @Setter
     private MittelGUIItem firstItem;
 
-    @Setter
     private MittelGUIItem secondItem;
 
-    @Setter
     private MittelGUIItem resultItem;
 
     private BiConsumer<Player, AnvilView> prepareListener;
@@ -53,9 +54,28 @@ public final class AnvilGUI implements MittelGUI {
     private BiConsumer<Player, AnvilGUI> closeConsumer;
 
     private AnvilGUI(Builder builder) {
+        this.owner = this;
+        this.title = builder.title;
         this.inv = Bukkit.createInventory(this, InventoryType.ANVIL, builder.title);
 
         init(builder);
+    }
+
+    private AnvilGUI(AnvilGUI source, Player player) {
+        this.owner = source;
+        PlayerInventoryHolder holder = new PlayerInventoryHolder(this, player.getUniqueId());
+        this.title = source.title;
+        this.inv = Bukkit.createInventory(holder, InventoryType.ANVIL, source.title);
+        holder.inventory(this.inv);
+        this.firstItem = source.firstItem;
+        this.secondItem = source.secondItem;
+        this.resultItem = source.resultItem;
+        this.prepareListener = source.prepareListener;
+        this.openConsumer = source.openConsumer;
+        this.closeConsumer = source.closeConsumer;
+        if (firstItem != null) inv.setItem(0, firstItem.getItem());
+        if (secondItem != null) inv.setItem(1, secondItem.getItem());
+        if (resultItem != null) inv.setItem(2, resultItem.getItem());
     }
 
     private void init(Builder builder) {
@@ -81,15 +101,47 @@ public final class AnvilGUI implements MittelGUI {
         }
     }
 
+    public void setFirstItem(MittelGUIItem item) {
+        this.firstItem = item;
+        setItem(0, item);
+    }
+
+    public void setSecondItem(MittelGUIItem item) {
+        this.secondItem = item;
+        setItem(1, item);
+    }
+
+    public void setResultItem(MittelGUIItem item) {
+        this.resultItem = item;
+        setItem(2, item);
+    }
+
+    private void setItem(int slot, MittelGUIItem item) {
+        inv.setItem(slot, item == null ? null : item.getItem());
+        if (owner == this) {
+            playerViews.values().forEach(view -> view.setItem(slot, item));
+        }
+    }
+
     @Override
     public void open(@NotNull Player player) {
         player.closeInventory();
+        if (this.inv.getHolder().equals(this)) {
+            AnvilGUI view = new AnvilGUI(this, player);
+            playerViews.put(player.getUniqueId(), view);
+            view.open(player);
+            return;
+        }
+        owner.playerViews.put(player.getUniqueId(), this);
         player.openInventory(inv);
     }
 
     @Override
     public @NotNull List<HumanEntity> viewers() {
-        return inv.getViewers();
+        if (owner != this) return inv.getViewers();
+        return playerViews.values().stream()
+                .flatMap(view -> view.inv.getViewers().stream())
+                .toList();
     }
 
     @Override
@@ -128,6 +180,7 @@ public final class AnvilGUI implements MittelGUI {
 
     @Override
     public void handleClose(@NotNull InventoryCloseEvent e) {
+        if (owner != this && e.getPlayer() instanceof Player p) owner.playerViews.remove(p.getUniqueId(), this);
         if (e.getPlayer() instanceof Player p && closeConsumer != null) {
             closeConsumer.accept(p, this);
         }

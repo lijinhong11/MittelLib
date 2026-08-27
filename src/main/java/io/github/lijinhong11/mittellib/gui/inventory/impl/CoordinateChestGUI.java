@@ -18,12 +18,9 @@
 package io.github.lijinhong11.mittellib.gui.inventory.impl;
 
 import io.github.lijinhong11.mittellib.gui.inventory.MittelGUI;
+import io.github.lijinhong11.mittellib.gui.inventory.PlayerInventoryHolder;
 import io.github.lijinhong11.mittellib.gui.inventory.item.MittelGUIItem;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -38,6 +35,9 @@ import org.jetbrains.annotations.Nullable;
 
 public final class CoordinateChestGUI implements MittelGUI {
     private final Inventory inv;
+    private final Map<UUID, CoordinateChestGUI> playerViews = new HashMap<>();
+    private final Component title;
+    private final CoordinateChestGUI owner;
     private final MittelGUIItem[] items;
     private final int rows;
     @Nullable private final MittelGUIItem axisX, axisY, origin;
@@ -49,11 +49,13 @@ public final class CoordinateChestGUI implements MittelGUI {
     private final Map<Character, MittelGUIItem> bindings;
     private final List<ViewSlot> viewSlots;
 
-    private final Map<String, MittelGUIItem> placed = new HashMap<>();
+    private final Map<String, MittelGUIItem> placed;
     private int ox, oy;
     private final BiConsumer<Player, CoordinateChestGUI> onOpen, onClose;
 
     private CoordinateChestGUI(Builder b) {
+        this.owner = this;
+        this.title = b.title;
         this.rows = b.rows;
         this.inv = Bukkit.createInventory(this, rows * 9, b.title);
         this.items = new MittelGUIItem[rows * 9];
@@ -64,8 +66,32 @@ public final class CoordinateChestGUI implements MittelGUI {
         this.viewBind = b.viewBind;
         this.bindings = new HashMap<>(b.bindings);
         this.viewSlots = collectViewSlots(b.viewBind);
+        this.placed = new HashMap<>();
         this.onOpen = b.onOpen;
         this.onClose = b.onClose;
+        render();
+    }
+
+    private CoordinateChestGUI(CoordinateChestGUI source, Player player) {
+        this.owner = source;
+        PlayerInventoryHolder holder = new PlayerInventoryHolder(this, player.getUniqueId());
+        this.title = source.title;
+        this.inv = Bukkit.createInventory(holder, source.inv.getSize(), source.title);
+        holder.inventory(this.inv);
+        this.items = new MittelGUIItem[source.items.length];
+        this.rows = source.rows;
+        this.axisX = source.axisX;
+        this.axisY = source.axisY;
+        this.origin = source.origin;
+        this.structure = source.structure == null ? null : source.structure.clone();
+        this.viewBind = source.viewBind;
+        this.bindings = new HashMap<>(source.bindings);
+        this.viewSlots = List.copyOf(source.viewSlots);
+        this.placed = new HashMap<>(source.placed);
+        this.ox = source.ox;
+        this.oy = source.oy;
+        this.onOpen = source.onOpen;
+        this.onClose = source.onClose;
         render();
     }
 
@@ -140,20 +166,39 @@ public final class CoordinateChestGUI implements MittelGUI {
     public void putItem(int x, int y, @NotNull MittelGUIItem item) {
         placed.put(key(x, y), item);
         render();
+        if (owner == this) {
+            playerViews.values().forEach(view -> {
+                view.placed.put(key(x, y), item);
+                view.render();
+            });
+        }
     }
 
     public void removeItem(int x, int y) {
         placed.remove(key(x, y));
         render();
+        if (owner == this) {
+            playerViews.values().forEach(view -> {
+                view.placed.remove(key(x, y));
+                view.render();
+            });
+        }
     }
 
     public void openCentered(@NotNull Player p, int x, int y) {
+        if (Objects.equals(this.inv.getHolder(), this)) {
+            CoordinateChestGUI view = new CoordinateChestGUI(this, p);
+            playerViews.put(p.getUniqueId(), view);
+            view.openCentered(p, x, y);
+            return;
+        }
         int maxX = viewSlots.stream().mapToInt(ViewSlot::x).max().orElse(0);
         int maxY = viewSlots.stream().mapToInt(ViewSlot::y).max().orElse(0);
         ox = x - maxX / 2;
         oy = y - maxY / 2;
         render();
         p.closeInventory();
+        owner.playerViews.put(p.getUniqueId(), this);
         p.openInventory(inv);
     }
 
@@ -191,13 +236,23 @@ public final class CoordinateChestGUI implements MittelGUI {
 
     @Override
     public void open(@NotNull Player p) {
+        if (Objects.equals(this.inv.getHolder(), this)) {
+            CoordinateChestGUI view = new CoordinateChestGUI(this, p);
+            playerViews.put(p.getUniqueId(), view);
+            view.open(p);
+            return;
+        }
         p.closeInventory();
+        owner.playerViews.put(p.getUniqueId(), this);
         p.openInventory(inv);
     }
 
     @Override
     public @NotNull List<HumanEntity> viewers() {
-        return inv.getViewers();
+        if (owner != this) return inv.getViewers();
+        return playerViews.values().stream()
+                .flatMap(view -> view.inv.getViewers().stream())
+                .toList();
     }
 
     @Override
@@ -220,6 +275,7 @@ public final class CoordinateChestGUI implements MittelGUI {
 
     @Override
     public void handleClose(@NotNull InventoryCloseEvent e) {
+        if (owner != this && e.getPlayer() instanceof Player p) owner.playerViews.remove(p.getUniqueId(), this);
         if (e.getPlayer() instanceof Player p && onClose != null) onClose.accept(p, this);
     }
 

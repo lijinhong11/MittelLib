@@ -25,22 +25,18 @@ import io.github.lijinhong11.mittellib.hook.point.PlayerPointsHook;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.lijinhong11.mittellib.utils.components.MittelLibTranslator;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
-import java.util.HashMap;
-import java.util.Map;
-
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.Getter;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.Nullable;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 
 public final class MittelLib extends JavaPlugin {
     private final Map<Plugin, SyncLanguageManager> pluginLanguages = new HashMap<>();
@@ -70,7 +66,7 @@ public final class MittelLib extends JavaPlugin {
         languageManager = new SyncLanguageManager(this);
         GlobalTranslator.translator().addSource(new MittelLibTranslator(this, languageManager));
 
-        registerCommand("mittellib", new BasicCommand("mittellib") {
+        registerCommand("mittellib", new BasicCommand() {
             @Override
             public @NotNull String permission() {
                 return "mittellib.reload";
@@ -78,7 +74,7 @@ public final class MittelLib extends JavaPlugin {
 
             @Override
             @ParametersAreNonnullByDefault
-            public void execute( CommandSourceStack cst, String[] args) {
+            public void execute(CommandSourceStack cst, String[] args) {
                 CommandSender sender = cst.getSender();
                 if (args.length != 1 || !args[0].equalsIgnoreCase("reload")) {
                     sender.sendMessage("Usage: /mittellib reload");

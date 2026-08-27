@@ -18,6 +18,7 @@
 package io.github.lijinhong11.mittellib.gui.inventory.impl;
 
 import io.github.lijinhong11.mittellib.gui.inventory.MittelGUI;
+import io.github.lijinhong11.mittellib.gui.inventory.PlayerInventoryHolder;
 import io.github.lijinhong11.mittellib.gui.inventory.item.MittelGUIItem;
 import java.util.HashMap;
 import java.util.List;
@@ -37,17 +38,36 @@ import org.jetbrains.annotations.Range;
 import org.jspecify.annotations.NonNull;
 
 public final class ChestGUI implements MittelGUI {
-    private final Inventory inv;
+    private final Inventory template;
+    private final Component title;
+    private final ChestGUI owner;
+    private final Map<java.util.UUID, ChestGUI> playerViews = new HashMap<>();
     private final MittelGUIItem[] items;
 
     private BiConsumer<Player, ChestGUI> openConsumer;
     private BiConsumer<Player, ChestGUI> closeConsumer;
 
     private ChestGUI(Builder builder) {
-        this.inv = Bukkit.createInventory(this, builder.size, builder.title);
+        this.owner = this;
+        this.title = builder.title;
+        this.template = Bukkit.createInventory(this, builder.size, builder.title);
         this.items = new MittelGUIItem[builder.size];
 
         init(builder);
+    }
+
+    private ChestGUI(ChestGUI source, Player player) {
+        this.owner = source;
+        this.title = source.title;
+        PlayerInventoryHolder holder = new PlayerInventoryHolder(this, player.getUniqueId());
+        this.template = Bukkit.createInventory(holder, source.template.getSize(), source.title);
+        holder.inventory(this.template);
+        this.items = source.items.clone();
+        this.openConsumer = source.openConsumer;
+        this.closeConsumer = source.closeConsumer;
+        for (int slot = 0; slot < items.length; slot++) {
+            if (items[slot] != null) template.setItem(slot, items[slot].getItem());
+        }
     }
 
     private void init(Builder builder) {
@@ -83,11 +103,11 @@ public final class ChestGUI implements MittelGUI {
                 }
 
                 final int finalSlot = i * 9 + c;
-                if (finalSlot >= this.inv.getSize()) {
+                if (finalSlot >= this.template.getSize()) {
                     continue;
                 }
 
-                this.inv.setItem(finalSlot, item.getItem());
+                this.template.setItem(finalSlot, item.getItem());
                 this.items[finalSlot] = item;
             }
         }
@@ -96,27 +116,45 @@ public final class ChestGUI implements MittelGUI {
     @Override
     public void open(@NotNull Player player) {
         player.closeInventory();
-        player.openInventory(inv);
+        if (owner != this) {
+            owner.playerViews.put(player.getUniqueId(), this);
+            player.openInventory(template);
+            return;
+        }
+        ChestGUI view = new ChestGUI(this, player);
+        playerViews.put(player.getUniqueId(), view);
+        view.open(player);
     }
 
     @Override
     public @NotNull List<HumanEntity> viewers() {
-        return this.inv.getViewers();
+        if (owner != this) return template.getViewers();
+        return playerViews.values().stream()
+                .flatMap(view -> view.template.getViewers().stream())
+                .toList();
     }
 
     @Override
     public @NotNull Inventory getInventory() {
-        return this.inv;
+        return this.template;
     }
 
     public void putItem(@Range(from = 0, to = 53) int slot, @NotNull MittelGUIItem item) {
         this.items[slot] = item;
-        this.inv.setItem(slot, item.getItem());
+        this.template.setItem(slot, item.getItem());
+        playerViews.values().forEach(view -> {
+            view.items[slot] = item;
+            view.template.setItem(slot, item.getItem());
+        });
     }
 
     public void removeItem(@Range(from = 0, to = 53) int slot) {
         this.items[slot] = null;
-        this.inv.setItem(slot, null);
+        this.template.setItem(slot, null);
+        playerViews.values().forEach(view -> {
+            view.items[slot] = null;
+            view.template.setItem(slot, null);
+        });
     }
 
     @Override
@@ -138,6 +176,7 @@ public final class ChestGUI implements MittelGUI {
 
     @Override
     public void handleClose(@NotNull InventoryCloseEvent e) {
+        if (owner != this && e.getPlayer() instanceof Player p) owner.playerViews.remove(p.getUniqueId(), this);
         if (e.getPlayer() instanceof Player p && closeConsumer != null) {
             closeConsumer.accept(p, this);
         }

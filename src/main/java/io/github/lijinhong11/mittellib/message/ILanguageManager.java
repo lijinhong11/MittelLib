@@ -94,7 +94,8 @@ public interface ILanguageManager {
     @Setter
     class Options {
         private boolean detectPlayerLocale = true;
-        private @NotNull String defaultLanguage = Locale.getDefault(Locale.Category.DISPLAY).toLanguageTag();
+        private @NotNull String defaultLanguage =
+                Locale.getDefault(Locale.Category.DISPLAY).toLanguageTag();
         private @NotNull String languageSetterKey = "language";
     }
 }

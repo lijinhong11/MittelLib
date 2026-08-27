@@ -37,15 +37,16 @@ public final class MittelGUIListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         Inventory inventory = event.getInventory();
-        if (!(inventory.getHolder() instanceof MittelGUI mg)) {
+        MittelGUI mg = gui(inventory);
+        if (mg == null) {
             if (event.getClick() == ClickType.DOUBLE_CLICK
-                    && event.getView().getTopInventory().getHolder() instanceof MittelGUI) {
+                    && gui(event.getView().getTopInventory()) != null) {
                 event.setCancelled(true);
             }
             return;
         }
 
-        Player player = (Player) event.getWhoClicked();
+        if (!(event.getWhoClicked() instanceof Player player)) return;
         long now = System.currentTimeMillis();
         Long last = lastClickTime.get(player.getUniqueId());
 
@@ -61,7 +62,8 @@ public final class MittelGUIListener implements Listener {
     @EventHandler
     public void onOpen(InventoryOpenEvent event) {
         Inventory inventory = event.getInventory();
-        if (!(inventory.getHolder() instanceof MittelGUI mg)) {
+        MittelGUI mg = gui(inventory);
+        if (mg == null) {
             return;
         }
 
@@ -71,7 +73,8 @@ public final class MittelGUIListener implements Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         Inventory inventory = event.getInventory();
-        if (!(inventory.getHolder() instanceof MittelGUI mg)) {
+        MittelGUI mg = gui(inventory);
+        if (mg == null) {
             return;
         }
 
@@ -80,8 +83,15 @@ public final class MittelGUIListener implements Listener {
 
     @EventHandler
     public void onAnvilRename(PrepareAnvilEvent event) {
-        if (event.getInventory().getHolder() instanceof AnvilGUI ag) {
+        MittelGUI gui = gui(event.getInventory());
+        if (gui instanceof AnvilGUI ag) {
             ag.handlePrepare(event.getView());
         }
+    }
+
+    private static MittelGUI gui(Inventory inventory) {
+        if (inventory.getHolder() instanceof MittelGUI mg) return mg;
+        if (inventory.getHolder() instanceof PlayerInventoryHolder holder) return holder.gui();
+        return null;
     }
 }
