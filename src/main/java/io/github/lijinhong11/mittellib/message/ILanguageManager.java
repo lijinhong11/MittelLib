@@ -18,6 +18,7 @@
 package io.github.lijinhong11.mittellib.message;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -93,7 +94,7 @@ public interface ILanguageManager {
     @Setter
     class Options {
         private boolean detectPlayerLocale = true;
-        private @NotNull String defaultLanguage = "en-US";
+        private @NotNull String defaultLanguage = Locale.getDefault(Locale.Category.DISPLAY).toLanguageTag();
         private @NotNull String languageSetterKey = "language";
     }
 }

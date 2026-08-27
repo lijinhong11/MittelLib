@@ -26,6 +26,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Enumeration;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -48,7 +49,7 @@ public final class SyncLanguageManager extends AbstractLanguageManager {
     private boolean autoComplete;
 
     public SyncLanguageManager(@NotNull Plugin plugin) {
-        this(plugin, "en-US");
+        this(plugin, Locale.getDefault(Locale.Category.DISPLAY).toLanguageTag());
     }
 
     public SyncLanguageManager(@NotNull Plugin plugin, @NotNull String defaultLanguage) {
@@ -101,7 +102,7 @@ public final class SyncLanguageManager extends AbstractLanguageManager {
         if (languageFiles != null) {
             for (File languageFile : languageFiles) {
                 String language = StringUtils.convertToRightLangCode(
-                        languageFile.getName().replaceAll(".yml", ""));
+                        languageFile.getName().replace(".yml", ""));
                 if (autoComplete) {
                     ConfigFileUtils.completeLangFile(plugin, "language/" + languageFile.getName());
                 }

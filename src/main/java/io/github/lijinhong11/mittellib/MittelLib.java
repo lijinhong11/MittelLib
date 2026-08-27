@@ -17,6 +17,7 @@
 */
 package io.github.lijinhong11.mittellib;
 
+import io.github.lijinhong11.mittellib.configuration.MittelConfig;
 import io.github.lijinhong11.mittellib.gui.inventory.MittelGUIListener;
 import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.hook.economy.EconomyProviders;
@@ -26,11 +27,20 @@ import io.github.lijinhong11.mittellib.utils.components.MittelLibTranslator;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.papermc.paper.command.brigadier.BasicCommand;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import lombok.Getter;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public final class MittelLib extends JavaPlugin {
     private final Map<Plugin, SyncLanguageManager> pluginLanguages = new HashMap<>();
@@ -53,10 +63,32 @@ public final class MittelLib extends JavaPlugin {
     @Override
     public void onEnable() {
         // Shut up bstats relocation
+        MittelConfig.load(this, "config.yml");
+
         System.setProperty("bstats.relocatecheck", "false");
 
         languageManager = new SyncLanguageManager(this);
         GlobalTranslator.translator().addSource(new MittelLibTranslator(this, languageManager));
+
+        registerCommand("mittellib", new BasicCommand("mittellib") {
+            @Override
+            public @NotNull String permission() {
+                return "mittellib.reload";
+            }
+
+            @Override
+            @ParametersAreNonnullByDefault
+            public void execute( CommandSourceStack cst, String[] args) {
+                CommandSender sender = cst.getSender();
+                if (args.length != 1 || !args[0].equalsIgnoreCase("reload")) {
+                    sender.sendMessage("Usage: /mittellib reload");
+                    return;
+                }
+
+                languageManager.reload();
+                sender.sendMessage("MittelLib language files reloaded.");
+            }
+        });
 
         ContentProviders.init();
         EconomyProviders.init();

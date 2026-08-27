@@ -20,7 +20,6 @@ package io.github.lijinhong11.mittellib.hook.placeholder;
 import io.github.lijinhong11.mittellib.utils.components.ComponentUtils;
 import io.github.miniplaceholders.api.Expansion;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -121,15 +120,15 @@ public abstract class UniversalPlaceholderExpansion {
         public @Nullable String onPlaceholderRequest(Player one, Player two, String identifier) {
             if (identifier.isEmpty()) return null;
 
-            String[] split = identifier.split("_");
-            String key = split[0].toLowerCase(Locale.ROOT);
+            PlaceholderMatch match = findPapiMatch(identifier);
+            if (match == null) return null;
 
-            PlaceholderEntry entry = placeholders.get(key);
+            PlaceholderEntry entry = match.entry();
             if (entry == null) return null;
 
             if (entry.type != PlaceholderType.RELATIONAL) return null;
 
-            String[] args = Arrays.copyOfRange(split, 1, split.length);
+            String[] args = match.arguments();
 
             return entry.handle.parse(one, two, args);
         }
@@ -144,7 +143,7 @@ public abstract class UniversalPlaceholderExpansion {
                         entry.getValue(),
                         normalized.equals(entry.getKey())
                                 ? new String[0]
-                                : params.substring(entry.getKey().length() + 1).split("_")))
+                                : params.substring(entry.getKey().length() + 1).split("_", 2)))
                 .orElse(null);
     }
 

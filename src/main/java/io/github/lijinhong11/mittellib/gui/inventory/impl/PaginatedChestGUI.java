@@ -51,7 +51,6 @@ public final class PaginatedChestGUI implements MittelGUI {
     private final char contentBind;
     private final char previousPageBind;
     private final char nextPageBind;
-    private final MittelGUIItem previousPageItem, nextPageItem;
     private final Character searchBind;
     private final BiPredicate<String, MittelGUIItem> searchCallback;
 
@@ -74,12 +73,10 @@ public final class PaginatedChestGUI implements MittelGUI {
         this.contentBind = builder.contentBind;
         this.previousPageBind = builder.previousPageBind;
         this.nextPageBind = builder.nextPageBind;
-        this.previousPageItem = builder.previousPageItem;
-        this.nextPageItem = builder.nextPageItem;
         this.searchBind = builder.searchBind;
         this.searchCallback = builder.searchCallback;
-        this.cachedPrevButton = new PageButtonItem(this.previousPageItem, PaginatedChestGUI::previousPage);
-        this.cachedNextButton = new PageButtonItem(this.nextPageItem, PaginatedChestGUI::nextPage);
+        this.cachedPrevButton = new PageButtonItem(builder.previousPageItem, PaginatedChestGUI::previousPage);
+        this.cachedNextButton = new PageButtonItem(builder.nextPageItem, PaginatedChestGUI::nextPage);
         this.cachedSearchButton = builder.searchItem == null ? null : new SearchButtonItem(builder.searchItem);
         init(builder);
     }

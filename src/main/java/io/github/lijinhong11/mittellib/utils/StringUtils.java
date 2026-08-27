@@ -20,6 +20,7 @@ package io.github.lijinhong11.mittellib.utils;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.miniplaceholders.api.MiniPlaceholders;
+import java.util.Locale;
 import lombok.experimental.UtilityClass;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -71,12 +72,10 @@ public class StringUtils {
 
     public static @NotNull String convertToRightLangCode(@Nullable String lang) {
         if (lang == null || lang.isBlank()) return "en-US";
-        String[] split = lang.split("-");
-        if (split.length == 1) {
-            String[] split2 = lang.split("_");
-            if (split2.length == 1) return lang;
-            return lang.replace(split2[1], split2[1].toUpperCase());
-        }
-        return lang.replace(split[1], split[1].toUpperCase());
+        String normalized = lang.replace('_', '-');
+        String[] split = normalized.split("-");
+        if (split.length == 1) return normalized;
+
+        return split[0] + "-" + split[1].toUpperCase(Locale.ROOT);
     }
 }

@@ -59,7 +59,7 @@ public final class LocalLanguageManager extends AbstractLanguageManager {
         if (languageFiles != null) {
             for (File languageFile : languageFiles) {
                 String language = StringUtils.convertToRightLangCode(
-                        languageFile.getName().replaceAll(".yml", ""));
+                        languageFile.getName().replace(".yml", ""));
                 configurations.put(language, YamlConfiguration.loadConfiguration(languageFile));
             }
         }
