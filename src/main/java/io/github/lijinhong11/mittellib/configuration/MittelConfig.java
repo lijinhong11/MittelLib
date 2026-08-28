@@ -36,6 +36,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.file.YamlConfigurationOptions;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -130,6 +131,7 @@ public class MittelConfig {
         return backend.getString(path);
     }
 
+    @Contract("_, !null -> !null")
     public @Nullable String getString(@NotNull String path, @Nullable String def) {
         return backend.getString(path, def);
     }
@@ -138,6 +140,7 @@ public class MittelConfig {
         return getComponent(path, null);
     }
 
+    @Contract("_, !null -> !null")
     public @Nullable Component getComponent(@NotNull String path, @Nullable Component def) {
         String s = getString(path);
         if (s == null) {

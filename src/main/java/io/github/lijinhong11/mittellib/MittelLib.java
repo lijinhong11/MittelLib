@@ -51,17 +51,38 @@ public final class MittelLib extends JavaPlugin {
     @Getter
     private SyncLanguageManager languageManager;
 
+    private MittelConfig cfg;
+
+    /**
+     * Get the configured date format.
+     *
+     * @return the date format pattern
+     */
+    public @NotNull String getDateFormat() {
+        return cfg.getString("date-format", "yyyy-MM-dd HH:mm:ss");
+    }
+
+    /**
+     * Get the configured countdown format.
+     *
+     * @return the countdown format with %days%, %hours%, %minutes% and %seconds% placeholders
+     */
+    public @NotNull String getCountdownFormat() {
+        return cfg.getString("countdown-format", "&e%days%d &6%hours%h &a%minutes%m &b%seconds%s");
+    }
+
     @Override
     public void onLoad() {
         instance = this;
+
     }
 
     @Override
     public void onEnable() {
         // Shut up bstats relocation
-        MittelConfig.load(this, "config.yml");
-
         System.setProperty("bstats.relocatecheck", "false");
+
+        cfg = MittelConfig.load(this, "config.yml");
 
         languageManager = new SyncLanguageManager(this);
         GlobalTranslator.translator().addSource(new MittelLibTranslator(this, languageManager));
@@ -81,6 +102,7 @@ public final class MittelLib extends JavaPlugin {
                     return;
                 }
 
+                cfg.reload();
                 languageManager.reload();
                 sender.sendMessage("MittelLib language files reloaded.");
             }

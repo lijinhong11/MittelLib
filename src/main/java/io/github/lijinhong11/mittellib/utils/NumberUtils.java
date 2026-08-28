@@ -87,4 +87,18 @@ public class NumberUtils {
 
         return sb.toString().trim();
     }
+
+    public static @NotNull String formatCountdown(int totalSeconds) {
+        int days = totalSeconds / 86400;
+        int hours = (totalSeconds % 86400) / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+
+        return MittelLib.getInstance()
+                .getCountdownFormat()
+                .replace("%days%", String.valueOf(days))
+                .replace("%hours%", String.valueOf(hours))
+                .replace("%minutes%", String.valueOf(minutes))
+                .replace("%seconds%", String.valueOf(seconds));
+    }
 }
