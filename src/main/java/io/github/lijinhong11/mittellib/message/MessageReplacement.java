@@ -24,6 +24,7 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslationArgument;
 import net.kyori.adventure.text.TranslationArgumentLike;
 import net.kyori.adventure.text.VirtualComponentRenderer;
+import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
@@ -34,20 +35,25 @@ public final class MessageReplacement
     @ApiStatus.Internal
     public static final String PARSE_HEADER = "__ml:";
 
+    @RegExp
     private final String placeholder;
     private final String replacement;
 
-    private MessageReplacement(@NotNull String placeholder, @NotNull String replacement) {
+    private MessageReplacement(@RegExp @NotNull String placeholder, @NotNull String replacement) {
         this.placeholder = placeholder;
         this.replacement = replacement;
     }
 
-    public static @NotNull MessageReplacement replace(@NotNull String placeholder, @NotNull String replacement) {
+    public static @NotNull MessageReplacement replace(@RegExp @NotNull String placeholder, @NotNull String replacement) {
         return new MessageReplacement(placeholder, replacement);
     }
 
     public @NotNull String parse(@NotNull String message) {
         return message.replace(left(), right());
+    }
+
+    public @NotNull Component parse(@NotNull Component component) {
+        return component.replaceText(b -> b.match(placeholder).replacement(replacement));
     }
 
     public @NotNull String left() {

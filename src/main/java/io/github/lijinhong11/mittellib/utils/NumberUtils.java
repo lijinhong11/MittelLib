@@ -19,9 +19,14 @@ package io.github.lijinhong11.mittellib.utils;
 
 import io.github.lijinhong11.mittellib.MittelLib;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.sql.Date;
+import java.text.DateFormat;
+import java.time.Instant;
 
 @UtilityClass
 public class NumberUtils {
@@ -49,6 +54,7 @@ public class NumberUtils {
         return obj instanceof Number n ? n : null;
     }
 
+    @Deprecated
     public static @NotNull String formatSeconds(@Nullable CommandSender cs, int totalSeconds) {
         String secondText = MittelLib.getInstance().getLanguageManager().getMsg(cs, "time.second");
         String secondsText = MittelLib.getInstance().getLanguageManager().getMsg(cs, "time.seconds");
@@ -86,19 +92,5 @@ public class NumberUtils {
         }
 
         return sb.toString().trim();
-    }
-
-    public static @NotNull String formatCountdown(int totalSeconds) {
-        int days = totalSeconds / 86400;
-        int hours = (totalSeconds % 86400) / 3600;
-        int minutes = (totalSeconds % 3600) / 60;
-        int seconds = totalSeconds % 60;
-
-        return MittelLib.getInstance()
-                .getCountdownFormat()
-                .replace("%days%", String.valueOf(days))
-                .replace("%hours%", String.valueOf(hours))
-                .replace("%minutes%", String.valueOf(minutes))
-                .replace("%seconds%", String.valueOf(seconds));
     }
 }

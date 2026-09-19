@@ -20,12 +20,16 @@ package io.github.lijinhong11.mittellib.utils;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.miniplaceholders.api.MiniPlaceholders;
+
+import java.sql.Date;
+import java.time.Instant;
 import java.util.Locale;
 import lombok.experimental.UtilityClass;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -77,5 +81,27 @@ public class StringUtils {
         if (split.length == 1) return normalized;
 
         return split[0] + "-" + split[1].toUpperCase(Locale.ROOT);
+    }
+
+    public static @NotNull String formatCountdown(int totalSeconds) {
+        int days = totalSeconds / 86400;
+        int hours = (totalSeconds % 86400) / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+
+        return MittelLib.getInstance()
+                .getCountdownFormat()
+                .replace("%days%", String.valueOf(days))
+                .replace("%hours%", String.valueOf(hours))
+                .replace("%minutes%", String.valueOf(minutes))
+                .replace("%seconds%", String.valueOf(seconds));
+    }
+
+    public static @NotNull String formatDateOfNow() {
+        return DateFormatUtils.format(Date.from(Instant.now()), MittelLib.getInstance().getDateFormat());
+    }
+
+    public static @NotNull String formatDate(long epochmilli) {
+        return DateFormatUtils.format(Date.from(Instant.ofEpochMilli(epochmilli)), MittelLib.getInstance().getDateFormat());
     }
 }

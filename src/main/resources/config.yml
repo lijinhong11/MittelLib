@@ -1,4 +1,5 @@
 language: en-US
 detect-player-locale: true
+
 date-format: yyyy-MM-dd HH:mm:ss
 countdown-format: "&e%days%d &6%hours%h &a%minutes%m &b%seconds%s"

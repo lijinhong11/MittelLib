@@ -74,7 +74,6 @@ public final class MittelLib extends JavaPlugin {
     @Override
     public void onLoad() {
         instance = this;
-
     }
 
     @Override
