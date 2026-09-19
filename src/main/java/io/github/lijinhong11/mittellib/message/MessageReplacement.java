@@ -37,6 +37,7 @@ public final class MessageReplacement
 
     @RegExp
     private final String placeholder;
+
     private final String replacement;
 
     private MessageReplacement(@RegExp @NotNull String placeholder, @NotNull String replacement) {
@@ -44,7 +45,8 @@ public final class MessageReplacement
         this.replacement = replacement;
     }
 
-    public static @NotNull MessageReplacement replace(@RegExp @NotNull String placeholder, @NotNull String replacement) {
+    public static @NotNull MessageReplacement replace(
+            @RegExp @NotNull String placeholder, @NotNull String replacement) {
         return new MessageReplacement(placeholder, replacement);
     }
 

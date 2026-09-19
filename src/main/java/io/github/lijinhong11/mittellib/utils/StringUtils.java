@@ -20,7 +20,6 @@ package io.github.lijinhong11.mittellib.utils;
 import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
 import io.github.miniplaceholders.api.MiniPlaceholders;
-
 import java.sql.Date;
 import java.time.Instant;
 import java.util.Locale;
@@ -98,10 +97,13 @@ public class StringUtils {
     }
 
     public static @NotNull String formatDateOfNow() {
-        return DateFormatUtils.format(Date.from(Instant.now()), MittelLib.getInstance().getDateFormat());
+        return DateFormatUtils.format(
+                Date.from(Instant.now()), MittelLib.getInstance().getDateFormat());
     }
 
     public static @NotNull String formatDate(long epochmilli) {
-        return DateFormatUtils.format(Date.from(Instant.ofEpochMilli(epochmilli)), MittelLib.getInstance().getDateFormat());
+        return DateFormatUtils.format(
+                Date.from(Instant.ofEpochMilli(epochmilli)),
+                MittelLib.getInstance().getDateFormat());
     }
 }
