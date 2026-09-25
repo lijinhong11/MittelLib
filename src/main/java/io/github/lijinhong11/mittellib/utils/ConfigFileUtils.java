@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -79,10 +80,14 @@ public class ConfigFileUtils {
 
     private static void complete0(YamlConfiguration configuration, YamlConfiguration configuration2, String key) {
         Object value = configuration.get(key);
-        if (value instanceof List<?>) {
+        if (value instanceof List<?> defaultList) {
             List<?> list2 = configuration2.getList(key);
             if (list2 == null) {
                 configuration2.set(key, value);
+            } else if (defaultList.size() > list2.size()) {
+                List<Object> completedList = new ArrayList<>(list2);
+                completedList.addAll(defaultList.subList(list2.size(), defaultList.size()));
+                configuration2.set(key, completedList);
             }
         }
 

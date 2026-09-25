@@ -35,18 +35,16 @@ public final class MessageReplacement
     @ApiStatus.Internal
     public static final String PARSE_HEADER = "__ml:";
 
-    @RegExp
     private final String placeholder;
 
     private final String replacement;
 
-    private MessageReplacement(@RegExp @NotNull String placeholder, @NotNull String replacement) {
+    private MessageReplacement(@NotNull String placeholder, @NotNull String replacement) {
         this.placeholder = placeholder;
         this.replacement = replacement;
     }
 
-    public static @NotNull MessageReplacement replace(
-            @RegExp @NotNull String placeholder, @NotNull String replacement) {
+    public static @NotNull MessageReplacement replace(@NotNull String placeholder, @NotNull String replacement) {
         return new MessageReplacement(placeholder, replacement);
     }
 
@@ -55,7 +53,7 @@ public final class MessageReplacement
     }
 
     public @NotNull Component parse(@NotNull Component component) {
-        return component.replaceText(b -> b.match(placeholder).replacement(replacement));
+        return component.replaceText(b -> b.matchLiteral(placeholder).replacement(replacement));
     }
 
     public @NotNull String left() {

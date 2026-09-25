@@ -48,7 +48,7 @@ dependencies {
 
     // placeholders
     compileOnly("me.clip:placeholderapi:2.12.2")
-    compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.1.0")
+    compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
 
     // content provider
     compileOnly("dev.lone:api-itemsadder:4.0.10")
@@ -123,7 +123,7 @@ nexusMCPublisher {
     versionTag.set(VersionTag.RELEASE)
     versionTitle = project.property("version") as String
     changelog.set(file("changelog.txt").readLines(StandardCharsets.UTF_8).joinToString("\n"))
-    mcVersions.set(listOf("26.1", "26.1.1", "26.1.2", "26.2"))
+    mcVersions.set(listOf("26.1", "26.1.1", "26.1.2", "26.2", "26.3"))
     token = System.getenv("NEXUSMC_API_TOKEN")
 }
 
