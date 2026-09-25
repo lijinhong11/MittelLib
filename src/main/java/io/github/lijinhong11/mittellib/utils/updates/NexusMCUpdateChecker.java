@@ -14,11 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 package io.github.lijinhong11.mittellib.utils.updates;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -26,7 +27,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -89,11 +89,7 @@ public class NexusMCUpdateChecker {
      * @param gameVersion Minecraft version the resource must support
      */
     public NexusMCUpdateChecker(
-            JavaPlugin plugin,
-            String resourceId,
-            Component adminJoinMessage,
-            String platform,
-            String gameVersion) {
+            JavaPlugin plugin, String resourceId, Component adminJoinMessage, String platform, String gameVersion) {
         this(plugin, resourceId, adminJoinMessage, platform, gameVersion, null, null, "approved", Map.of());
     }
 
@@ -173,7 +169,8 @@ public class NexusMCUpdateChecker {
         this.versionTag = versionTag;
         this.status = status;
         this.queryParameters = queryParameters == null ? Map.of() : Map.copyOf(queryParameters);
-        this.httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
+        this.httpClient =
+                HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
         if (adminJoinMessage != null) {
             plugin.getServer().getPluginManager().registerEvents(new AdminJoinListener(), plugin);
         }
@@ -193,14 +190,14 @@ public class NexusMCUpdateChecker {
 
                 String currentVersion = plugin.getDescription().getVersion();
                 if (isNewer(latest.version, currentVersion)) {
-                    availableUpdate = new UpdateInfo(
-                            currentVersion, latest.version, RESOURCE_URL + resourceId);
-                    plugin.getComponentLogger().info(adminJoinMessage == null
-                            ? Component.text(plugin.getName() + " has a new version: " + latest.version)
-                            : formatMessage(availableUpdate));
-                } else {
+                    availableUpdate = new UpdateInfo(currentVersion, latest.version, RESOURCE_URL + resourceId);
                     plugin.getComponentLogger()
-                            .info(Component.text(plugin.getName() + " is up to date on NexusMC."));
+                            .info(
+                                    adminJoinMessage == null
+                                            ? Component.text(plugin.getName() + " has a new version: " + latest.version)
+                                            : formatMessage(availableUpdate));
+                } else {
+                    plugin.getComponentLogger().info(Component.text(plugin.getName() + " is up to date on NexusMC."));
                 }
             } catch (Exception exception) {
                 plugin.getLogger().warning("NexusMC update check error: " + exception.getMessage());
@@ -223,13 +220,12 @@ public class NexusMCUpdateChecker {
     private Component formatMessage(UpdateInfo update) {
         return adminJoinMessage
                 .replaceText(replacement -> replacement.matchLiteral("%plugin%").replacement(plugin.getName()))
-                .replaceText(replacement -> replacement
-                        .matchLiteral("%current_version%")
-                        .replacement(update.currentVersion))
-                .replaceText(replacement -> replacement
-                        .matchLiteral("%latest_version%")
-                        .replacement(update.latestVersion))
-                .replaceText(replacement -> replacement.matchLiteral("%update_url%").replacement(update.url));
+                .replaceText(replacement ->
+                        replacement.matchLiteral("%current_version%").replacement(update.currentVersion))
+                .replaceText(replacement ->
+                        replacement.matchLiteral("%latest_version%").replacement(update.latestVersion))
+                .replaceText(
+                        replacement -> replacement.matchLiteral("%update_url%").replacement(update.url));
     }
 
     private record UpdateInfo(String currentVersion, String latestVersion, String url) {}
@@ -268,13 +264,11 @@ public class NexusMCUpdateChecker {
             return null;
         }
 
-        List<FileInfo> matchingFiles = version.files.stream()
-                .filter(this::matchesFile)
-                .toList();
-        return matchingFiles.stream()
-                .filter(file -> file.isPrimary)
+        List<FileInfo> matchingFiles =
+                version.files.stream().filter(this::matchesFile).toList();
+        return matchingFiles.stream().filter(file -> file.isPrimary).findFirst().orElseGet(() -> matchingFiles.stream()
                 .findFirst()
-                .orElseGet(() -> matchingFiles.stream().findFirst().orElse(null));
+                .orElse(null));
     }
 
     private boolean matchesFile(FileInfo file) {
@@ -283,8 +277,7 @@ public class NexusMCUpdateChecker {
                 || file.gameVersions != null && file.gameVersions.contains(gameVersion);
         boolean matchesLoader = loader == null
                 || loader.isBlank()
-                || file.subcategoryIds != null
-                        && file.subcategoryIds.stream().anyMatch(loader::equalsIgnoreCase);
+                || file.subcategoryIds != null && file.subcategoryIds.stream().anyMatch(loader::equalsIgnoreCase);
         return matchesVersion && matchesLoader;
     }
 

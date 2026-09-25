@@ -30,6 +30,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MinecraftContentProvider implements ContentProvider {
+    private static final List<String> ITEM_SUGGESTIONS = Arrays.stream(Material.values())
+            .filter(material -> !material.isAir() && material.isItem())
+            .map(material -> "minecraft:" + material.toString().toLowerCase())
+            .toList();
+
+    private static final List<String> BLOCK_SUGGESTIONS = Arrays.stream(Material.values())
+            .filter(material -> !material.isAir() && material.isBlock())
+            .map(material -> "minecraft:" + material.toString().toLowerCase())
+            .toList();
+
     @Override
     public @NotNull String getId() {
         return "Minecraft";
@@ -68,18 +78,12 @@ public class MinecraftContentProvider implements ContentProvider {
 
     @Override
     public @NotNull List<String> getItemSuggestions() {
-        return Arrays.stream(Material.values())
-                .filter(m -> !m.isAir() && m.isItem())
-                .map(m -> "minecraft:" + m.toString().toLowerCase())
-                .toList();
+        return ITEM_SUGGESTIONS;
     }
 
     @Override
     public @NotNull List<String> getBlockSuggestions() {
-        return Arrays.stream(Material.values())
-                .filter(m -> !m.isAir() && m.isBlock())
-                .map(m -> "minecraft:" + m.toString().toLowerCase())
-                .toList();
+        return BLOCK_SUGGESTIONS;
     }
 
     @Override

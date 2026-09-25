@@ -26,6 +26,12 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ContentProvider {
     /**
+     * Refresh provider data after the backing plugin reloads its content.
+     * Providers without local caches do not need to override this method.
+     */
+    default void refresh() {}
+
+    /**
      * Get the content provider's id
      */
     @NotNull String getId();

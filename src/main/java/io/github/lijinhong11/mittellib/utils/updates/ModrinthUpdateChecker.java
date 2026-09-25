@@ -110,9 +110,7 @@ public class ModrinthUpdateChecker {
 
                 if (isNewer(latest.versionNumber, currentVersion)) {
                     availableUpdate = new UpdateInfo(
-                            currentVersion,
-                            latest.versionNumber,
-                            "https://modrinth.com/plugin/" + projectId);
+                            currentVersion, latest.versionNumber, "https://modrinth.com/plugin/" + projectId);
                     plugin.getComponentLogger().info(formatMessage(availableUpdate));
                 } else {
                     plugin.getComponentLogger().info(Component.text(plugin.getName() + " is up to date."));
@@ -139,13 +137,12 @@ public class ModrinthUpdateChecker {
     private Component formatMessage(UpdateInfo update) {
         return adminJoinMessage
                 .replaceText(replacement -> replacement.matchLiteral("%plugin%").replacement(plugin.getName()))
-                .replaceText(replacement -> replacement
-                        .matchLiteral("%current_version%")
-                        .replacement(update.currentVersion))
-                .replaceText(replacement -> replacement
-                        .matchLiteral("%latest_version%")
-                        .replacement(update.latestVersion))
-                .replaceText(replacement -> replacement.matchLiteral("%update_url%").replacement(update.url));
+                .replaceText(replacement ->
+                        replacement.matchLiteral("%current_version%").replacement(update.currentVersion))
+                .replaceText(replacement ->
+                        replacement.matchLiteral("%latest_version%").replacement(update.latestVersion))
+                .replaceText(
+                        replacement -> replacement.matchLiteral("%update_url%").replacement(update.url));
     }
 
     private record UpdateInfo(String currentVersion, String latestVersion, String url) {}

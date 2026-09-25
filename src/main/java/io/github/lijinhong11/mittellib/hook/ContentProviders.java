@@ -17,18 +17,25 @@
 */
 package io.github.lijinhong11.mittellib.hook;
 
+import io.github.lijinhong11.mittellib.MittelLib;
 import io.github.lijinhong11.mittellib.hook.content.MinecraftContentProvider;
 import io.github.lijinhong11.mittellib.iface.ContentProvider;
 import io.github.lijinhong11.mittellib.iface.block.PackedBlock;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,21 +44,128 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public final class ContentProviders {
     private static final Map<String, ContentProvider> contentProviders = new LinkedHashMap<>();
+    private static volatile List<String> itemSuggestions = List.of();
+    private static volatile List<String> blockSuggestions = List.of();
+    private static volatile List<PackedBlock> usableBlocks = List.of();
+    private static boolean reloadListenersRegistered;
+
+    private static final List<ReloadBinding> RELOAD_BINDINGS = List.of(
+            new ReloadBinding("Nexo", "com.nexomc.nexo.api.events.NexoItemsLoadedEvent", "nexo"),
+            new ReloadBinding("Oraxen", "io.th0rgal.oraxen.api.events.OraxenItemsLoadedEvent", "oraxen"),
+            new ReloadBinding("ItemsAdder", "dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent", "itemsadder"),
+            new ReloadBinding(
+                    "CraftEngine", "net.momirealms.craftengine.bukkit.api.event.CraftEngineReloadEvent", "craftengine"),
+            new ReloadBinding(
+                    "ExecutableItems",
+                    "com.ssomar.score.api.executableitems.load.ExecutableItemsPostLoadEvent",
+                    "executableitems"),
+            new ReloadBinding("MMOItems", "net.Indyuce.mmoitems.api.event.MMOItemsReloadEvent", "mmoitems"),
+            new ReloadBinding("MythicMobs", "io.lumine.mythic.bukkit.events.MythicReloadCompleteEvent", "mythicmobs"));
 
     public static void init() {
+        contentProviders.clear();
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             String name = plugin.getName() + "ContentProvider";
             try {
                 Class<?> theClass = Class.forName("io.github.lijinhong11.mittellib.hook.content." + name);
                 Constructor<? extends ContentProvider> constructor =
                         ((Class<? extends ContentProvider>) theClass).getConstructor();
-                contentProviders.put(name.toLowerCase(), constructor.newInstance());
+                register(constructor.newInstance());
             } catch (Exception ignore) {
             }
         }
 
-        contentProviders.put("minecraft", new MinecraftContentProvider());
+        register(new MinecraftContentProvider());
+        rebuildCaches();
+        registerReloadListeners();
     }
+
+    @SuppressWarnings("unchecked")
+    private static void registerReloadListeners() {
+        if (reloadListenersRegistered || MittelLib.getInstance() == null) {
+            return;
+        }
+
+        for (ReloadBinding binding : RELOAD_BINDINGS) {
+            Plugin plugin = Bukkit.getPluginManager().getPlugin(binding.pluginName);
+            if (plugin == null || !plugin.isEnabled() || getById(binding.providerId) == null) {
+                continue;
+            }
+
+            try {
+                Class<? extends Event> eventClass = (Class<? extends Event>) Class.forName(binding.eventClassName);
+                EventExecutor executor = (_, _) -> refresh(binding.providerId);
+                Bukkit.getPluginManager()
+                        .registerEvent(
+                                eventClass,
+                                new ReloadListener(),
+                                EventPriority.MONITOR,
+                                executor,
+                                MittelLib.getInstance());
+            } catch (ClassNotFoundException ignored) {
+                // The corresponding optional plugin or API is not installed.
+            }
+        }
+        reloadListenersRegistered = true;
+    }
+
+    /**
+     * Refresh all registered content providers and rebuild the lookup caches.
+     * Call this after a content plugin reloads its custom items or blocks.
+     */
+    public static void refresh() {
+        for (ContentProvider provider : contentProviders.values()) {
+            provider.refresh();
+        }
+        rebuildCaches();
+    }
+
+    /**
+     * Refresh one content provider and rebuild the lookup caches.
+     *
+     * @param id provider namespace, for example {@code nexo}
+     * @return whether a provider with the given namespace was found
+     */
+    public static boolean refresh(@NotNull String id) {
+        ContentProvider provider = getById(id);
+        if (provider == null) {
+            return false;
+        }
+
+        provider.refresh();
+        rebuildCaches();
+        return true;
+    }
+
+    private static void register(@NotNull ContentProvider provider) {
+        contentProviders.put(normalize(provider.getId()), provider);
+    }
+
+    private static String normalize(@NotNull String value) {
+        return value.trim().toLowerCase(Locale.ROOT);
+    }
+
+    private static void rebuildCaches() {
+        Set<String> items = new LinkedHashSet<>();
+        Set<String> blocks = new LinkedHashSet<>();
+        List<PackedBlock> allUsableBlocks = new ArrayList<>();
+
+        for (ContentProvider provider : contentProviders.values()) {
+            items.addAll(provider.getItemSuggestions());
+            blocks.addAll(provider.getBlockSuggestions());
+            allUsableBlocks.addAll(provider.getAllBlocks().stream()
+                    .filter(block -> block.toItem() != null)
+                    .toList());
+        }
+
+        itemSuggestions = List.copyOf(items);
+        blockSuggestions = List.copyOf(blocks);
+        usableBlocks = List.copyOf(allUsableBlocks);
+    }
+
+    private record ReloadBinding(String pluginName, String eventClassName, String providerId) {}
+
+    private static final class ReloadListener implements org.bukkit.event.Listener {}
 
     /**
      * Get a content provider by its id
@@ -60,13 +174,7 @@ public final class ContentProviders {
      * @return the content provider, null if not found
      */
     public static @Nullable ContentProvider getById(@NotNull String id) {
-        for (ContentProvider provider : contentProviders.values()) {
-            if (provider.getId().equalsIgnoreCase(id)) {
-                return provider;
-            }
-        }
-
-        return null;
+        return contentProviders.get(normalize(id));
     }
 
     /**
@@ -100,8 +208,9 @@ public final class ContentProviders {
      */
     public static @Nullable String getIdFromItem(@NotNull ItemStack item) {
         for (ContentProvider cp : contentProviders.values()) {
-            if (cp.getIdFromItem(item) != null) {
-                return cp.getIdFromItem(item);
+            String id = cp.getIdFromItem(item);
+            if (id != null) {
+                return id;
             }
         }
 
@@ -146,12 +255,7 @@ public final class ContentProviders {
      * @return a list of item suggestion
      */
     public static @NotNull List<String> getItemSuggestions() {
-        List<String> suggest = new ArrayList<>();
-        for (ContentProvider cp : contentProviders.values()) {
-            suggest.addAll(cp.getItemSuggestions());
-        }
-
-        return suggest;
+        return itemSuggestions;
     }
 
     /**
@@ -160,12 +264,7 @@ public final class ContentProviders {
      * @return a list of block suggestion
      */
     public static @NotNull List<String> getBlockSuggestions() {
-        List<String> suggest = new ArrayList<>();
-        for (ContentProvider cp : contentProviders.values()) {
-            suggest.addAll(cp.getBlockSuggestions());
-        }
-
-        return suggest;
+        return blockSuggestions;
     }
 
     /**
@@ -174,13 +273,7 @@ public final class ContentProviders {
      * @return a list of all usable blocks
      */
     public static @NotNull List<PackedBlock> getAllUsableBlocks() {
-        List<PackedBlock> blocks = new ArrayList<>();
-        for (ContentProvider cp : contentProviders.values()) {
-            blocks.addAll(
-                    cp.getAllBlocks().stream().filter(b -> b.toItem() != null).toList());
-        }
-
-        return blocks;
+        return usableBlocks;
     }
 
     /**

@@ -11,6 +11,7 @@ libraries:
   - "org.bstats:bstats-bukkit:3.2.1"
   - "io.github.lijinhong11:MDatabase:1.2.1"
   - "com.ezylang:EvalEx:3.7.0"
+  - "com.cronutils:cron-utils:9.2.1"
 softdepend:
   - CraftEngine
   - EcoItems

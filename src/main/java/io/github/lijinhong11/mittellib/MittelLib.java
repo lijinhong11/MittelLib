@@ -103,6 +103,7 @@ public final class MittelLib extends JavaPlugin {
 
                 cfg.reload();
                 languageManager.reload();
+                ContentProviders.refresh();
                 sender.sendMessage("MittelLib language files reloaded.");
             }
         });

@@ -15,7 +15,7 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.36.0"
     id("com.diffplug.spotless") version "8.9.0"
     id("io.freefair.lombok") version "9.5.0"
-    id("io.github.lijinhong11.nexusmcpublisher") version "1.0.3"
+    id("io.github.lijinhong11.nexusmcpublisher") version "1.0.6"
 }
 
 group = "io.github.lijinhong11"
@@ -45,6 +45,7 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.2.1")
     implementation("io.github.lijinhong11:MDatabase:1.2.1")
     implementation("com.ezylang:EvalEx:3.7.0")
+    implementation("com.cronutils:cron-utils:9.2.1")
 
     // placeholders
     compileOnly("me.clip:placeholderapi:2.12.2")
