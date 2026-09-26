@@ -75,7 +75,15 @@ public final class MittelTask {
     }
 
     public boolean isCancelled() {
-        return cancelled.get() || handle != null && handle.isCancelled();
+        if (cancelled.get()) {
+            return true;
+        }
+
+        if (handle == null) {
+            return true;
+        }
+
+        return handle.isCancelled();
     }
 
     public long getNextExecutionTime() {

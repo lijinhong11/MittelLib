@@ -17,38 +17,27 @@
 */
 package io.github.lijinhong11.mittellib.utils.updates;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URLEncoder;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * A modrinth update checker
  */
-public class ModrinthUpdateChecker {
-    private final JavaPlugin plugin;
+public final class ModrinthUpdateChecker extends AbstractUpdateChecker {
     private final String projectId;
-    private final Component adminJoinMessage;
-
-    private final HttpClient httpClient = HttpClient.newHttpClient();
-    private final Gson gson = new Gson();
-    private volatile UpdateInfo availableUpdate;
 
     /**
      * Create a modrinth update checker
@@ -60,150 +49,54 @@ public class ModrinthUpdateChecker {
     }
 
     /**
-     * Create a modrinth update checker with an administrator join notification.
+     * Create a modrinth update checker with a player-specific administrator join notification.
      *
      * @param plugin the plugin
      * @param projectId the project id
-     * @param adminJoinMessage message sent to OPs when they join after an update is found
+     * @param adminJoinMessage message generated for OPs when they join after an update is found
      */
-    public ModrinthUpdateChecker(JavaPlugin plugin, String projectId, Component adminJoinMessage) {
-        this.plugin = plugin;
+    public ModrinthUpdateChecker(JavaPlugin plugin, String projectId, Function<Player, Component> adminJoinMessage) {
+        super(plugin, adminJoinMessage);
         this.projectId = projectId;
-        this.adminJoinMessage = adminJoinMessage;
-        if (adminJoinMessage != null) {
-            plugin.getServer().getPluginManager().registerEvents(new AdminJoinListener(), plugin);
+    }
+
+    @Override
+    protected LatestUpdate findLatestUpdate() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(buildUrl()))
+                .header("User-Agent", userAgent())
+                .GET()
+                .build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            throw new IllegalStateException("Modrinth version request failed (HTTP " + response.statusCode() + ")");
         }
-    }
 
-    /**
-     * Start the update checking task
-     */
-    public void check() {
-        CompletableFuture.runAsync(() -> {
-            try {
-                String currentVersion = plugin.getDescription().getVersion();
-                String url = buildUrl();
-
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url))
-                        .header("User-Agent", plugin.getName())
-                        .GET()
-                        .build();
-
-                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-                if (response.statusCode() != 200) {
-                    plugin.getLogger().warning("Update check failed (HTTP " + response.statusCode() + ")");
-                    return;
-                }
-
-                Type listType = new TypeToken<List<ModrinthVersion>>() {}.getType();
-                List<ModrinthVersion> versions = gson.fromJson(response.body(), listType);
-
-                if (versions == null || versions.isEmpty()) {
-                    plugin.getLogger().info("No updates found.");
-                    return;
-                }
-
-                versions.sort(Comparator.comparing(v -> v.datePublished));
-                ModrinthVersion latest = versions.getLast();
-
-                if (isNewer(latest.versionNumber, currentVersion)) {
-                    availableUpdate = new UpdateInfo(
-                            currentVersion, latest.versionNumber, "https://modrinth.com/plugin/" + projectId);
-                    plugin.getComponentLogger().info(formatMessage(availableUpdate));
-                } else {
-                    plugin.getComponentLogger().info(Component.text(plugin.getName() + " is up to date."));
-                }
-
-            } catch (Exception e) {
-                plugin.getLogger().warning("Update check error: " + e.getMessage());
-            }
-        });
-    }
-
-    private final class AdminJoinListener implements Listener {
-        @EventHandler
-        public void onPlayerJoin(PlayerJoinEvent event) {
-            UpdateInfo update = availableUpdate;
-            if (update == null || !event.getPlayer().isOp()) {
-                return;
-            }
-
-            event.getPlayer().sendMessage(formatMessage(update));
+        Type listType = new TypeToken<List<ModrinthVersion>>() {}.getType();
+        List<ModrinthVersion> versions = gson.fromJson(response.body(), listType);
+        if (versions == null || versions.isEmpty()) {
+            return null;
         }
+
+        ModrinthVersion latest = versions.stream()
+                .max(Comparator.comparing(version -> version.datePublished))
+                .orElseThrow();
+        return new LatestUpdate(latest.versionNumber, "https://modrinth.com/plugin/" + projectId);
     }
 
-    private Component formatMessage(UpdateInfo update) {
-        return adminJoinMessage
-                .replaceText(replacement -> replacement.matchLiteral("%plugin%").replacement(plugin.getName()))
-                .replaceText(replacement ->
-                        replacement.matchLiteral("%current_version%").replacement(update.currentVersion))
-                .replaceText(replacement ->
-                        replacement.matchLiteral("%latest_version%").replacement(update.latestVersion))
-                .replaceText(
-                        replacement -> replacement.matchLiteral("%update_url%").replacement(update.url));
-    }
-
-    private record UpdateInfo(String currentVersion, String latestVersion, String url) {}
-
-    private boolean isFolia() {
-        try {
-            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
-    private String detectLoader() {
-        return isFolia() ? "folia" : "paper";
-    }
-
-    private void runSync(Runnable runnable) {
-        if (isFolia()) {
-            plugin.getServer().getGlobalRegionScheduler().execute(plugin, runnable);
-        } else {
-            Bukkit.getScheduler().runTask(plugin, runnable);
-        }
+    @Override
+    protected String serviceName() {
+        return "Modrinth";
     }
 
     private String buildUrl() {
-        String loadersJson = "[\"" + detectLoader() + "\"]";
-        String versionsJson = "[\"" + Bukkit.getMinecraftVersion() + "\"]";
+        String loadersJson = "[\"" + loader + "\"]";
+        String versionsJson = "[\"" + gameVersion + "\"]";
 
         return "https://api.modrinth.com/v2/project/" + projectId + "/version"
                 + "?include_changelog=false"
                 + "&loaders=" + URLEncoder.encode(loadersJson, StandardCharsets.UTF_8)
                 + "&game_versions=" + URLEncoder.encode(versionsJson, StandardCharsets.UTF_8);
-    }
-
-    private boolean isNewer(String latest, String current) {
-        String[] l = normalize(latest);
-        String[] c = normalize(current);
-
-        int max = Math.max(l.length, c.length);
-
-        for (int i = 0; i < max; i++) {
-            int li = i < l.length ? parseInt(l[i]) : 0;
-            int ci = i < c.length ? parseInt(c[i]) : 0;
-
-            if (li > ci) return true;
-            if (li < ci) return false;
-        }
-        return false;
-    }
-
-    private String[] normalize(String v) {
-        return v.replace("v", "").replace("-SNAPSHOT", "").split("\\.");
-    }
-
-    private int parseInt(String s) {
-        try {
-            return Integer.parseInt(s.replaceAll("[^0-9]", ""));
-        } catch (Exception e) {
-            return 0;
-        }
     }
 
     private static class ModrinthVersion {

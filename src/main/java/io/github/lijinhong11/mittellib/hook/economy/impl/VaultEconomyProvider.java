@@ -18,14 +18,12 @@
 package io.github.lijinhong11.mittellib.hook.economy.impl;
 
 import io.github.lijinhong11.mittellib.hook.economy.EconomyProvider;
-import io.github.lijinhong11.mittellib.hook.economy.EconomyProviderSpec;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
 
-@EconomyProviderSpec(id = "vault")
 public final class VaultEconomyProvider implements EconomyProvider {
     private Economy economy;
 
