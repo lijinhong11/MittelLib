@@ -43,7 +43,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>Cron expressions use the standard five-field Unix format:
  * {@code minute hour day-of-month month day-of-week}.
  */
-public final class CronTaskManager {
+public class CronTaskManager {
     private static final long MAX_DELAY_TICKS = Integer.MAX_VALUE;
 
     private final JavaPlugin plugin;

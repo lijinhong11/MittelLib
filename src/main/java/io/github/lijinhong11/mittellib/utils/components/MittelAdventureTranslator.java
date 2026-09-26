@@ -36,16 +36,16 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class MittelLibTranslator implements Translator {
+public final class MittelAdventureTranslator implements Translator {
     private final ILanguageManager languageManager;
     private final Key name;
     private final String keyPrefix;
 
-    public MittelLibTranslator(Plugin plugin, ILanguageManager languageManager) {
+    public MittelAdventureTranslator(Plugin plugin, ILanguageManager languageManager) {
         this(new NamespacedKey(plugin, "translator"), languageManager);
     }
 
-    public MittelLibTranslator(Key name, ILanguageManager languageManager) {
+    public MittelAdventureTranslator(Key name, ILanguageManager languageManager) {
         this.languageManager = languageManager;
         this.name = name;
         this.keyPrefix = name.namespace() + ".";

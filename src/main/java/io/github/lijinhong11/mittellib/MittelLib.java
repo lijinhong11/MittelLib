@@ -23,7 +23,7 @@ import io.github.lijinhong11.mittellib.hook.ContentProviders;
 import io.github.lijinhong11.mittellib.hook.economy.EconomyProviders;
 import io.github.lijinhong11.mittellib.hook.point.PlayerPointsHook;
 import io.github.lijinhong11.mittellib.message.SyncLanguageManager;
-import io.github.lijinhong11.mittellib.utils.components.MittelLibTranslator;
+import io.github.lijinhong11.mittellib.utils.components.MittelAdventureTranslator;
 import io.github.lijinhong11.mittellib.utils.enums.MCVersion;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -84,7 +84,7 @@ public final class MittelLib extends JavaPlugin {
         cfg = MittelConfig.load(this, "config.yml");
 
         languageManager = new SyncLanguageManager(this);
-        GlobalTranslator.translator().addSource(new MittelLibTranslator(this, languageManager));
+        GlobalTranslator.translator().addSource(new MittelAdventureTranslator(this, languageManager));
 
         registerCommand("mittellib", new BasicCommand() {
             @Override
@@ -137,7 +137,7 @@ public final class MittelLib extends JavaPlugin {
             SyncLanguageManager manager = new SyncLanguageManager(pl);
             manager.setFallback(languageManager);
 
-            GlobalTranslator.translator().addSource(new MittelLibTranslator(pl, manager));
+            GlobalTranslator.translator().addSource(new MittelAdventureTranslator(pl, manager));
 
             return manager;
         });
